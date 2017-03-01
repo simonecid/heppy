@@ -16,17 +16,20 @@ class PtPrinter(Analyzer):
     The input data must contain a variable called "var1",
     which is the case of the L{test tree<heppy.utils.testtree>}. 
     '''
-
     #self.cfg_ana.input_objects: name of the particle I want the pt printed
     #getattr, gets the attribute which is named as the second parameter
     input_collection = getattr(event, self.cfg_ana.input_objects)
     #checks if input_collection is a dictionary class
     if isinstance(input_collection, collections.Mapping):
+      print "Event contains ", len(input_collection) , " jet"
       for key, val in input_collection.iteritems():
-        print "PtPrinter says " + str(key) + ": " + str(val)
+        print "PtPrinter says " + str(val.pt())
     else:
+
+      if len(input_collection) > 0:
+        print "Event contains ", len(input_collection) , " jet"
       for obj in input_collection:
-        print "PtPrinter says " + str(obj)
+        print "PtPrinter says " + str(obj.pt())
         
 
 
