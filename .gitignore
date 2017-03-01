@@ -6,3 +6,4 @@
 *.pck
 bin/*
 *.pyo
+.vscode/
