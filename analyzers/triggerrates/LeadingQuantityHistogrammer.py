@@ -1,4 +1,4 @@
-'''Generic histogrammer that takes a particle type and quantity and plots it'''
+'''Generic histogrammer that takes a particle type and quantity and plots the higher one in the event'''
 
 from heppy.framework.analyzer import Analyzer
 from ROOT import TH1I
@@ -6,8 +6,8 @@ import collections
 from ROOT import TCanvas
 from ROOT import TFile
 
-class Histogrammer(Analyzer):
-  '''Generic histogrammer that takes a particle type and quantity and plots it.
+class LeadingQuantityHistogrammer(Analyzer):
+  '''Generic histogrammer that takes a particle type and quantity and plots the higher one in the event
   
   Example::
   
@@ -22,10 +22,10 @@ class Histogrammer(Analyzer):
       return ptc.pt()
 
     histogrammer = cfg.Analyzer(
-      Histogrammer,
+      LeadingQuantityHistogrammer,
       file_label = 'tfile1',
       histo_name = 'jetPtDistribution',
-      histo_title = 'Jet transverse momentum distribution',
+      histo_title = 'Leading jet transverse momentum distribution',
       min = 0,
       max = 300,
       nbins = 100,
@@ -41,12 +41,11 @@ class Histogrammer(Analyzer):
     * nbins: Number of bins
     * input_objects : the input collection.
     * value_func : function that returns the value to store in the histogram
-    * log_y: True or False, sets log scale on y axis (False by default)
   
   '''
 
   def beginLoop(self, setup):
-    super(Histogrammer, self).beginLoop(setup)
+    super(LeadingQuantityHistogrammer, self).beginLoop(setup)
     self.hasTFileService = hasattr(self.cfg_ana, "file_label")
     if self.hasTFileService:
       servname = '_'.join(['heppy.framework.services.tfile.TFileService',
@@ -68,13 +67,21 @@ class Histogrammer(Analyzer):
        These objects must be usable by the filtering function
        self.cfg_ana.trigger_func.
     '''
+
+    maximum = 0
+
     input_collection = getattr(event, self.cfg_ana.input_objects)
     if isinstance(input_collection, collections.Mapping):
       for key, val in input_collection.iteritems():
-        self.histogram.Fill(self.cfg_ana.value_func(val))
+        if self.cfg_ana.value_func(val) > maximum:
+          maximum = self.cfg_ana.value_func(val)
     else:
       for obj in input_collection:
-        self.histogram.Fill(self.cfg_ana.value_func(obj))
+        if self.cfg_ana.value_func(obj) > maximum:
+          maximum = self.cfg_ana.value_func(obj)
+
+    if maximum != 0:
+      self.histogram.Fill(maximum)
 
   def write(self, setup):
     self.rootfile.cd()

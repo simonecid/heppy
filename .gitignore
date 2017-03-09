@@ -9,3 +9,4 @@ bin/*
 .vscode/
 *.pdf
 *.png
+*.svg
