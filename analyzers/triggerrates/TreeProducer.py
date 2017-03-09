@@ -22,9 +22,9 @@ class TreeProducer(Analyzer):
   
   The TTree is written to the file C{tree.root} in the analyzer directory.
   
-  @param tree_name: Name of the tree (Key in the output root file).
-  @param tree_title: Title of the tree.
-  @param thresholds: Array containing the threshold to be tested
+  * tree_name: Name of the tree (Key in the output root file).
+  * tree_title: Title of the tree.
+  * thresholds: Array containing the threshold to be tested
   '''
   
   '''Generates a threshold function'''
