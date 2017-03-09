@@ -10,7 +10,9 @@ logging.basicConfig(level=logging.WARNING)
 
 comp = cfg.Component(
   'minBias',
-  files = ["../FCCSW/minBiasSimulationOutput_1000evts.root", "../FCCSW/minBiasSimulationOutput_10000evts.root" ]
+  #files = ["../FCCSW/mininumBiasDelphesSimulation_PU180_2evts.root"]
+  #files = ["../FCCSW/mininumBiasDelphesSimulation_PU25_10evts.root"]
+  files = ["../FCCSW/minimumBias_10000evts.root"]
 )
 selectedComponents = [comp]
 
@@ -18,7 +20,7 @@ from heppy.analyzers.fcc.Reader import Reader
 source = cfg.Analyzer(
   Reader,
 
-  #gen_particles = 'genParticles',
+  gen_particles = 'skimmedGenParticles',
   #gen_vertices = 'genVertices',
 
   gen_jets = 'genJets',
@@ -43,117 +45,91 @@ gSystem.Load("libdatamodelDict")
 
 from EventStore import EventStore as Events
 
-from heppy.analyzers.triggerrates.PtPrinter import PtPrinter
-ptPrinter = cfg.Analyzer(
-  PtPrinter,
-  input_objects = 'jets',
-)
-
-# Closure that returns a single object threshold trigger
-# I love this <3
-
-def thresholdTriggerGenerator (threshold):
-  def thresholdTrigger (ptc):
-    return ptc.pt() > threshold
-  return thresholdTrigger
-
-from heppy.analyzers.triggerrates.SingleObjectTrigger import SingleObjectTrigger
-jetTrigger = cfg.Analyzer(
-  SingleObjectTrigger,
-  'jetTrigger',
-  input_objects = 'jets',
-  trigger_func = thresholdTriggerGenerator(40)
-)
-
 steps = []
 
-for x in xrange(30, 210, 5):
+for x in xrange(0, 300, 5):
   steps.append(x)
 
-# creating an output tree
-from heppy.analyzers.triggerrates.TreeProducer import TreeProducer
-tree = cfg.Analyzer(
-  TreeProducer,
-  tree_name = 'tree',
-  tree_title = 'Trigger rates',
-  input_objects = 'jets',
-  thresholds = steps  
-)
+# File in which all the rate plots will be stored 
 
 from heppy.framework.services.tfile import TFileService
 tfile_service_1 = cfg.Service(
   TFileService,
-  'tfile1',
-  fname='histograms.root',
+  'ratePlotFile',
+  fname='ratePlots.root',
   option='recreate'
 )
 
-def pt (ptc):
-  return ptc.pt()
-
-from heppy.analyzers.triggerrates.Histogrammer import Histogrammer
-ptDistribution = cfg.Analyzer(
-  Histogrammer,
-  file_label = 'tfile1',
-  histo_name = 'jetPtDistribution',
-  histo_title = 'Jet transverse momentum distribution',
-  min = 0,
-  max = 200,
-  nbins = 100,
-  input_objects = 'jets',
-  value_func = pt
-)
-
-def eta (ptc):
-  return ptc.eta()
-
-etaDistribution = cfg.Analyzer(
-  Histogrammer,
-  file_label = 'tfile1',
-  histo_name = 'jetEtaDistribution',
-  histo_title = 'Jet pseudo-rapidity distribution',
-  min = -10,
-  max = +10,
-  nbins = 100,
-  input_objects = 'jets',
-  value_func = eta
-)
-
-def phi (ptc):
-  return ptc.phi()
-
-phiDistribution = cfg.Analyzer(
-  Histogrammer,
-  file_label = 'tfile1',
-  histo_name = 'jetPhiDistribution',
-  histo_title = 'Jet phi distribution',
-  min = -3.15,
-  max = +3.15,
-  nbins = 100,
-  input_objects = 'jets',
-  value_func = phi
-)
-
 from heppy.analyzers.triggerrates.RatePlotProducer import RatePlotProducer
-rate = cfg.Analyzer(
+jetRate = cfg.Analyzer(
   RatePlotProducer,
-  plot_name = 'rate',
+  file_label = 'ratePlotFile',
+  plot_name = 'jetTriggerRate',
   plot_title = 'Jet trigger rate',
-  instantaneous_luminosity = 3e35,
+  instantaneous_luminosity = 5e34,
   input_objects = 'jets',
   cross_section = 100,
-  thresholds = steps
+  thresholds = steps,
+  yscale = 1e6
+)
+
+electronRate = cfg.Analyzer(
+  RatePlotProducer,
+  file_label = 'ratePlotFile',
+  plot_name = 'electronTriggerRate',
+  plot_title = 'Electron trigger rate',
+  instantaneous_luminosity = 5e34,
+  input_objects = 'electrons',
+  cross_section = 100,
+  thresholds = steps,
+  yscale = 1e6
+)
+
+muonRate = cfg.Analyzer(
+  RatePlotProducer,
+  file_label = 'ratePlotFile',
+  plot_name = 'muonTriggerRate',
+  plot_title = 'Muon trigger rate',
+  instantaneous_luminosity = 5e34,
+  input_objects = 'muons',
+  cross_section = 100,
+  thresholds = steps,
+  yscale = 1e6
+)
+
+photonRate = cfg.Analyzer(
+  RatePlotProducer,
+  file_label = 'ratePlotFile',
+  plot_name = 'photonTriggerRate',
+  plot_title = 'Photon trigger rate',
+  instantaneous_luminosity = 5e34,
+  input_objects = 'photons',
+  cross_section = 100,
+  thresholds = steps,
+  yscale = 1e6
+)
+
+metRate = cfg.Analyzer(
+  RatePlotProducer,
+  file_label = 'ratePlotFile',
+  plot_name = 'metTriggerRate',
+  plot_title = 'MET trigger rate',
+  instantaneous_luminosity = 5e34,
+  input_objects = 'met',
+  cross_section = 100,
+  thresholds = steps,
+  yscale = 1e6
 )
 
 # definition of a sequence of analyzers,
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
   source,
-  ptDistribution,
-  etaDistribution,
-  phiDistribution,
-  rate,
-  tree
+  jetRate,
+  muonRate,
+  photonRate,
+  electronRate,
+  metRate
 ] )
 
 

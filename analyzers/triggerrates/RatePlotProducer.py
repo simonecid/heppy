@@ -5,7 +5,11 @@ from heppy.statistics.tree import Tree
 from ROOT import TFile
 from ROOT import TH1F
 from ROOT import TCanvas
+from ROOT import TLine
 from array import array
+
+from bisect import insort
+
 import collections
 
 class RatePlotProducer(Analyzer):
@@ -16,20 +20,24 @@ class RatePlotProducer(Analyzer):
   
     rate = cfg.Analyzer(
       RatePlotProducer,
+      file_label = 'tfile1',
       plot_name = 'rate',
       plot_title = 'A rate plot',
       instantaneous_luminosity = 3e35,
       cross_section = 100,
       input_objects = 'jets',
-      thresholds = [30, 40, 50, 60]
+      thresholds = [30, 40, 50, 60],
+      yscale = 1e6
     )
     
-  @param plot_name: Name of the plot (Key in the output root file).
-  @param plot_title: Title of the plot.
-  @param thresholds: Array containing the threshold to be tested
-  @param instantaneous_luminosity: instantaneous luminosity in cm^-2 s^-1
-  @param cross_section: cross section in mb
-  @param input_objects: name of the particle collection
+  * file_label: (Facultative) Name of a TFileService. If specified, the histogram will be saved in that root file, otherwise it will be saved in a <plot_name>.png and <plot_name>.root file
+  * plot_name: Name of the plot (Key in the output root file).
+  * plot_title: Title of the plot.
+  * thresholds: Array containing the threshold to be tested
+  * instantaneous_luminosity: instantaneous luminosity in cm^-2 s^-1
+  * cross_section: cross section in mb
+  * input_objects: name of the particle collection
+  * yscale: y level of the reference line
   '''
   
   '''Generates a threshold function'''
@@ -40,13 +48,26 @@ class RatePlotProducer(Analyzer):
     
   def beginLoop(self, setup):
     super(RatePlotProducer, self).beginLoop(setup)
-    self.rootfile = TFile('/'.join([self.dirName,
-                                    'tree.root']),
-                          'recreate')
+    
+    self.hasTFileService = hasattr(self.cfg_ana, "file_label")
+    if self.hasTFileService:
+      servname = '_'.join(['heppy.framework.services.tfile.TFileService',
+                          self.cfg_ana.file_label
+                      ])
+      tfileservice = setup.services[servname]
+      self.rootfile = tfileservice.file
+    else:
+      self.rootfile = TFile('/'.join([self.dirName,
+                                      self.cfg_ana.plot_name + '.root']),
+                            'recreate')
 
     bins = array("f", self.cfg_ana.thresholds)
     self.histogram = TH1F(self.cfg_ana.plot_name, self.cfg_ana.plot_title, len(bins) - 1 , bins)
     self.numberOfEvents = 0 
+
+    # Sorted array of pt, used to find the estimate the probability that 2 jets above a certain
+    # threshold will appear in the same event
+    self.ptArray = []
 
   def process(self, event):
     '''Process the event.
@@ -60,63 +81,98 @@ class RatePlotProducer(Analyzer):
     input_collection = getattr(event, self.cfg_ana.input_objects)
 
     self.numberOfEvents += 1
-        
-    if isinstance(input_collection, collections.Mapping):
+
+    #We want accept events without objects if the threshold is 0 or less
+    startIdx = 0
+
+    #Adding events for that thresholds
+    for x in range(0, len(self.cfg_ana.thresholds) - 1):
+      if self.cfg_ana.thresholds[x] <= 0:
+        self.histogram.AddBinContent(x+1)
+        startIdx = x + 1
+
+    #startIdx keeps track of where the positive thresholds start
+
+    # MET is not iterable, it is a single object
+    # We treat here single objects
+    if not isinstance(input_collection, collections.Iterable):
+      for x in range(startIdx, len(self.cfg_ana.thresholds) - 1):
+        # Preparing the check function
+          trigger_func = self.thresholdTriggerGenerator(self.cfg_ana.thresholds[x])
+          # Checking if the object passes the trigger
+          if trigger_func(input_collection):
+            self.histogram.AddBinContent(x+1)
+          else:
+          #If no item passes the threshold I can stop
+            break
+
+    elif isinstance(input_collection, collections.Mapping):
       
-      # Iterating through all the jets
-      for x in range(0, len(self.cfg_ana.thresholds) - 1):
+      # Iterating through all the objects
+      for x in range(startIdx, len(self.cfg_ana.thresholds) - 1):
         # Checking what thresholds are satisfied
         isPassed = False
         for key, val in input_collection.iteritems():
+
           # Preparing the check function
           trigger_func = self.thresholdTriggerGenerator(self.cfg_ana.thresholds[x])
-          # Checking if the jet passes the trigger
+          # Checking if the object passes the trigger
           if trigger_func(val):
-            self.histogram.AddBinContent(x+1);
+            self.histogram.AddBinContent(x+1)
             isPassed = True
-            # We don't need to check for other jets
+            # We don't need to check for other objects
             break
 
         if not isPassed:
-          #If no jets passes the threshold I can stop
+          #If no objects passes the threshold I can stop
           break
       
     else:
-      for x in range(0, len(self.cfg_ana.thresholds) - 1):
+      for x in range(startIdx, len(self.cfg_ana.thresholds) - 1):
         # Checking what thresholds are satisfied
         isPassed = False
         for obj in input_collection:
           # Preparing the check function
           trigger_func = self.thresholdTriggerGenerator(self.cfg_ana.thresholds[x])
-          # Checking if the jet passes the trigger
+          # Checking if the object passes the trigger
           if trigger_func(obj):
-            self.histogram.AddBinContent(x+1);
+            self.histogram.AddBinContent(x+1)
             isPassed = True
-            # We don't need to check for other jets
+            # We don't need to check for other objects
             break
 
         if not isPassed:
-          #If no jets passes the threshold I can stop
+          #If no objects passes the threshold I can stop
           break
 
   def write(self, setup):
 
-    #Rescaling to corresponding rate
-
-    print "The number of events is ", self.numberOfEvents
-    
+    #Rescaling to corresponding rate    
     expected_rate = self.cfg_ana.instantaneous_luminosity * 1e-27 * self.cfg_ana.cross_section
     normalisation = expected_rate/self.numberOfEvents
     #Rescaling everything to have rates
     self.histogram.Scale(normalisation)
     
-    self.histogram.Write()
-    self.rootfile.Write()
-    c1 = TCanvas ("c1", "c1", 600, 600)
+    #self.histogram.Write()
+    xMax = self.histogram.GetXaxis().GetXmax()
+    xMin = self.histogram.GetXaxis().GetXmin()
+
+    c1 = TCanvas ("canvas_" + self.cfg_ana.plot_name, self.cfg_ana.plot_title, 600, 600)
     c1.SetGridx()
     c1.SetGridy()
     self.histogram.Draw("")
-    c1.Update()
-    c1.Print("rate_VS_JetPt.png", "png")
+    c1.SetLogy(True)
 
-    self.rootfile.Close()
+    line = TLine(xMin, self.cfg_ana.yscale, xMax, self.cfg_ana.yscale)
+    line.SetLineColor(2)
+    line.Draw()
+
+    line = TLine(xMin, self.cfg_ana.yscale, xMax, self.cfg_ana.yscale)
+    line.SetLineColor(2)
+    line.Draw()
+
+    c1.Update()
+    c1.Write()
+    c1.Print(self.cfg_ana.plot_name + ".svg", "svg")
+
+    #self.rootfile.Close()
