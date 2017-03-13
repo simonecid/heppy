@@ -8,6 +8,12 @@ logging.shutdown()
 reload(logging)
 logging.basicConfig(level=logging.WARNING)
 
+mySettings = lambda a: None
+mySettings.pileup = 180
+mySettings.yScale = 1e6
+mySettings.crossSection = 100
+
+
 comp = cfg.Component(
   'minBias',
   #files = ["../FCCSW/mininumBiasDelphesSimulation_PU180_2evts.root"]
@@ -68,9 +74,10 @@ jetRate = cfg.Analyzer(
   plot_title = 'Jet trigger rate',
   instantaneous_luminosity = 5e34,
   input_objects = 'jets',
-  cross_section = 100,
+  cross_section = mySettings.crossSection,
   thresholds = steps,
-  yscale = 1e6
+  yscale = mySettings.yScale,
+  pileup = mySettings.pileup
 )
 
 electronRate = cfg.Analyzer(
@@ -80,9 +87,10 @@ electronRate = cfg.Analyzer(
   plot_title = 'Electron trigger rate',
   instantaneous_luminosity = 5e34,
   input_objects = 'electrons',
-  cross_section = 100,
+  cross_section = mySettings.crossSection,
   thresholds = steps,
-  yscale = 1e6
+  yscale = mySettings.yScale,
+  pileup = mySettings.pileup
 )
 
 muonRate = cfg.Analyzer(
@@ -92,9 +100,10 @@ muonRate = cfg.Analyzer(
   plot_title = 'Muon trigger rate',
   instantaneous_luminosity = 5e34,
   input_objects = 'muons',
-  cross_section = 100,
+  cross_section = mySettings.crossSection,
   thresholds = steps,
-  yscale = 1e6
+  yscale = mySettings.yScale,
+  pileup = mySettings.pileup
 )
 
 photonRate = cfg.Analyzer(
@@ -104,9 +113,10 @@ photonRate = cfg.Analyzer(
   plot_title = 'Photon trigger rate',
   instantaneous_luminosity = 5e34,
   input_objects = 'photons',
-  cross_section = 100,
+  cross_section = mySettings.crossSection,
   thresholds = steps,
-  yscale = 1e6
+  yscale = mySettings.yScale,
+  pileup = mySettings.pileup
 )
 
 metRate = cfg.Analyzer(
@@ -116,9 +126,10 @@ metRate = cfg.Analyzer(
   plot_title = 'MET trigger rate',
   instantaneous_luminosity = 5e34,
   input_objects = 'met',
-  cross_section = 100,
+  cross_section = mySettings.crossSection,
   thresholds = steps,
-  yscale = 1e6
+  yscale = mySettings.yScale,
+  pileup = mySettings.pileup
 )
 
 # definition of a sequence of analyzers,

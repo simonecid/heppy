@@ -7,6 +7,8 @@ from ROOT import TH1F
 from ROOT import TCanvas
 from ROOT import TLine
 from array import array
+from numpy import power
+from scipy.optimize import fsolve
 
 from bisect import insort
 
@@ -27,7 +29,8 @@ class RatePlotProducer(Analyzer):
       cross_section = 100,
       input_objects = 'jets',
       thresholds = [30, 40, 50, 60],
-      yscale = 1e6
+      yscale = 1e6,
+      pileup = 180
     )
     
   * file_label: (Facultative) Name of a TFileService. If specified, the histogram will be saved in that root file, otherwise it will be saved in a <plot_name>.png and <plot_name>.root file
@@ -38,6 +41,7 @@ class RatePlotProducer(Analyzer):
   * cross_section: cross section in mb
   * input_objects: name of the particle collection
   * yscale: y level of the reference line
+  * pileup: pile-up level, used to estimate where the single-object rate can be approximated as a trigger rate
   '''
   
   '''Generates a threshold function'''
@@ -67,7 +71,7 @@ class RatePlotProducer(Analyzer):
 
     # Sorted array of pt, used to find the estimate the probability that 2 jets above a certain
     # threshold will appear in the same event
-    self.ptArray = []
+    self.sortedPtArray = []
 
   def process(self, event):
     '''Process the event.
@@ -96,6 +100,9 @@ class RatePlotProducer(Analyzer):
     # MET is not iterable, it is a single object
     # We treat here single objects
     if not isinstance(input_collection, collections.Iterable):
+
+      insort(self.sortedPtArray, input_collection.pt())
+
       for x in range(startIdx, len(self.cfg_ana.thresholds) - 1):
         # Preparing the check function
           trigger_func = self.thresholdTriggerGenerator(self.cfg_ana.thresholds[x])
@@ -107,6 +114,9 @@ class RatePlotProducer(Analyzer):
             break
 
     elif isinstance(input_collection, collections.Mapping):
+
+      for key, val in input_collection.iteritems():
+        insort(self.sortedPtArray, val.pt())
       
       # Iterating through all the objects
       for x in range(startIdx, len(self.cfg_ana.thresholds) - 1):
@@ -128,6 +138,10 @@ class RatePlotProducer(Analyzer):
           break
       
     else:
+
+      for obj in input_collection:
+        insort(self.sortedPtArray, obj.pt())
+
       for x in range(startIdx, len(self.cfg_ana.thresholds) - 1):
         # Checking what thresholds are satisfied
         isPassed = False
@@ -156,6 +170,9 @@ class RatePlotProducer(Analyzer):
     #self.histogram.Write()
     xMax = self.histogram.GetXaxis().GetXmax()
     xMin = self.histogram.GetXaxis().GetXmin()
+    yMin = self.histogram.GetMinimum()
+    yMax = self.histogram.GetMaximum()
+
 
     c1 = TCanvas ("canvas_" + self.cfg_ana.plot_name, self.cfg_ana.plot_title, 600, 600)
     c1.SetGridx()
@@ -167,9 +184,27 @@ class RatePlotProducer(Analyzer):
     line.SetLineColor(2)
     line.Draw()
 
-    line = TLine(xMin, self.cfg_ana.yscale, xMax, self.cfg_ana.yscale)
-    line.SetLineColor(2)
-    line.Draw()
+    # I would like to draw a line to signal a threshold over which the probability of having 2 or more jets
+    # with an higher transverse momentum than the threshold is below 5%
+
+    # To find the threshold I have to solve numerically the equation 
+    # 1 - (1 - p)^(pileup) - pileup * p * (1 - p)^(pileup) = 0.05
+    # where p is the probability that a jet will be above a certain threshold
+    # p can also be interpreted as the fraction of jets in my distribution
+    # (1 - p) * numberOfJets will tell me which jet represents the threshold
+
+    equation = lambda p : 1 - power(1 - p, self.cfg_ana.pileup) - self.cfg_ana.pileup * p * power(1 - p, self.cfg_ana.pileup - 1) - 0.05
+    p_solution = fsolve(equation, 1./self.cfg_ana.pileup)
+    thresholdIdx = int ( (1 - p_solution) * len(self.sortedPtArray))
+    threshold = self.sortedPtArray[thresholdIdx]
+
+    #print "Threshold for", self.cfg_ana.plot_name, "is", threshold, "w/ p", p_solution, "thresholdIdx", thresholdIdx, "numPts", len(self.sortedPtArray)
+
+    # Drawing the threshold line
+
+    pileupLine = TLine(threshold, yMin, threshold, yMax)
+    pileupLine.SetLineColor(6)
+    pileupLine.Draw()
 
     c1.Update()
     c1.Write()
