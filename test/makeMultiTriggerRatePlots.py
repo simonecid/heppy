@@ -1,3 +1,7 @@
+'''
+  Receives a ROOT file with trigger rates as an argument and plots them altogether
+'''
+
 from ROOT import TFile
 from ROOT import TMultiGraph
 from ROOT import TGraph
