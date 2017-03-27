@@ -16,7 +16,7 @@ import collections
 
 class RatePlotProducer(Analyzer):
 
-  '''Analyzer creating a rate plot.
+  '''Analyzer creating a rate plot and saving it to ROOT and SVG format.
   
   Example::
   
@@ -28,20 +28,22 @@ class RatePlotProducer(Analyzer):
       instantaneous_luminosity = 3e35,
       cross_section = 100,
       input_objects = 'jets',
-      thresholds = [30, 40, 50, 60],
+      bins = [30, 40, 50, 60],
       yscale = 1e6,
-      pileup = 180
+      pileup = 180,
+      scale_factors = [3, 5, 4]
     )
     
   * file_label: (Facultative) Name of a TFileService. If specified, the histogram will be saved in that root file, otherwise it will be saved in a <plot_name>.png and <plot_name>.root file
   * plot_name: Name of the plot (Key in the output root file).
   * plot_title: Title of the plot.
-  * thresholds: Array containing the threshold to be tested
+  * bins: Array containing the bins to be tested
   * instantaneous_luminosity: instantaneous luminosity in cm^-2 s^-1
   * cross_section: cross section in mb
   * input_objects: name of the particle collection
   * yscale: y level of the reference line
   * pileup: pile-up level, used to estimate where the single-object rate can be approximated as a trigger rate
+  * scale_factors: custom factors to be applied to the bin, 1 is assumed in case of missing parameter or if less factors than bins are provided
   '''
   
   '''Generates a threshold function'''
@@ -65,7 +67,7 @@ class RatePlotProducer(Analyzer):
                                       self.cfg_ana.plot_name + '.root']),
                             'recreate')
 
-    bins = array("f", self.cfg_ana.thresholds)
+    bins = array("f", self.cfg_ana.bins)
     self.histogram = TH1F(self.cfg_ana.plot_name, self.cfg_ana.plot_title, len(bins) - 1 , bins)
     self.numberOfEvents = 0 
 
@@ -90,8 +92,8 @@ class RatePlotProducer(Analyzer):
     startIdx = 0
 
     #Adding events for that thresholds
-    for x in range(0, len(self.cfg_ana.thresholds) - 1):
-      if self.cfg_ana.thresholds[x] <= 0:
+    for x in range(0, len(self.cfg_ana.bins) - 1):
+      if self.cfg_ana.bins[x] <= 0:
         self.histogram.AddBinContent(x+1)
         startIdx = x + 1
 
@@ -103,9 +105,9 @@ class RatePlotProducer(Analyzer):
 
       insort(self.sortedPtArray, input_collection.pt())
 
-      for x in range(startIdx, len(self.cfg_ana.thresholds) - 1):
+      for x in range(startIdx, len(self.cfg_ana.bins) - 1):
         # Preparing the check function
-          trigger_func = self.thresholdTriggerGenerator(self.cfg_ana.thresholds[x])
+          trigger_func = self.thresholdTriggerGenerator(self.cfg_ana.bins[x])
           # Checking if the object passes the trigger
           if trigger_func(input_collection):
             self.histogram.AddBinContent(x+1)
@@ -119,13 +121,13 @@ class RatePlotProducer(Analyzer):
         insort(self.sortedPtArray, val.pt())
       
       # Iterating through all the objects
-      for x in range(startIdx, len(self.cfg_ana.thresholds) - 1):
+      for x in range(startIdx, len(self.cfg_ana.bins) - 1):
         # Checking what thresholds are satisfied
         isPassed = False
         for key, val in input_collection.iteritems():
 
           # Preparing the check function
-          trigger_func = self.thresholdTriggerGenerator(self.cfg_ana.thresholds[x])
+          trigger_func = self.thresholdTriggerGenerator(self.cfg_ana.bins[x])
           # Checking if the object passes the trigger
           if trigger_func(val):
             self.histogram.AddBinContent(x+1)
@@ -142,12 +144,12 @@ class RatePlotProducer(Analyzer):
       for obj in input_collection:
         insort(self.sortedPtArray, obj.pt())
 
-      for x in range(startIdx, len(self.cfg_ana.thresholds) - 1):
+      for x in range(startIdx, len(self.cfg_ana.bins) - 1):
         # Checking what thresholds are satisfied
         isPassed = False
         for obj in input_collection:
           # Preparing the check function
-          trigger_func = self.thresholdTriggerGenerator(self.cfg_ana.thresholds[x])
+          trigger_func = self.thresholdTriggerGenerator(self.cfg_ana.bins[x])
           # Checking if the object passes the trigger
           if trigger_func(obj):
             self.histogram.AddBinContent(x+1)
@@ -166,6 +168,10 @@ class RatePlotProducer(Analyzer):
     normalisation = expected_rate/self.numberOfEvents
     #Rescaling everything to have rates
     self.histogram.Scale(normalisation)
+
+    if hasattr(self.cfg_ana, "scale_factors"):
+      for x in xrange(0, len(self.cfg_ana.scale_factors)):
+        self.histogram.SetBinContent(x+1, self.histogram.GetBinContent(x+1)*self.cfg_ana.scale_factors[x])
     
     #self.histogram.Write()
     xMax = self.histogram.GetXaxis().GetXmax()
