@@ -9,9 +9,13 @@ reload(logging)
 logging.basicConfig(level=logging.WARNING)
 
 mySettings = lambda a: None
-mySettings.pileup = 180
+mySettings.pileup = 180 # FCC
+#mySettings.pileup = 40 # LHC
 mySettings.yScale = 1e6
-mySettings.crossSection = 100
+mySettings.crossSection = 100 # FCC
+#mySettings.crossSection = 60 # LHC
+mySettings.instantaneousLuminosity = 5e34 # FCC
+#mySettings.instantaneousLuminosity = 1.15e34 # LHC
 
 
 comp = cfg.Component(
@@ -19,6 +23,7 @@ comp = cfg.Component(
   #files = ["../FCCSW/mininumBiasDelphesSimulation_PU180_2evts.root"]
   #files = ["../FCCSW/mininumBiasDelphesSimulation_PU25_10evts.root"]
   files = ["../FCCSW/minimumBias_10000evts.root"]
+  #files = ["../FCCSW/minimumBias_13TeV_100000evts.root"]
 )
 selectedComponents = [comp]
 
@@ -52,9 +57,45 @@ gSystem.Load("libdatamodelDict")
 from EventStore import EventStore as Events
 
 steps = []
+jet_to_electron_scale = []
+jet_to_photon_scale = []
+jet_to_muon_scale = []
+jet_to_MET_scale = []
 
-for x in xrange(0, 300, 5):
+for x in xrange(0, 300, 10):
   steps.append(x)
+  jet_to_electron_scale.append(0)
+  jet_to_photon_scale.append(0)
+  jet_to_muon_scale.append(0)
+  jet_to_MET_scale.append(0)
+
+jet_to_electron_scale[0] = 1
+jet_to_electron_scale[1] = 8.00E-03
+jet_to_electron_scale[2] = 7.50E-04
+jet_to_electron_scale[3] = 4.89E-04
+jet_to_electron_scale[4] = 6.13E-04
+jet_to_electron_scale[5] = 8.21E-04
+
+jet_to_photon_scale[0] = 1
+jet_to_photon_scale[1] = 2.50E-02
+jet_to_photon_scale[2] = 6.50E-05
+jet_to_photon_scale[3] = 4.03E-05
+jet_to_photon_scale[4] = 3.07E-05
+jet_to_photon_scale[5] = 0
+
+jet_to_muon_scale[0] = 1
+jet_to_muon_scale[1] = 1.88E-03
+jet_to_muon_scale[2] = 1.75E-04
+jet_to_muon_scale[3] = 1.15E-04
+jet_to_muon_scale[4] = 1.23E-04
+jet_to_muon_scale[5] = 2.30E-04
+
+jet_to_MET_scale[0] = 1
+jet_to_MET_scale[1] = 5.50E-01
+jet_to_MET_scale[2] = 1.33E-01
+jet_to_MET_scale[3] = 7.48E-02
+jet_to_MET_scale[4] = 4.60E-02
+jet_to_MET_scale[5] = 3.29E-02
 
 # File in which all the rate plots will be stored 
 
@@ -72,12 +113,68 @@ jetRate = cfg.Analyzer(
   file_label = 'ratePlotFile',
   plot_name = 'jetTriggerRate',
   plot_title = 'Jet trigger rate',
-  instantaneous_luminosity = 5e34,
+  instantaneous_luminosity = mySettings.instantaneousLuminosity,
   input_objects = 'jets',
   cross_section = mySettings.crossSection,
-  thresholds = steps,
+  bins = steps,
   yscale = mySettings.yScale,
   pileup = mySettings.pileup
+)
+
+jetToElectronRate = cfg.Analyzer(
+  RatePlotProducer,
+  file_label = 'ratePlotFile',
+  plot_name = 'jetToElectronTriggerRate',
+  plot_title = 'Electron trigger rate from jets',
+  instantaneous_luminosity = mySettings.instantaneousLuminosity,
+  input_objects = 'jets',
+  cross_section = mySettings.crossSection,
+  bins = steps,
+  yscale = mySettings.yScale,
+  pileup = mySettings.pileup,
+  scale_factors = jet_to_electron_scale
+)
+
+jetToPhotonRate = cfg.Analyzer(
+  RatePlotProducer,
+  file_label = 'ratePlotFile',
+  plot_name = 'jetToPhotonTriggerRate',
+  plot_title = 'Photon trigger rate from jets',
+  instantaneous_luminosity = mySettings.instantaneousLuminosity,
+  input_objects = 'jets',
+  cross_section = mySettings.crossSection,
+  bins = steps,
+  yscale = mySettings.yScale,
+  pileup = mySettings.pileup,
+  scale_factors = jet_to_photon_scale
+)
+
+jetToMuonRate = cfg.Analyzer(
+  RatePlotProducer,
+  file_label = 'ratePlotFile',
+  plot_name = 'jetToMuonTriggerRate',
+  plot_title = 'Muon trigger rate from jets',
+  instantaneous_luminosity = mySettings.instantaneousLuminosity,
+  input_objects = 'jets',
+  cross_section = mySettings.crossSection,
+  bins = steps,
+  yscale = mySettings.yScale,
+  pileup = mySettings.pileup,
+  scale_factors = jet_to_muon_scale
+)
+
+jetToMETRate = cfg.Analyzer(
+  RatePlotProducer,
+  file_label = 'ratePlotFile',
+  plot_name = 'jetToMETTriggerRate',
+  plot_title = 'MET trigger rate from jets',
+  instantaneous_luminosity = mySettings.instantaneousLuminosity,
+  input_objects = 'jets',
+  cross_section = mySettings.crossSection,
+  bins = steps,
+  yscale = mySettings.yScale,
+  pileup = mySettings.pileup,
+  scale_factors = jet_to_MET_scale
 )
 
 electronRate = cfg.Analyzer(
@@ -85,10 +182,10 @@ electronRate = cfg.Analyzer(
   file_label = 'ratePlotFile',
   plot_name = 'electronTriggerRate',
   plot_title = 'Electron trigger rate',
-  instantaneous_luminosity = 5e34,
+  instantaneous_luminosity = mySettings.instantaneousLuminosity,
   input_objects = 'electrons',
   cross_section = mySettings.crossSection,
-  thresholds = steps,
+  bins = steps,
   yscale = mySettings.yScale,
   pileup = mySettings.pileup
 )
@@ -98,10 +195,10 @@ muonRate = cfg.Analyzer(
   file_label = 'ratePlotFile',
   plot_name = 'muonTriggerRate',
   plot_title = 'Muon trigger rate',
-  instantaneous_luminosity = 5e34,
+  instantaneous_luminosity = mySettings.instantaneousLuminosity,
   input_objects = 'muons',
   cross_section = mySettings.crossSection,
-  thresholds = steps,
+  bins = steps,
   yscale = mySettings.yScale,
   pileup = mySettings.pileup
 )
@@ -111,10 +208,10 @@ photonRate = cfg.Analyzer(
   file_label = 'ratePlotFile',
   plot_name = 'photonTriggerRate',
   plot_title = 'Photon trigger rate',
-  instantaneous_luminosity = 5e34,
+  instantaneous_luminosity = mySettings.instantaneousLuminosity,
   input_objects = 'photons',
   cross_section = mySettings.crossSection,
-  thresholds = steps,
+  bins = steps,
   yscale = mySettings.yScale,
   pileup = mySettings.pileup
 )
@@ -124,10 +221,10 @@ metRate = cfg.Analyzer(
   file_label = 'ratePlotFile',
   plot_name = 'metTriggerRate',
   plot_title = 'MET trigger rate',
-  instantaneous_luminosity = 5e34,
+  instantaneous_luminosity = mySettings.instantaneousLuminosity,
   input_objects = 'met',
   cross_section = mySettings.crossSection,
-  thresholds = steps,
+  bins = steps,
   yscale = mySettings.yScale,
   pileup = mySettings.pileup
 )
@@ -140,7 +237,11 @@ sequence = cfg.Sequence( [
   muonRate,
   photonRate,
   electronRate,
-  metRate
+  metRate,
+  jetToMuonRate,
+  jetToPhotonRate,
+  jetToElectronRate,
+  jetToMETRate
 ] )
 
 
