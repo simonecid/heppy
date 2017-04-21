@@ -9,11 +9,14 @@ reload(logging)
 logging.basicConfig(level=logging.WARNING)
 
 mySettings = lambda a: None
+'''Pile up level for that kind of event'''
 mySettings.pileup = 180 # FCC
 #mySettings.pileup = 40 # LHC
 mySettings.yScale = 1e6
+'''Cross section of the event in mb'''
 mySettings.crossSection = 100 # FCC
 #mySettings.crossSection = 60 # LHC
+'''Instantaneous lumi in cm^-2 s^-1'''
 mySettings.instantaneousLuminosity = 5e34 # FCC
 #mySettings.instantaneousLuminosity = 1.15e34 # LHC
 
