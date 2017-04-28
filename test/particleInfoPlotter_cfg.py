@@ -13,8 +13,17 @@ reload(logging)
 logging.basicConfig(level=logging.WARNING)
 
 comp = cfg.Component(
-  'minBias',
-  files = ["../FCCSW/mininumBiasDelphesSimulation_PU180_2evts.root"]
+  'EWProductionAndHiggs',
+  #files = ["../FCCSW/DelphesSim_ff_H_WW_enuenu_1000events.root"]
+  #files = ["../FCCSW/DelphesSim_ff_H_WW_munumunu_1000events.root"]
+  files = ["../FCCSW/DelphesSim_ff_H_ZZ_eeee_1000events.root"]
+  #files = ["../FCCSW/DelphesSim_ff_H_ZZ_mumumumu_1000events.root"]
+  #files = ["../FCCSW/DelphesSim_ff_W_enu_1000events.root"]
+  #files = ["../FCCSW/DelphesSim_ff_W_munu_1000events.root"]
+  #files = ["../FCCSW/DelphesSim_ff_W_taunu_1000events.root"]
+  #files = ["../FCCSW/DelphesSim_ff_Z_ee_1000events.root"]
+  #files = ["../FCCSW/DelphesSim_ff_Z_mumu_1000events.root"]
+  #files = ["../FCCSW/DelphesSim_ff_Z_tautau_1000events.root"]
   #files = ["../FCCSW/mininumBiasDelphesSimulation_PU25_10evts.root"]
   #files = ["../FCCSW/minimumBias_10000evts.root"]
 )
@@ -61,7 +70,7 @@ source = cfg.Analyzer(
 
 def particleCheckerFactory (ptcName):
   def particleChecker (ptc):
-    return (abs(ptc.pdgid()) == pdgIds[ptcName]) and (abs(ptc.eta()) < 6.)
+    return (abs(ptc.pdgid()) == pdgIds[ptcName])
   return particleChecker
 
 # All my stuff will be saved in this file
@@ -79,9 +88,13 @@ tfile_service_1 = cfg.Service(
   option='recreate'
 )
 
-# pt checker
+''' Returns pt'''
 def pt (ptc):
       return ptc.pt()
+
+'''Returns eta'''
+def eta (ptc):
+      return ptc.eta()
 
 # Restricting gen particles and jets in the abs(eta) < 6 region
 
@@ -114,7 +127,7 @@ electronRecoPtDistribution = cfg.Analyzer(
   histo_name = 'electronRecoPtDistribution',
   histo_title = 'Electron transverse momentum distribution (reco level)',
   min = 0,
-  max = 100,
+  max = 500,
   nbins = 100,
   input_objects = 'electrons',
   value_func = pt,
@@ -129,10 +142,25 @@ electronLeadingRecoPtDistribution = cfg.Analyzer(
   histo_name = 'electronLeadingRecoPtDistribution',
   histo_title = 'Electron leading transverse momentum distribution (reco level)',
   min = 0,
-  max = 100,
+  max = 500,
   nbins = 100,
   input_objects = 'electrons',
+  key_func = pt,
   value_func = pt,
+  log_y = True
+)
+
+electronLeadingRecoEtaDistribution = cfg.Analyzer(
+  LeadingQuantityHistogrammer,
+  file_label = 'tfile1',
+  histo_name = 'electronLeadingRecoEtaDistribution',
+  histo_title = 'Electron leading eta distribution (reco level)',
+  min = -10,
+  max = +10,
+  nbins = 100,
+  input_objects = 'electrons',
+  key_func = pt,
+  value_func = eta,
   log_y = True
 )
 
@@ -140,7 +168,7 @@ electronSelector = cfg.Analyzer(
     Selector,
     'sel_electrons',
     output = 'gen_electrons',
-    input_objects = 'gen_particles_eta_restricted',
+    input_objects = 'gen_particles',
     filter_func = particleCheckerFactory("electron-")
 )
 
@@ -165,7 +193,7 @@ muonRecoPtDistribution = cfg.Analyzer(
   histo_name = 'muonRecoPtDistribution',
   histo_title = 'Muon transverse momentum distribution (reco level)',
   min = 0,
-  max = 100,
+  max = 500,
   nbins = 100,
   input_objects = 'muons',
   value_func = pt,
@@ -178,10 +206,25 @@ muonLeadingRecoPtDistribution = cfg.Analyzer(
   histo_name = 'muonLeadingRecoPtDistribution',
   histo_title = 'Muon leading transverse momentum distribution (reco level)',
   min = 0,
-  max = 100,
+  max = 500,
   nbins = 100,
   input_objects = 'muons',
+  key_func = pt,
   value_func = pt,
+  log_y = True
+)
+
+muonLeadingRecoEtaDistribution = cfg.Analyzer(
+  LeadingQuantityHistogrammer,
+  file_label = 'tfile1',
+  histo_name = 'muonLeadingRecoEtaDistribution',
+  histo_title = 'Muon leading eta distribution (reco level)',
+  min = -10,
+  max = 10,
+  nbins = 100,
+  input_objects = 'muons',
+  key_func = pt,
+  value_func = eta,
   log_y = True
 )
 
@@ -237,7 +280,7 @@ photonRecoPtDistribution = cfg.Analyzer(
   histo_name = 'photonRecoPtDistribution',
   histo_title = 'Photon transverse momentum distribution (reco level)',
   min = 0,
-  max = 100,
+  max = 500,
   nbins = 100,
   input_objects = 'photons',
   value_func = pt,
@@ -250,10 +293,25 @@ photonLeadingRecoPtDistribution = cfg.Analyzer(
   histo_name = 'photonLeadingRecoPtDistribution',
   histo_title = 'Photon leading transverse momentum distribution (reco level)',
   min = 0,
-  max = 100,
+  max = 500,
   nbins = 100,
   input_objects = 'photons',
+  key_func = pt,
   value_func = pt,
+  log_y = True
+)
+
+photonLeadingRecoEtaDistribution = cfg.Analyzer(
+  LeadingQuantityHistogrammer,
+  file_label = 'tfile1',
+  histo_name = 'photonLeadingRecoEtaDistribution',
+  histo_title = 'Photon leading eta distribution (reco level)',
+  min = -10,
+  max = +10,
+  nbins = 100,
+  input_objects = 'photons',
+  key_func = pt,
+  value_func = eta,
   log_y = True
 )
 
@@ -302,7 +360,22 @@ jetLeadingRecoPtDistribution = cfg.Analyzer(
   max = 500,
   nbins = 100,
   input_objects = 'jets',
+  key_func = pt,
   value_func = pt,
+  log_y = True
+)
+
+jetLeadingRecoEtaDistribution = cfg.Analyzer(
+  LeadingQuantityHistogrammer,
+  file_label = 'tfile1',
+  histo_name = 'jetLeadingRecoEtaDistribution',
+  histo_title = 'Jet leading eta distribution (reco level)',
+  min = -10,
+  max = +10,
+  nbins = 100,
+  input_objects = 'jets',
+  key_func = pt,
+  value_func = eta,
   log_y = True
 )
 
@@ -332,16 +405,20 @@ sequence = cfg.Sequence( [
   photonSelector,
   electronRecoPtDistribution,
   electronLeadingRecoPtDistribution,
+  electronLeadingRecoEtaDistribution,
   electronGenPtDistribution,
   muonRecoPtDistribution,
   muonLeadingRecoPtDistribution,
+  muonLeadingRecoEtaDistribution,
   muonGenPtDistribution,
   tauGenPtDistribution,
   photonRecoPtDistribution,
   photonLeadingRecoPtDistribution,
+  photonLeadingRecoEtaDistribution,
   photonGenPtDistribution,
   jetRecoPtDistribution,
   jetLeadingRecoPtDistribution,
+  jetLeadingRecoEtaDistribution,
   jetGenPtDistribution
 ] )
 
