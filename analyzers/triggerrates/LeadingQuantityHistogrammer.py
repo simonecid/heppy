@@ -30,17 +30,19 @@ class LeadingQuantityHistogrammer(Analyzer):
       max = 300,
       nbins = 100,
       input_objects = 'jets',
-      value_func = pt
+      value_func = pt,
+      key_func = pt
     )
 
     * file_label: (Facultative) Name of a TFileService. If specified, the histogram will be saved in that root file, otherwise it will be saved in a <histo_name>.png and <histo_name>.root file .
     * histo_name: Name of the histogram.
     * histo_title: Title of the histogram.
     * min: Minimum of the histogram
-    * max: Maximum of the histogram
+    * max: MaximumKey of the histogram
     * nbins: Number of bins
     * input_objects : the input collection.
     * value_func : function that returns the value to store in the histogram
+    * key_func : function that returns the value used to determine the leading object (typically pt for the trigger)
   
   '''
 
@@ -68,24 +70,27 @@ class LeadingQuantityHistogrammer(Analyzer):
        self.cfg_ana.trigger_func.
     '''
 
-    maximum = 0
+    maximumKey = 0
+    maximumValue = 0
 
     input_collection = getattr(event, self.cfg_ana.input_objects)
     if isinstance(input_collection, collections.Mapping):
       for key, val in input_collection.iteritems():
-        if self.cfg_ana.value_func(val) > maximum:
-          maximum = self.cfg_ana.value_func(val)
+        if self.cfg_ana.key_func(val) > maximumKey:
+          maximumKey = self.cfg_ana.key_func(val)
+          maximumValue = self.cfg_ana.value_func(val)
     else:
       for obj in input_collection:
-        if self.cfg_ana.value_func(obj) > maximum:
-          maximum = self.cfg_ana.value_func(obj)
+        if self.cfg_ana.key_func(obj) > maximumKey:
+          maximumKey = self.cfg_ana.key_func(obj)
+          maximumValue = self.cfg_ana.value_func(obj)
 
-    if maximum != 0:
-      self.histogram.Fill(maximum)
+    if maximumKey != 0:
+      self.histogram.Fill(maximumValue)
 
   def write(self, setup):
     self.rootfile.cd()
-    self.histogram.Write()
+    #self.histogram.Write()
     c1 = TCanvas ("c1", "c1", 600, 600)
     c1.SetGridx()
     c1.SetGridy()
