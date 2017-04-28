@@ -25,8 +25,30 @@ comp = cfg.Component(
   'minBias',
   #files = ["../FCCSW/mininumBiasDelphesSimulation_PU180_2evts.root"]
   #files = ["../FCCSW/mininumBiasDelphesSimulation_PU25_10evts.root"]
-  files = ["../FCCSW/minimumBias_10000evts.root"]
+  #files = ["../FCCSW/minimumBias_10000evts.root"]
   #files = ["../FCCSW/minimumBias_13TeV_100000evts.root"]
+  files = [
+    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.0.root",
+    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.10.root",
+    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.11.root",
+    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.12.root",
+    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.13.root",
+    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.14.root",
+    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.15.root",
+    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.16.root",
+    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.17.root",
+    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.18.root",
+    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.19.root",
+    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.1.root",
+    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.2.root",
+    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.3.root",
+    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.4.root",
+    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.5.root",
+    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.6.root",
+    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.7.root",
+    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.8.root",
+    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.9.root"
+  ]
 )
 selectedComponents = [comp]
 
