@@ -28,26 +28,26 @@ comp = cfg.Component(
   #files = ["../FCCSW/minimumBias_10000evts.root"]
   #files = ["../FCCSW/minimumBias_13TeV_100000evts.root"]
   files = [
-    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.0.root",
-    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.10.root",
-    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.11.root",
-    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.12.root",
-    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.13.root",
-    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.14.root",
-    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.15.root",
-    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.16.root",
-    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.17.root",
-    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.18.root",
-    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.19.root",
-    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.1.root",
-    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.2.root",
-    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.3.root",
-    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.4.root",
-    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.5.root",
-    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.6.root",
-    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.7.root",
-    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.8.root",
-    "../FCCSW/events_MinimumBiasGeneration_25kevents_1684753.9.root"
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.0.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.10.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.11.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.12.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.13.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.14.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.15.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.16.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.17.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.18.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.19.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.1.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.2.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.3.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.4.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.5.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.6.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.7.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.8.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.9.root"
   ]
 )
 selectedComponents = [comp]
@@ -100,6 +100,15 @@ jet_to_electron_scale[2] = 7.50E-04
 jet_to_electron_scale[3] = 4.89E-04
 jet_to_electron_scale[4] = 6.13E-04
 jet_to_electron_scale[5] = 8.21E-04
+jet_to_electron_scale[6] = 9.59E-04
+jet_to_electron_scale[7] = 1.11E-03
+jet_to_electron_scale[8] = 1.27E-03
+jet_to_electron_scale[9] = 1.43E-03
+jet_to_electron_scale[10] = 1.58E-03
+jet_to_electron_scale[11] = 1.74E-03
+jet_to_electron_scale[12] = 1.89E-03
+jet_to_electron_scale[13] = 2.05E-03
+jet_to_electron_scale[14] = 2.21E-03
 
 jet_to_photon_scale[0] = 1
 jet_to_photon_scale[1] = 2.50E-02
@@ -114,6 +123,15 @@ jet_to_muon_scale[2] = 1.75E-04
 jet_to_muon_scale[3] = 1.15E-04
 jet_to_muon_scale[4] = 1.23E-04
 jet_to_muon_scale[5] = 2.30E-04
+jet_to_muon_scale[6] = 2.00E-04
+jet_to_muon_scale[7] = 2.29E-04
+jet_to_muon_scale[8] = 2.58E-04
+jet_to_muon_scale[9] = 2.88E-04
+jet_to_muon_scale[10] = 3.17E-04
+jet_to_muon_scale[11] = 3.46E-04
+jet_to_muon_scale[12] = 3.75E-04
+jet_to_muon_scale[13] = 4.04E-04
+jet_to_muon_scale[14] = 4.34E-04
 
 jet_to_MET_scale[0] = 1
 jet_to_MET_scale[1] = 5.50E-01
