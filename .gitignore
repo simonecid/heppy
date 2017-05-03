@@ -11,3 +11,4 @@ bin/*
 *.png
 *.svg
 _*
+*.tar.gz
