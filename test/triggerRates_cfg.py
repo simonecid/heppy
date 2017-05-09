@@ -143,7 +143,7 @@ jet_to_MET_scale[6] = 3.29E-02
 jet_to_MET_scale[7] = 3.68E-02
 jet_to_MET_scale[8] = 5.37E-02
 jet_to_MET_scale[9] = 5.44E-02
-jet_to_MET_scale[10]  6.01E-02
+jet_to_MET_scale[10] = 6.01E-02
 jet_to_MET_scale[11] = 6.59E-02
 jet_to_MET_scale[12] = 7.16E-02
 jet_to_MET_scale[13] = 7.74E-02
