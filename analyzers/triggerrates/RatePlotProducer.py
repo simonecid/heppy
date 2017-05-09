@@ -1,4 +1,4 @@
-'''Test analyzer creating a simple root tree.'''
+'''Produces a rate plot'''
 
 from heppy.framework.analyzer import Analyzer
 from heppy.statistics.tree import Tree
