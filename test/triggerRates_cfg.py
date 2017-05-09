@@ -118,8 +118,8 @@ jet_to_photon_scale[4] = 3.07E-05
 jet_to_photon_scale[5] = 0
 
 jet_to_muon_scale[0] = 1
-jet_to_muon_scale[1] = 1.88E-03
-jet_to_muon_scale[2] = 1.75E-04
+jet_to_muon_scale[1] = 1.38E-03
+jet_to_muon_scale[2] = 1.25E-04
 jet_to_muon_scale[3] = 1.15E-04
 jet_to_muon_scale[4] = 1.23E-04
 jet_to_muon_scale[5] = 2.30E-04
@@ -135,10 +135,19 @@ jet_to_muon_scale[14] = 4.34E-04
 
 jet_to_MET_scale[0] = 1
 jet_to_MET_scale[1] = 5.50E-01
-jet_to_MET_scale[2] = 1.33E-01
-jet_to_MET_scale[3] = 7.48E-02
-jet_to_MET_scale[4] = 4.60E-02
+jet_to_MET_scale[2] = 1.55E-01
+jet_to_MET_scale[3] = 9.20E-02
+jet_to_MET_scale[4] = 6.29E-02
 jet_to_MET_scale[5] = 3.29E-02
+jet_to_MET_scale[6] = 3.29E-02
+jet_to_MET_scale[7] = 3.68E-02
+jet_to_MET_scale[8] = 5.37E-02
+jet_to_MET_scale[9] = 5.44E-02
+jet_to_MET_scale[10]  6.01E-02
+jet_to_MET_scale[11] = 6.59E-02
+jet_to_MET_scale[12] = 7.16E-02
+jet_to_MET_scale[13] = 7.74E-02
+jet_to_MET_scale[14] = 8.31E-02
 
 # File in which all the rate plots will be stored 
 
