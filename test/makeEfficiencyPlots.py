@@ -1,10 +1,12 @@
 from ROOT import TFile
+from ROOT import TLatex
 from ROOT import TH1I
 from ROOT import TH1F
 from ROOT import TCanvas
 from ROOT import TLegend
 from ROOT import TGraph
 from ROOT import TMultiGraph
+from ROOT import TLine
 
 class ParticleDistributionsFromDelphes(object):
 
@@ -348,6 +350,15 @@ ptToMuonRate.append(559.86)
 
 canvas.SetLogx(1)
 
+label_20GeV_electrons = TLatex(217343, 1.01, "20 GeV")
+label_20GeV_electrons.SetTextSize(0.04)
+label_20GeV_muons = TLatex(50713.3, 1.01, "20 GeV")
+label_20GeV_muons.SetTextSize(0.04)
+line_20GeV_electrons = TLine(217343, 0, 217343, 1)
+line_20GeV_electrons.SetLineColor(2)
+line_20GeV_muons = TLine(50713.3, 0, 50713.3, 1)
+line_20GeV_muons.SetLineColor(2)
+
 efficiencyPlotWithRate_ff_H_WW_enuenu_1000events = TGraph(14)
 for x in xrange(1, 15):
   efficiencyPlotWithRate_ff_H_WW_enuenu_1000events.SetPoint(x - 1, ptToElectronRate[x], efficiencyPlot_ff_H_WW_enuenu_1000events.GetBinContent(efficiencyPlot_ff_H_WW_enuenu_1000events.GetXaxis().FindBin(x*10)))
@@ -358,6 +369,8 @@ efficiencyPlotWithRate_ff_H_WW_enuenu_1000events.SetMarkerColor(4)
 efficiencyPlotWithRate_ff_H_WW_enuenu_1000events.SetMarkerStyle(21)
 efficiencyPlotWithRate_ff_H_WW_enuenu_1000events.GetXaxis().SetTitle("Rate [Hz]")
 efficiencyPlotWithRate_ff_H_WW_enuenu_1000events.Draw("AP")
+label_20GeV_electrons.Draw()
+line_20GeV_electrons.Draw()
 canvas.Update()
 canvas.Print("efficiencyPlotWithRate_ff_H_WW_enuenu_1000events.svg", "svg")
 
@@ -371,6 +384,8 @@ efficiencyPlotWithRate_ff_H_WW_munumunu_1000events.SetMarkerColor(4)
 efficiencyPlotWithRate_ff_H_WW_munumunu_1000events.SetMarkerStyle(21)
 efficiencyPlotWithRate_ff_H_WW_munumunu_1000events.GetXaxis().SetTitle("Rate [Hz]")
 efficiencyPlotWithRate_ff_H_WW_munumunu_1000events.Draw("AP")
+label_20GeV_muons.Draw()
+line_20GeV_muons.Draw()
 canvas.Update()
 canvas.Print("efficiencyPlotWithRate_ff_H_WW_munumunu_1000events.svg", "svg")
 
@@ -384,6 +399,8 @@ efficiencyPlotWithRate_ff_H_ZZ_eeee_1000events.SetMarkerColor(4)
 efficiencyPlotWithRate_ff_H_ZZ_eeee_1000events.SetMarkerStyle(21)
 efficiencyPlotWithRate_ff_H_ZZ_eeee_1000events.GetXaxis().SetTitle("Rate [Hz]")
 efficiencyPlotWithRate_ff_H_ZZ_eeee_1000events.Draw("AP")
+label_20GeV_electrons.Draw()
+line_20GeV_electrons.Draw()
 canvas.Update()
 canvas.Print("efficiencyPlotWithRate_ff_H_ZZ_eeee_1000events.svg", "svg")
 
@@ -397,6 +414,8 @@ efficiencyPlotWithRate_ff_H_ZZ_mumumumu_1000events.SetMarkerColor(4)
 efficiencyPlotWithRate_ff_H_ZZ_mumumumu_1000events.SetMarkerStyle(21)
 efficiencyPlotWithRate_ff_H_ZZ_mumumumu_1000events.GetXaxis().SetTitle("Rate [Hz]")
 efficiencyPlotWithRate_ff_H_ZZ_mumumumu_1000events.Draw("AP")
+label_20GeV_muons.Draw()
+line_20GeV_muons.Draw()
 canvas.Update()
 canvas.Print("efficiencyPlotWithRate_ff_H_ZZ_mumumumu_1000events.svg", "svg")
 
@@ -410,6 +429,8 @@ efficiencyPlotWithRate_ff_W_enu_1000events.SetMarkerColor(4)
 efficiencyPlotWithRate_ff_W_enu_1000events.SetMarkerStyle(21)
 efficiencyPlotWithRate_ff_W_enu_1000events.GetXaxis().SetTitle("Rate [Hz]")
 efficiencyPlotWithRate_ff_W_enu_1000events.Draw("AP")
+label_20GeV_electrons.Draw()
+line_20GeV_electrons.Draw()
 canvas.Update()
 canvas.Print("efficiencyPlotWithRate_ff_W_enu_1000events.svg", "svg")
 
@@ -423,6 +444,8 @@ efficiencyPlotWithRate_ff_W_munu_1000events.SetMarkerColor(4)
 efficiencyPlotWithRate_ff_W_munu_1000events.SetMarkerStyle(21)
 efficiencyPlotWithRate_ff_W_munu_1000events.GetXaxis().SetTitle("Rate [Hz]")
 efficiencyPlotWithRate_ff_W_munu_1000events.Draw("AP")
+label_20GeV_muons.Draw()
+line_20GeV_muons.Draw()
 canvas.Update()
 canvas.Print("efficiencyPlotWithRate_ff_W_munu_1000events.svg", "svg")
 
@@ -436,6 +459,8 @@ efficiencyPlotWithRate_ff_Z_ee_1000events.SetMarkerColor(4)
 efficiencyPlotWithRate_ff_Z_ee_1000events.SetMarkerStyle(21)
 efficiencyPlotWithRate_ff_Z_ee_1000events.GetXaxis().SetTitle("Rate [Hz]")
 efficiencyPlotWithRate_ff_Z_ee_1000events.Draw("AP")
+label_20GeV_electrons.Draw()
+line_20GeV_electrons.Draw()
 canvas.Update()
 canvas.Print("efficiencyPlotWithRate_ff_Z_ee_1000events.svg", "svg")
 
@@ -449,6 +474,8 @@ efficiencyPlotWithRate_ff_Z_mumu_1000events.SetMarkerColor(4)
 efficiencyPlotWithRate_ff_Z_mumu_1000events.SetMarkerStyle(21)
 efficiencyPlotWithRate_ff_Z_mumu_1000events.GetXaxis().SetTitle("Rate [Hz]")
 efficiencyPlotWithRate_ff_Z_mumu_1000events.Draw("AP")
+label_20GeV_muons.Draw()
+line_20GeV_muons.Draw()
 canvas.Update()
 canvas.Print("efficiencyPlotWithRate_ff_Z_mumu_1000events.svg", "svg")
 
@@ -470,6 +497,8 @@ efficiencyPlotWithRate_ff_Z_ee_1000events.SetMarkerColor(4)
 efficiencyPlotWithRate_ff_Z_ee_1000events.SetLineColor(0)
 efficiencyPlotWithRate_ff_Z_ee_1000events.SetFillColor(0)
 efficiencyPlotWithRate_electrons.Draw("AP")
+label_20GeV_electrons.Draw()
+line_20GeV_electrons.Draw()
 canvas.BuildLegend(0.6, 0.35, 0.9, 0.15)
 canvas.Update()
 canvas.Print("efficiencyPlotWithRate_electrons.svg", "svg")
@@ -492,6 +521,10 @@ efficiencyPlotWithRate_ff_Z_mumu_1000events.SetMarkerColor(4)
 efficiencyPlotWithRate_ff_Z_mumu_1000events.SetLineColor(0)
 efficiencyPlotWithRate_ff_Z_mumu_1000events.SetFillColor(0)
 efficiencyPlotWithRate_muons.Draw("AP")
+label_20GeV_muons.Draw()
+line_20GeV_muons.Draw()
 canvas.BuildLegend(0.6, 0.35, 0.9, 0.15)
 canvas.Update()
 canvas.Print("efficiencyPlotWithRate_muons.svg", "svg")
+
+raw_input()
