@@ -1,5 +1,13 @@
 #! /bin/bash
 
+echo "Dumping sysinfo"
+
+lsb_release -a
+
+python /cvmfs/fcc.cern.ch/sw/0.8.1/tools/hsf_get_platform.py --get=os 
+
+echo "Running heppy job"
+
 SAVE_DEST="$(pwd)"
 
 mkdir output
