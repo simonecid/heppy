@@ -1,3 +1,6 @@
+'''Build efficiency plots starting from the distributions in output from the particleInfoPlotter heppy script.
+'''
+
 from ROOT import TFile
 from ROOT import TLatex
 from ROOT import TH1I
