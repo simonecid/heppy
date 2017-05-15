@@ -96,19 +96,19 @@ for x in xrange(0, 300, 10):
 
 jet_to_electron_scale[0] = 1
 jet_to_electron_scale[1] = 8.00E-03
-jet_to_electron_scale[2] = 7.50E-04
+jet_to_electron_scale[2] = 6.75E-04
 jet_to_electron_scale[3] = 4.89E-04
 jet_to_electron_scale[4] = 6.13E-04
 jet_to_electron_scale[5] = 8.21E-04
-jet_to_electron_scale[6] = 9.59E-04
-jet_to_electron_scale[7] = 1.11E-03
-jet_to_electron_scale[8] = 1.27E-03
-jet_to_electron_scale[9] = 1.43E-03
-jet_to_electron_scale[10] = 1.58E-03
-jet_to_electron_scale[11] = 1.74E-03
-jet_to_electron_scale[12] = 1.89E-03
-jet_to_electron_scale[13] = 2.05E-03
-jet_to_electron_scale[14] = 2.21E-03
+jet_to_electron_scale[6] = 9.69E-04
+jet_to_electron_scale[7] = 1.13E-03
+jet_to_electron_scale[8] = 1.29E-03
+jet_to_electron_scale[9] = 1.45E-03
+jet_to_electron_scale[10] = 1.62E-03
+jet_to_electron_scale[11] = 1.78E-03
+jet_to_electron_scale[12] = 1.94E-03
+jet_to_electron_scale[13] = 2.10E-03
+jet_to_electron_scale[14] = 2.26E-03
 
 jet_to_photon_scale[0] = 1
 jet_to_photon_scale[1] = 2.50E-02
@@ -123,15 +123,15 @@ jet_to_muon_scale[2] = 1.25E-04
 jet_to_muon_scale[3] = 1.15E-04
 jet_to_muon_scale[4] = 1.23E-04
 jet_to_muon_scale[5] = 2.30E-04
-jet_to_muon_scale[6] = 2.00E-04
-jet_to_muon_scale[7] = 2.29E-04
-jet_to_muon_scale[8] = 2.58E-04
-jet_to_muon_scale[9] = 2.88E-04
-jet_to_muon_scale[10] = 3.17E-04
-jet_to_muon_scale[11] = 3.46E-04
-jet_to_muon_scale[12] = 3.75E-04
-jet_to_muon_scale[13] = 4.04E-04
-jet_to_muon_scale[14] = 4.34E-04
+jet_to_muon_scale[6] = 2.14E-04
+jet_to_muon_scale[7] = 2.50E-04
+jet_to_muon_scale[8] = 2.86E-04
+jet_to_muon_scale[9] = 3.21E-04
+jet_to_muon_scale[10] = 3.57E-04
+jet_to_muon_scale[11] = 3.93E-04
+jet_to_muon_scale[12] = 4.29E-04
+jet_to_muon_scale[13] = 4.64E-04
+jet_to_muon_scale[14] = 5.00E-04
 
 jet_to_MET_scale[0] = 1
 jet_to_MET_scale[1] = 5.50E-01
@@ -142,12 +142,12 @@ jet_to_MET_scale[5] = 3.29E-02
 jet_to_MET_scale[6] = 3.29E-02
 jet_to_MET_scale[7] = 3.68E-02
 jet_to_MET_scale[8] = 5.37E-02
-jet_to_MET_scale[9] = 5.44E-02
-jet_to_MET_scale[10] = 6.01E-02
-jet_to_MET_scale[11] = 6.59E-02
-jet_to_MET_scale[12] = 7.16E-02
-jet_to_MET_scale[13] = 7.74E-02
-jet_to_MET_scale[14] = 8.31E-02
+jet_to_MET_scale[9] = 5.58E-02
+jet_to_MET_scale[10] = 6.20E-02
+jet_to_MET_scale[11] = 6.82E-02
+jet_to_MET_scale[12] = 7.44E-02
+jet_to_MET_scale[13] = 8.06E-02
+jet_to_MET_scale[14] = 8.68E-02
 
 # File in which all the rate plots will be stored 
 
