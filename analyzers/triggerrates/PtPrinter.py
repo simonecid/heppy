@@ -19,17 +19,17 @@ class PtPrinter(Analyzer):
     #self.cfg_ana.input_objects: name of the particle I want the pt printed
     #getattr, gets the attribute which is named as the second parameter
     input_collection = getattr(event, self.cfg_ana.input_objects)
+    print self.cfg_ana.input_objects
     #checks if input_collection is a dictionary class
     if isinstance(input_collection, collections.Mapping):
-      print "Event contains ", len(input_collection) , " jet"
+      print self.cfg_ana.input_objects, "contains", len(input_collection) , "objects" 
       for key, val in input_collection.iteritems():
-        print "PtPrinter says " + str(val.pt())
+        print "PtPrinter says", key, val.pt()
     else:
-
       if len(input_collection) > 0:
-        print "Event contains ", len(input_collection) , " jet"
-      for obj in input_collection:
-        print "PtPrinter says " + str(obj.pt())
+        print self.cfg_ana.input_objects, "contains", len(input_collection) , "objects"   
+        for obj in input_collection:
+          print "PtPrinter says " + str(obj.pt())
         
 
 
