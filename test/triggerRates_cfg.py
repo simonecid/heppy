@@ -87,7 +87,7 @@ jet_to_photon_scale = []
 jet_to_muon_scale = []
 jet_to_MET_scale = []
 
-for x in xrange(0, 300, 10):
+for x in xrange(0, 600, 10):
   steps.append(x)
   jet_to_electron_scale.append(0)
   jet_to_photon_scale.append(0)
