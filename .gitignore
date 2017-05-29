@@ -12,3 +12,4 @@ bin/*
 *.svg
 _*
 *.tar.gz
+*.dat
