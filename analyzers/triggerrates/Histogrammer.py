@@ -40,7 +40,7 @@ class Histogrammer(Analyzer):
     * max: Maximum of the histogram
     * nbins: Number of bins
     * input_objects : the input collection.
-    * value_func : function that returns the value to store in the histogram
+    * value_func : function that returns the value to store in the histogram. If it returns None, it will not be stored
     * log_y: True or False, sets log scale on y axis (False by default)
   
   '''
@@ -71,10 +71,14 @@ class Histogrammer(Analyzer):
     input_collection = getattr(event, self.cfg_ana.input_objects)
     if isinstance(input_collection, collections.Mapping):
       for key, val in input_collection.iteritems():
-        self.histogram.Fill(self.cfg_ana.value_func(val))
+        value = self.cfg_ana.value_func(val)
+        if value != None:
+          self.histogram.Fill(value)
     else:
       for obj in input_collection:
-        self.histogram.Fill(self.cfg_ana.value_func(obj))
+        value = self.cfg_ana.value_func(obj)
+        if value != None:
+          self.histogram.Fill(value)
 
   def write(self, setup):
     self.rootfile.cd()
