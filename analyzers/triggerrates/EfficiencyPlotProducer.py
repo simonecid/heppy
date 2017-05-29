@@ -4,12 +4,14 @@ from heppy.framework.analyzer import Analyzer
 from heppy.statistics.tree import Tree
 from ROOT import TFile
 from ROOT import TH1F
+from ROOT import TGraphErrors
 from ROOT import TCanvas
 from ROOT import TLine
 from array import array
 from numpy import power
 from scipy.optimize import fsolve
 import numpy as np
+from math import sqrt
 
 from bisect import insort
 
@@ -99,13 +101,24 @@ class EfficiencyPlotProducer(Analyzer):
     normalisation = 1/self.histogram.GetBinContent(1)
     #Rescaling everything to have rates
     self.histogram.Scale(normalisation)
+
+    efficiencyPlot = TGraphErrors(self.histogram)
+    efficiencyPlot.SetName(self.cfg_ana.plot_name+"_errors")
+    efficiencyPlot.SetTitle(self.cfg_ana.plot_title)
+
+    for index in xrange(0, len(efficiencyPlot.GetX())):
+      efficiencyPlot.SetPointError(index, 
+                                   efficiencyPlot.GetEX()[index], 
+                                   sqrt(efficiencyPlot.GetY()[index] * normalisation)
+                                  )
     
     c1 = TCanvas ("canvas_" + self.cfg_ana.plot_name, self.cfg_ana.plot_title, 600, 600)
     c1.SetGridx()
     c1.SetGridy()
-    self.histogram.Draw("")
+    efficiencyPlot.Draw("AP")
     c1.Update()
     c1.Write()
     c1.Print(self.cfg_ana.plot_name + ".svg", "svg")
+    efficiencyPlot.Write()
 
     #self.rootfile.Close()
