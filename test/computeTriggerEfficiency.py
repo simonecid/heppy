@@ -11,10 +11,10 @@ logging.basicConfig(level=logging.WARNING)
 comp = cfg.Component(
   'METEfficiency',
   #files = ["../FCCSW/minimumBias_10000evts.root"],
-  #files = ["../FCCSW/DelphesSim_ff_H_WW_enuenu_1000events.root"]
+  files = ["../FCCSW/DelphesSim_ff_H_WW_enuenu_1000events.root"]
   #files = ["../FCCSW/DelphesSim_ff_H_WW_munumunu_1000events.root"]
   #files = ["../FCCSW/DelphesSim_ff_W_enu_1000events.root"]
-  files = ["../FCCSW/DelphesSim_ff_W_munu_1000events.root"]
+  #files = ["../FCCSW/DelphesSim_ff_W_munu_1000events.root"]
   #files = [
     #"/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.0.root",
     #"/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.10.root",
@@ -89,7 +89,7 @@ metEfficiency = cfg.Analyzer(
   input_objects = 'met',
   min = 0,
   max = 300,
-  nbins = 100,
+  nbins = 30,
   value_func = pt
 )
 
