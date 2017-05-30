@@ -49,7 +49,7 @@ canvas.SetLogy()
 
 # Lumi and energy info
 text = TPaveText(0.5, 0.84, 0.9, 0.9, "NDC")
-text.AddText("L_{inst} = 5 #times 10^{34} cm^{-2} s^{-1}   #sqrt{s} = 100 TeV")
+text.AddText("#sqrt{s} = 100 TeV")
 
 # Plotting stuff
 
