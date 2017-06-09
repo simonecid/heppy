@@ -13,10 +13,10 @@ reload(logging)
 logging.basicConfig(level=logging.WARNING)
 
 comp = cfg.Component(
-  'EWProductionAndHiggs',
+  'MinBiasDistribution',
   #files = ["../FCCSW/DelphesSim_ff_H_WW_enuenu_1000events.root"]
   #files = ["../FCCSW/DelphesSim_ff_H_WW_munumunu_1000events.root"]
-  files = ["../FCCSW/DelphesSim_ff_H_ZZ_eeee_1000events.root"]
+  #files = ["../FCCSW/DelphesSim_ff_H_ZZ_eeee_1000events.root"]
   #files = ["../FCCSW/DelphesSim_ff_H_ZZ_mumumumu_1000events.root"]
   #files = ["../FCCSW/DelphesSim_ff_W_enu_1000events.root"]
   #files = ["../FCCSW/DelphesSim_ff_W_munu_1000events.root"]
@@ -26,6 +26,28 @@ comp = cfg.Component(
   #files = ["../FCCSW/DelphesSim_ff_Z_tautau_1000events.root"]
   #files = ["../FCCSW/mininumBiasDelphesSimulation_PU25_10evts.root"]
   #files = ["../FCCSW/minimumBias_10000evts.root"]
+  files = [
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.0.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.10.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.11.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.12.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.13.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.14.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.15.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.16.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.17.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.18.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.19.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.1.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.2.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.3.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.4.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.5.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.6.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.7.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.8.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.9.root"
+  ]
 )
 selectedComponents = [comp]
 
@@ -63,7 +85,7 @@ source = cfg.Analyzer(
 )
 
 '''
-  Creates partticle checker functions. 
+  Creates particle checker functions. 
   The function checks the absolute value of the pdgId to identify the class of particle and verifies that it is in the |eta|<6 region.
   It does not distinguish between particles and anti-particles
 '''
@@ -79,14 +101,6 @@ from ROOT import gSystem
 gSystem.Load("libdatamodelDict")
 
 from EventStore import EventStore as Events
-
-from heppy.framework.services.tfile import TFileService
-tfile_service_1 = cfg.Service(
-  TFileService,
-  'tfile1',
-  fname='distributions.root',
-  option='recreate'
-)
 
 ''' Returns pt'''
 def pt (ptc):
@@ -119,11 +133,14 @@ etaGenJetSelector = cfg.Analyzer(
 
 # Defining analysers for electrons
 
-from heppy.analyzers.triggerrates.Histogrammer import Histogrammer
+from heppy.analyzers.triggerrates.Histogrammer_MPL import Histogrammer_MPL
 
 electronRecoPtDistribution = cfg.Analyzer(
-  Histogrammer,
+  Histogrammer_MPL,
+  'electronRecoPtDistribution',
   file_label = 'tfile1',
+  x_label= "pt [GeV]",
+  y_label = "# events",
   histo_name = 'electronRecoPtDistribution',
   histo_title = 'Electron transverse momentum distribution (reco level)',
   min = 0,
@@ -134,11 +151,14 @@ electronRecoPtDistribution = cfg.Analyzer(
   log_y = True
 )
 
-from heppy.analyzers.triggerrates.LeadingQuantityHistogrammer import LeadingQuantityHistogrammer
+from heppy.analyzers.triggerrates.LeadingQuantityHistogrammer_MPL import LeadingQuantityHistogrammer_MPL
 
 electronLeadingRecoPtDistribution = cfg.Analyzer(
-  LeadingQuantityHistogrammer,
+  LeadingQuantityHistogrammer_MPL,
+  'electronLeadingRecoPtDistribution',
   file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
   histo_name = 'electronLeadingRecoPtDistribution',
   histo_title = 'Electron leading transverse momentum distribution (reco level)',
   min = 0,
@@ -151,8 +171,11 @@ electronLeadingRecoPtDistribution = cfg.Analyzer(
 )
 
 electronLeadingRecoEtaDistribution = cfg.Analyzer(
-  LeadingQuantityHistogrammer,
+  LeadingQuantityHistogrammer_MPL,
+  'electronLeadingRecoEtaDistribution',
   file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
   histo_name = 'electronLeadingRecoEtaDistribution',
   histo_title = 'Electron leading eta distribution (reco level)',
   min = -10,
@@ -173,8 +196,11 @@ electronSelector = cfg.Analyzer(
 )
 
 electronGenPtDistribution = cfg.Analyzer(
-  Histogrammer,
+  Histogrammer_MPL,
+  'electronGenPtDistribution',
   file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
   histo_name = 'electronGenPtDistribution',
   histo_title = 'Electron transverse momentum distribution (gen level)',
   min = 0,
@@ -188,8 +214,11 @@ electronGenPtDistribution = cfg.Analyzer(
 # Muons
 
 muonRecoPtDistribution = cfg.Analyzer(
-  Histogrammer,
+  Histogrammer_MPL,
+  'muonRecoPtDistribution',
   file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
   histo_name = 'muonRecoPtDistribution',
   histo_title = 'Muon transverse momentum distribution (reco level)',
   min = 0,
@@ -201,8 +230,11 @@ muonRecoPtDistribution = cfg.Analyzer(
 )
 
 muonLeadingRecoPtDistribution = cfg.Analyzer(
-  LeadingQuantityHistogrammer,
+  LeadingQuantityHistogrammer_MPL,
+  'muonLeadingRecoPtDistribution',
   file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
   histo_name = 'muonLeadingRecoPtDistribution',
   histo_title = 'Muon leading transverse momentum distribution (reco level)',
   min = 0,
@@ -215,8 +247,11 @@ muonLeadingRecoPtDistribution = cfg.Analyzer(
 )
 
 muonLeadingRecoEtaDistribution = cfg.Analyzer(
-  LeadingQuantityHistogrammer,
+  LeadingQuantityHistogrammer_MPL,
+  'muonLeadingRecoEtaDistribution',
   file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
   histo_name = 'muonLeadingRecoEtaDistribution',
   histo_title = 'Muon leading eta distribution (reco level)',
   min = -10,
@@ -237,8 +272,11 @@ muonSelector = cfg.Analyzer(
 )
 
 muonGenPtDistribution = cfg.Analyzer(
-  Histogrammer,
+  Histogrammer_MPL,
+  'muonGenPtDistribution',
   file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
   histo_name = 'muonGenPtDistribution',
   histo_title = 'Muon transverse momentum distribution (gen level)',
   min = 0,
@@ -260,8 +298,11 @@ tauSelector = cfg.Analyzer(
 )
 
 tauGenPtDistribution = cfg.Analyzer(
-  Histogrammer,
+  Histogrammer_MPL,
+  'tauGenPtDistribution',
   file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
   histo_name = 'tauGenPtDistribution',
   histo_title = 'Tau transverse momentum distribution (gen level)',
   min = 0,
@@ -275,8 +316,11 @@ tauGenPtDistribution = cfg.Analyzer(
 # Photons
 
 photonRecoPtDistribution = cfg.Analyzer(
-  Histogrammer,
+  Histogrammer_MPL,
+  'photonRecoPtDistribution',
   file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
   histo_name = 'photonRecoPtDistribution',
   histo_title = 'Photon transverse momentum distribution (reco level)',
   min = 0,
@@ -288,8 +332,11 @@ photonRecoPtDistribution = cfg.Analyzer(
 )
 
 photonLeadingRecoPtDistribution = cfg.Analyzer(
-  LeadingQuantityHistogrammer,
+  LeadingQuantityHistogrammer_MPL,
+  'photonLeadingRecoPtDistribution',
   file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
   histo_name = 'photonLeadingRecoPtDistribution',
   histo_title = 'Photon leading transverse momentum distribution (reco level)',
   min = 0,
@@ -302,8 +349,11 @@ photonLeadingRecoPtDistribution = cfg.Analyzer(
 )
 
 photonLeadingRecoEtaDistribution = cfg.Analyzer(
-  LeadingQuantityHistogrammer,
+  LeadingQuantityHistogrammer_MPL,
+  'photonLeadingRecoEtaDistribution',
   file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
   histo_name = 'photonLeadingRecoEtaDistribution',
   histo_title = 'Photon leading eta distribution (reco level)',
   min = -10,
@@ -324,8 +374,11 @@ photonSelector = cfg.Analyzer(
 )
 
 photonGenPtDistribution = cfg.Analyzer(
-  Histogrammer,
+  Histogrammer_MPL,
+  'photonGenPtDistribution',
   file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
   histo_name = 'photonGenPtDistribution',
   histo_title = 'Photon transverse momentum distribution (gen level)',
   min = 0,
@@ -339,8 +392,11 @@ photonGenPtDistribution = cfg.Analyzer(
 # Jets
 
 jetRecoPtDistribution = cfg.Analyzer(
-  Histogrammer,
+  Histogrammer_MPL,
+  'jetRecoPtDistribution',
   file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
   histo_name = 'jetRecoPtDistribution',
   histo_title = 'Jet transverse momentum distribution (reco level)',
   min = 0,
@@ -352,8 +408,11 @@ jetRecoPtDistribution = cfg.Analyzer(
 )
 
 jetLeadingRecoPtDistribution = cfg.Analyzer(
-  LeadingQuantityHistogrammer,
+  LeadingQuantityHistogrammer_MPL,
+  'jetLeadingRecoPtDistribution',
   file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
   histo_name = 'jetLeadingRecoPtDistribution',
   histo_title = 'Jet leading transverse momentum distribution (reco level)',
   min = 0,
@@ -366,8 +425,11 @@ jetLeadingRecoPtDistribution = cfg.Analyzer(
 )
 
 jetLeadingRecoEtaDistribution = cfg.Analyzer(
-  LeadingQuantityHistogrammer,
+  LeadingQuantityHistogrammer_MPL,
+  'jetLeadingRecoEtaDistribution',
   file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
   histo_name = 'jetLeadingRecoEtaDistribution',
   histo_title = 'Jet leading eta distribution (reco level)',
   min = -10,
@@ -380,8 +442,11 @@ jetLeadingRecoEtaDistribution = cfg.Analyzer(
 )
 
 jetGenPtDistribution = cfg.Analyzer(
-  Histogrammer,
+  Histogrammer_MPL,
+  'jetGenPtDistribution',
   file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
   histo_name = 'jetGenPtDistribution',
   histo_title = 'Jet transverse momentum distribution (gen level)',
   min = 0,
@@ -426,7 +491,7 @@ sequence = cfg.Sequence( [
 config = cfg.Config(
   components = selectedComponents,
   sequence = sequence,
-  services = [tfile_service_1],
+  services = [],
   events_class = Events
 )
 
