@@ -1,6 +1,6 @@
 Universe = vanilla
 job = minBias_500kevents
-cmd = runHeppy.sh
+cmd = runHeppyParticleInfoPlotter.sh
 args=$(cluster).$(process)
 # Better not to put logs in the same folder, as they are plenty
 output = /storage/sb17498/logs/heppy/$(job)_$(cluster).$(process).out
