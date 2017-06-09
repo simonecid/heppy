@@ -6,7 +6,10 @@ import matplotlib.pyplot as plt
 import pickle
 
 class Histogrammer_MPL(Analyzer):
-  '''Generic histogrammer_MPL that takes a particle type and quantity and plots it.
+  '''Generic histogrammer that takes a particle type and quantity and plots it using matplotlib.
+
+  Histogram is saved in .png and in .pickle.
+  Bins and relative contents are saved in a separate pickle file.
   
   Example::
   
@@ -76,15 +79,15 @@ class Histogrammer_MPL(Analyzer):
           self.histogramData.append(value)
 
   def write(self, setup):
-    #self.histogram.Write()
-    #if hasattr(self.cfg_ana, "log_y"):
-      #c1.SetLogy(self.cfg_ana.log_y)
-    self.histogramPlot.hist(
-                            self.histogramData, 
-                            bins = self.cfg_ana.nbins,
-                            histtype="step",
-                            range =(self.cfg_ana.min, self.cfg_ana.max)
-                           )
+    
+    binContents, bins, patches = self.histogramPlot.hist(
+                                                         self.histogramData, 
+                                                         bins = self.cfg_ana.nbins,
+                                                         histtype="step",
+                                                         range =(self.cfg_ana.min, self.cfg_ana.max)
+                                                        )
+
+    histogramContent = [bins, binContents]
     
     self.histogramPlot.set_title(self.cfg_ana.histo_title)
     self.histogramPlot.grid(b=True)
@@ -99,7 +102,7 @@ class Histogrammer_MPL(Analyzer):
 
     pickle.dump(self.histogramCanvas, file('/'.join([self.dirName,
                                       self.cfg_ana.histo_name + '_figure.pickle']), 'wb'))
-    pickle.dump(self.histogramData, file('/'.join([self.dirName,
-                                      self.cfg_ana.histo_name + '_data.pickle']), 'wb'))
+    pickle.dump(histogramContent, file('/'.join([self.dirName,
+                                      self.cfg_ana.histo_name + '_histogramContent.pickle']), 'wb'))
     self.histogramCanvas.savefig('/'.join([self.dirName,
-                                      self.cfg_ana.histo_name + '.svg']), format="svg")
+                                      self.cfg_ana.histo_name + '.png']), format="png")
