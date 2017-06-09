@@ -49,6 +49,10 @@ comp = cfg.Component(
     "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.9.root"
   ]
 )
+
+# N jobs = N files
+comp.splitFactor = len(comp.files)
+
 selectedComponents = [comp]
 
 # Defining pdgids
