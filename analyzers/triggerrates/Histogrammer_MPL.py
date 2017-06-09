@@ -2,6 +2,8 @@
 
 from heppy.framework.analyzer import Analyzer
 import collections
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import pickle
 
