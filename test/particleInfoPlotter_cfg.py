@@ -50,8 +50,8 @@ comp = cfg.Component(
   ]
 )
 
-# N jobs = N files
-comp.splitFactor = len(comp.files)
+# 4 CPUs
+comp.splitFactor = 4
 
 selectedComponents = [comp]
 
@@ -105,6 +105,14 @@ from ROOT import gSystem
 gSystem.Load("libdatamodelDict")
 
 from EventStore import EventStore as Events
+
+from heppy.framework.services.tfile import TFileService
+tfile_service_1 = cfg.Service(
+  TFileService,
+  'tfile1',
+  fname='distributions.root',
+  option='recreate'
+)
 
 ''' Returns pt'''
 def pt (ptc):
@@ -495,7 +503,7 @@ sequence = cfg.Sequence( [
 config = cfg.Config(
   components = selectedComponents,
   sequence = sequence,
-  services = [],
+  services = [tfile_service_1],
   events_class = Events
 )
 

@@ -94,6 +94,11 @@ class LeadingQuantityHistogrammer(Analyzer):
     c1 = TCanvas ("c1", "c1", 600, 600)
     c1.SetGridx()
     c1.SetGridy()
+    self.histogram.GetXaxis().SetTitleOffset(1.2)
+    self.histogram.GetYaxis().SetTitleOffset(1.2)
+    self.histogram.SetMarkerStyle(21)
+    self.histogram.SetMarkerColor(4)
+    self.histogram.SetLineColor(1)
     if hasattr(self.cfg_ana, "log_y"):
       c1.SetLogy(self.cfg_ana.log_y)
     self.histogram.Draw("")
@@ -102,6 +107,5 @@ class LeadingQuantityHistogrammer(Analyzer):
     if hasattr(self.cfg_ana, "y_label"):
       self.histogram.GetYaxis().SetTitle(self.cfg_ana.y_label)
     c1.Update()
-    c1.Print("/".join([self.dirName, self.cfg_ana.histo_name + ".pdf"]), "pdf")
+    c1.Print("/".join([self.dirName, self.cfg_ana.histo_name + ".svg"]), "svg")
     c1.Print("/".join([self.dirName, self.cfg_ana.histo_name + ".C"]), "cxx")
-    
