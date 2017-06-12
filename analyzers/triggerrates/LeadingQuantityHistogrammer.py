@@ -97,6 +97,11 @@ class LeadingQuantityHistogrammer(Analyzer):
     if hasattr(self.cfg_ana, "log_y"):
       c1.SetLogy(self.cfg_ana.log_y)
     self.histogram.Draw("")
+    if hasattr(self.cfg_ana, "x_label"):
+      self.histogram.GetXaxis().SetTitle(self.cfg_ana.x_label)
+    if hasattr(self.cfg_ana, "y_label"):
+      self.histogram.GetYaxis().SetTitle(self.cfg_ana.y_label)
     c1.Update()
     c1.Print("/".join([self.dirName, self.cfg_ana.histo_name + ".pdf"]), "pdf")
+    c1.Print("/".join([self.dirName, self.cfg_ana.histo_name + ".C"]), "cxx")
     

@@ -30,7 +30,9 @@ class Histogrammer(Analyzer):
       max = 300,
       nbins = 100,
       input_objects = 'jets',
-      value_func = pt
+      value_func = pt,
+      x_label = "pt [GeV]",
+      y_label = "\# events"
     )
 
     * file_label: (Facultative) Name of a TFileService. If specified, the histogram will be saved in that root file, otherwise it will be saved in a <histo_name>.png and <histo_name>.root file .
@@ -89,6 +91,11 @@ class Histogrammer(Analyzer):
     if hasattr(self.cfg_ana, "log_y"):
       c1.SetLogy(self.cfg_ana.log_y)
     self.histogram.Draw("")
+    if hasattr(self.cfg_ana, "x_label"):
+      self.histogram.GetXaxis().SetTitle(self.cfg_ana.x_label)
+    if hasattr(self.cfg_ana, "y_label"):
+      self.histogram.GetYaxis().SetTitle(self.cfg_ana.y_label)
     c1.Update()
     c1.Print("/".join([self.dirName, self.cfg_ana.histo_name + ".pdf"]), "pdf")
+    c1.Print("/".join([self.dirName, self.cfg_ana.histo_name + ".C"]), "cxx")
     

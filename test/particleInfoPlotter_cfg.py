@@ -137,10 +137,10 @@ etaGenJetSelector = cfg.Analyzer(
 
 # Defining analysers for electrons
 
-from heppy.analyzers.triggerrates.Histogrammer_MPL import Histogrammer_MPL
+from heppy.analyzers.triggerrates.Histogrammer import Histogrammer
 
 electronRecoPtDistribution = cfg.Analyzer(
-  Histogrammer_MPL,
+  Histogrammer,
   'electronRecoPtDistribution',
   file_label = 'tfile1',
   x_label= "pt [GeV]",
@@ -155,10 +155,10 @@ electronRecoPtDistribution = cfg.Analyzer(
   log_y = True
 )
 
-from heppy.analyzers.triggerrates.LeadingQuantityHistogrammer_MPL import LeadingQuantityHistogrammer_MPL
+from heppy.analyzers.triggerrates.LeadingQuantityHistogrammer import LeadingQuantityHistogrammer
 
 electronLeadingRecoPtDistribution = cfg.Analyzer(
-  LeadingQuantityHistogrammer_MPL,
+  LeadingQuantityHistogrammer,
   'electronLeadingRecoPtDistribution',
   file_label = 'tfile1',
   x_label = "pt [GeV]",
@@ -175,7 +175,7 @@ electronLeadingRecoPtDistribution = cfg.Analyzer(
 )
 
 electronLeadingRecoEtaDistribution = cfg.Analyzer(
-  LeadingQuantityHistogrammer_MPL,
+  LeadingQuantityHistogrammer,
   'electronLeadingRecoEtaDistribution',
   file_label = 'tfile1',
   x_label = "pt [GeV]",
@@ -200,7 +200,7 @@ electronSelector = cfg.Analyzer(
 )
 
 electronGenPtDistribution = cfg.Analyzer(
-  Histogrammer_MPL,
+  Histogrammer,
   'electronGenPtDistribution',
   file_label = 'tfile1',
   x_label = "pt [GeV]",
@@ -218,7 +218,7 @@ electronGenPtDistribution = cfg.Analyzer(
 # Muons
 
 muonRecoPtDistribution = cfg.Analyzer(
-  Histogrammer_MPL,
+  Histogrammer,
   'muonRecoPtDistribution',
   file_label = 'tfile1',
   x_label = "pt [GeV]",
@@ -234,7 +234,7 @@ muonRecoPtDistribution = cfg.Analyzer(
 )
 
 muonLeadingRecoPtDistribution = cfg.Analyzer(
-  LeadingQuantityHistogrammer_MPL,
+  LeadingQuantityHistogrammer,
   'muonLeadingRecoPtDistribution',
   file_label = 'tfile1',
   x_label = "pt [GeV]",
@@ -251,7 +251,7 @@ muonLeadingRecoPtDistribution = cfg.Analyzer(
 )
 
 muonLeadingRecoEtaDistribution = cfg.Analyzer(
-  LeadingQuantityHistogrammer_MPL,
+  LeadingQuantityHistogrammer,
   'muonLeadingRecoEtaDistribution',
   file_label = 'tfile1',
   x_label = "pt [GeV]",
@@ -276,7 +276,7 @@ muonSelector = cfg.Analyzer(
 )
 
 muonGenPtDistribution = cfg.Analyzer(
-  Histogrammer_MPL,
+  Histogrammer,
   'muonGenPtDistribution',
   file_label = 'tfile1',
   x_label = "pt [GeV]",
@@ -302,7 +302,7 @@ tauSelector = cfg.Analyzer(
 )
 
 tauGenPtDistribution = cfg.Analyzer(
-  Histogrammer_MPL,
+  Histogrammer,
   'tauGenPtDistribution',
   file_label = 'tfile1',
   x_label = "pt [GeV]",
@@ -320,7 +320,7 @@ tauGenPtDistribution = cfg.Analyzer(
 # Photons
 
 photonRecoPtDistribution = cfg.Analyzer(
-  Histogrammer_MPL,
+  Histogrammer,
   'photonRecoPtDistribution',
   file_label = 'tfile1',
   x_label = "pt [GeV]",
@@ -336,7 +336,7 @@ photonRecoPtDistribution = cfg.Analyzer(
 )
 
 photonLeadingRecoPtDistribution = cfg.Analyzer(
-  LeadingQuantityHistogrammer_MPL,
+  LeadingQuantityHistogrammer,
   'photonLeadingRecoPtDistribution',
   file_label = 'tfile1',
   x_label = "pt [GeV]",
@@ -353,7 +353,7 @@ photonLeadingRecoPtDistribution = cfg.Analyzer(
 )
 
 photonLeadingRecoEtaDistribution = cfg.Analyzer(
-  LeadingQuantityHistogrammer_MPL,
+  LeadingQuantityHistogrammer,
   'photonLeadingRecoEtaDistribution',
   file_label = 'tfile1',
   x_label = "pt [GeV]",
@@ -378,7 +378,7 @@ photonSelector = cfg.Analyzer(
 )
 
 photonGenPtDistribution = cfg.Analyzer(
-  Histogrammer_MPL,
+  Histogrammer,
   'photonGenPtDistribution',
   file_label = 'tfile1',
   x_label = "pt [GeV]",
@@ -396,7 +396,7 @@ photonGenPtDistribution = cfg.Analyzer(
 # Jets
 
 jetRecoPtDistribution = cfg.Analyzer(
-  Histogrammer_MPL,
+  Histogrammer,
   'jetRecoPtDistribution',
   file_label = 'tfile1',
   x_label = "pt [GeV]",
@@ -412,7 +412,7 @@ jetRecoPtDistribution = cfg.Analyzer(
 )
 
 jetLeadingRecoPtDistribution = cfg.Analyzer(
-  LeadingQuantityHistogrammer_MPL,
+  LeadingQuantityHistogrammer,
   'jetLeadingRecoPtDistribution',
   file_label = 'tfile1',
   x_label = "pt [GeV]",
@@ -429,7 +429,7 @@ jetLeadingRecoPtDistribution = cfg.Analyzer(
 )
 
 jetLeadingRecoEtaDistribution = cfg.Analyzer(
-  LeadingQuantityHistogrammer_MPL,
+  LeadingQuantityHistogrammer,
   'jetLeadingRecoEtaDistribution',
   file_label = 'tfile1',
   x_label = "pt [GeV]",
@@ -446,7 +446,7 @@ jetLeadingRecoEtaDistribution = cfg.Analyzer(
 )
 
 jetGenPtDistribution = cfg.Analyzer(
-  Histogrammer_MPL,
+  Histogrammer,
   'jetGenPtDistribution',
   file_label = 'tfile1',
   x_label = "pt [GeV]",
