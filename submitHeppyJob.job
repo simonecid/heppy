@@ -1,5 +1,5 @@
 Universe = vanilla
-job = minBias_500kevents_4Job_ParticleInfo_100TeV
+job = minBias_500kevents_4Job_ParticleInfo_13TeV
 cmd = runHeppyParticleInfoPlotter.sh
 args=$(cluster).$(process)
 # Better not to put logs in the same folder, as they are plenty
