@@ -44,6 +44,7 @@ class Histogrammer(Analyzer):
     * input_objects : the input collection.
     * value_func : function that returns the value to store in the histogram. If it returns None, it will not be stored
     * log_y: True or False, sets log scale on y axis (False by default)
+    * x_label (y_label): X-axis (Y- axis) label
   
   '''
 
