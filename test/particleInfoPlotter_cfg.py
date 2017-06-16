@@ -535,6 +535,26 @@ jetGenPtDistribution = cfg.Analyzer(
   log_y = True
 )
 
+from heppy.analyzers.triggerrates.Histogrammer_2D import Histogrammer_2D
+
+jetRecoPtEtaDistribution = cfg.Analyzer(
+  Histogrammer_2D,
+  file_label = 'tfile1',
+  histo_name = 'jetPtEtaDistribution',
+  histo_title = 'Jet transverse momentum and eta distribution',
+  input_objects = 'jets',
+  x_min = 0,
+  x_max = 500,
+  x_nbins = 100,
+  x_value_func = pt,
+  x_label = "pt [GeV]",
+  y_min = -10,
+  y_max = 10,
+  y_nbins = 100,
+  y_value_func = eta,
+  y_label = "#eta",
+  z_label = "\# events"
+)
 
 # definition of a sequence of analyzers,
 # the analyzers will process each event in this order
@@ -562,7 +582,8 @@ sequence = cfg.Sequence( [
   jetRecoPtDistribution,
   jetLeadingRecoPtDistribution,
   jetLeadingRecoEtaDistribution,
-  jetGenPtDistribution
+  jetGenPtDistribution,
+  jetRecoPtEtaDistribution
 ] )
 
 
