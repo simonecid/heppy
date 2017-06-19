@@ -1,7 +1,7 @@
 '''Generic histogrammer that takes a particle type and quantity and plots it'''
 
 from heppy.framework.analyzer import Analyzer
-from ROOT import TH2I
+from ROOT import TH2F
 import collections
 from ROOT import TCanvas
 from ROOT import TFile
@@ -72,7 +72,7 @@ class Histogrammer_2D(Analyzer):
                                       self.cfg_ana.histo_name + '.root']),
                             'recreate')
       
-    self.histogram = TH2I(self.cfg_ana.histo_name, self.cfg_ana.histo_title,
+    self.histogram = TH2F(self.cfg_ana.histo_name, self.cfg_ana.histo_title,
                            self.cfg_ana.x_nbins, self.cfg_ana.x_min, self.cfg_ana.x_max,
                            self.cfg_ana.y_nbins, self.cfg_ana.y_min, self.cfg_ana.y_max
                           )
