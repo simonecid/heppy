@@ -116,5 +116,5 @@ class Histogrammer_2D(Analyzer):
     if hasattr(self.cfg_ana, "y_label"):
       self.histogram.GetYaxis().SetTitle(self.cfg_ana.y_label)
     c1.Update()
-    c1.Print("/".join([self.dirName, self.cfg_ana.histo_name + ".svg"]), "svg")
+    c1.Print("/".join([self.dirName, self.cfg_ana.histo_name + ".png"]), "png")
     c1.Print("/".join([self.dirName, self.cfg_ana.histo_name + ".C"]), "cxx")
