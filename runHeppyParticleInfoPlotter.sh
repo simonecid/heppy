@@ -21,4 +21,4 @@ heppy ${SAVE_DEST}/output test/particleInfoPlotter_cfg.py
 
 # Zip file
 cd ${SAVE_DEST}
-tar -czvf minBias_500kevents_4Job_ParticleInfo_100TeV_DelphesFCC_CMSJets.tar.gz output
+tar -czvf minBias_500kevents_4Job_ParticleInfo_13TeV_DelphesCMS.tar.gz output

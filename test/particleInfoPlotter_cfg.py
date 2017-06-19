@@ -13,7 +13,7 @@ reload(logging)
 logging.basicConfig(level=logging.WARNING)
 
 comp = cfg.Component(
-  'MinBiasDistribution_100TeV_DelphesFCC_CMSJets',
+  'MinBiasDistribution_13TeV_DelphesCMS',
   #files = ["../FCCSW/DelphesSim_ff_H_WW_enuenu_1000events.root"]
   #files = ["../FCCSW/DelphesSim_ff_H_WW_munumunu_1000events.root"]
   #files = ["../FCCSW/DelphesSim_ff_H_ZZ_eeee_1000events.root"]
@@ -70,28 +70,28 @@ comp = cfg.Component(
   #  "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.8.root",
   #  "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.9.root"
   #]
-  #files = [
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.0.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.10.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.11.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.12.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.13.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.14.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.15.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.16.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.17.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.18.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.19.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.1.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.2.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.3.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.4.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.5.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.6.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.7.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.8.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.9.root",
-  #]
+  files = [
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.0.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.10.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.11.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.12.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.13.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.14.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.15.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.16.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.17.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.18.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.19.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.1.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.2.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.3.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.4.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.5.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.6.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.7.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.8.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.9.root",
+  ]
   #files = [
   #  "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.0.root",
   #  "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.10.root",
@@ -114,28 +114,28 @@ comp = cfg.Component(
   #  "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.8.root",
   #  "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.9.root",
   #]
-  files = [
-    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.0.root",
-    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.10.root",
-    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.11.root",
-    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.12.root",
-    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.13.root",
-    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.14.root",
-    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.15.root",
-    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.16.root",
-    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.17.root",
-    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.18.root",
-    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.19.root",
-    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.1.root",
-    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.2.root",
-    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.3.root",
-    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.4.root",
-    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.5.root",
-    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.6.root",
-    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.7.root",
-    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.8.root",
-    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.9.root",
-  ]
+  #files = [
+  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.0.root",
+  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.10.root",
+  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.11.root",
+  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.12.root",
+  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.13.root",
+  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.14.root",
+  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.15.root",
+  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.16.root",
+  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.17.root",
+  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.18.root",
+  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.19.root",
+  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.1.root",
+  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.2.root",
+  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.3.root",
+  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.4.root",
+  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.5.root",
+  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.6.root",
+  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.7.root",
+  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.8.root",
+  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.9.root",
+  #]
 )
 
 # Max 4 jobs
