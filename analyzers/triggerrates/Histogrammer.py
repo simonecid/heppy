@@ -20,7 +20,7 @@ class Histogrammer(Analyzer):
 
     def pt (ptc):
       return ptc.pt()
-
+      
     histogrammer = cfg.Analyzer(
       Histogrammer,
       file_label = 'tfile1',
@@ -75,12 +75,12 @@ class Histogrammer(Analyzer):
     if isinstance(input_collection, collections.Mapping):
       for key, val in input_collection.iteritems():
         value = self.cfg_ana.value_func(val)
-        if value != None:
+        if value is not None:
           self.histogram.Fill(value)
     else:
       for obj in input_collection:
         value = self.cfg_ana.value_func(obj)
-        if value != None:
+        if value is not None:
           self.histogram.Fill(value)
 
   def write(self, setup):
