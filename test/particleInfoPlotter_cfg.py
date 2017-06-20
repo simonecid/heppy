@@ -3,17 +3,26 @@
 import os
 import copy
 import heppy.framework.config as cfg
-
-from heppy.analyzers.Selector import Selector
-
 import logging
+from heppy.analyzers.Selector import Selector
+from heppy.analyzers.fcc.Reader import Reader
+from ROOT import gSystem
+from EventStore import EventStore as Events
+from heppy.framework.services.tfile import TFileService
+from heppy.analyzers.triggerrates.Histogrammer import Histogrammer
+from heppy.analyzers.triggerrates.LeadingQuantityHistogrammer import LeadingQuantityHistogrammer
+from heppy.analyzers.triggerrates.SubLeadingQuantityHistogrammer import SubLeadingQuantityHistogrammer
+from heppy.analyzers.triggerrates.Histogrammer_2D import Histogrammer_2D
+import sys
+from heppy.framework.looper import Looper
+
 # next 2 lines necessary to deal with reimports from ipython
 logging.shutdown()
 reload(logging)
 logging.basicConfig(level=logging.WARNING)
 
-comp = cfg.Component(
-  'MinBiasDistribution_13TeV_DelphesCMS',
+_MBtest = cfg.MCComponent(
+  '_MBtest',
   #files = ["../FCCSW/DelphesSim_ff_H_WW_enuenu_1000events.root"]
   #files = ["../FCCSW/DelphesSim_ff_H_WW_munumunu_1000events.root"]
   #files = ["../FCCSW/DelphesSim_ff_H_ZZ_eeee_1000events.root"]
@@ -25,51 +34,67 @@ comp = cfg.Component(
   #files = ["../FCCSW/DelphesSim_ff_Z_mumu_1000events.root"]
   #files = ["../FCCSW/DelphesSim_ff_Z_tautau_1000events.root"]
   #files = ["../FCCSW/mininumBiasDelphesSimulation_PU25_10evts.root"]
-  #files = ["../FCCSW/minimumBias_10000evts.root"]
-  #files = [
-  #  "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.0.root",
-  #  "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.10.root",
-  #  "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.11.root",
-  #  "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.12.root",
-  #  "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.13.root",
-  #  "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.14.root",
-  #  "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.15.root",
-  #  "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.16.root",
-  #  "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.17.root",
-  #  "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.18.root",
-  #  "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.19.root",
-  #  "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.1.root",
-  #  "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.2.root",
-  #  "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.3.root",
-  #  "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.4.root",
-  #  "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.5.root",
-  #  "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.6.root",
-  #  "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.7.root",
-  #  "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.8.root",
-  #  "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.9.root"
-  #]
-  #files = [
-  #  "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.0.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.10.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.11.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.12.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.13.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.14.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.15.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.16.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.17.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.18.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.19.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.1.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.2.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.3.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.4.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.5.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.6.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.7.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.8.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.9.root"
-  #]
+  files = ["../FCCSW/minimumBias_10000evts.root"]
+)
+
+MinBiasDistribution_100TeV_DelphesFCC_FCCJets = cfg.MCComponent(
+  'MinBiasDistribution_100TeV_DelphesFCC_FCCJets',
+  files = [
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.0.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.10.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.11.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.12.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.13.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.14.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.15.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.16.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.17.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.18.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.19.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.1.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.2.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.3.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.4.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.5.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.6.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.7.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.8.root",
+    "/hdfs/FCC-hh/minBias/events_MinimumBiasGeneration_25kevents_1684753.9.root"
+  ],
+  xSection = 80, #mb
+  nGenEvents = 500000
+)
+
+MinBiasDistribution_13TeV_DelphesFCC_FCCJets = cfg.MCComponent(
+  'MinBiasDistribution_13TeV_DelphesFCC_FCCJets',
+  files = [
+    "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.0.root",
+    "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.10.root",
+    "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.11.root",
+    "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.12.root",
+    "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.13.root",
+    "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.14.root",
+    "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.15.root",
+    "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.16.root",
+    "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.17.root",
+    "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.18.root",
+    "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.19.root",
+    "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.1.root",
+    "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.2.root",
+    "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.3.root",
+    "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.4.root",
+    "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.5.root",
+    "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.6.root",
+    "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.7.root",
+    "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.8.root",
+    "/hdfs/FCC-hh/minBias_13TeV/events_MinimumBiasGeneration_25kevents_13TeV_2274254.9.root"
+  ],
+  xSection = 56.7, #mb
+  nGenEvents = 500000
+)
+
+MinBiasDistribution_13TeV_DelphesCMS_CMSJets = cfg.MCComponent(
+  'MinBiasDistribution_13TeV_DelphesCMS_CMSJets',
   files = [
     "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.0.root",
     "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.10.root",
@@ -91,57 +116,79 @@ comp = cfg.Component(
     "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.7.root",
     "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.8.root",
     "/hdfs/FCC-hh/minBias_13TeV_DelphesCMS/events_MinimumBiasGeneration_25kevents_13TeV_DelphesCMS_2274953.9.root",
-  ]
-  #files = [
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.0.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.10.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.11.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.12.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.13.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.14.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.15.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.16.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.17.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.18.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.19.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.1.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.2.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.3.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.4.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.5.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.6.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.7.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.8.root",
-  #  "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.9.root",
-  #]
-  #files = [
-  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.0.root",
-  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.10.root",
-  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.11.root",
-  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.12.root",
-  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.13.root",
-  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.14.root",
-  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.15.root",
-  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.16.root",
-  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.17.root",
-  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.18.root",
-  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.19.root",
-  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.1.root",
-  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.2.root",
-  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.3.root",
-  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.4.root",
-  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.5.root",
-  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.6.root",
-  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.7.root",
-  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.8.root",
-  #  "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.9.root",
-  #]
+  ],
+  xSection = 56.7, #mb
+  nGenEvents = 500000
+)
+
+MinBiasDistribution_13TeV_DelphesFCC_CMSJets = cfg.MCComponent(
+  'MinBiasDistribution_13TeV_DelphesFCC_CMSJets',
+  files = [
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.0.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.10.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.11.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.12.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.13.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.14.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.15.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.16.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.17.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.18.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.19.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.1.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.2.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.3.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.4.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.5.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.6.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.7.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.8.root",
+    "/hdfs/FCC-hh/minBias_13TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_13TeV_DelphesFCC_CMSJets_2276635.9.root",
+  ],
+  xSection = 56.7, #mb
+  nGenEvents = 500000
+)
+
+MinBiasDistribution_100TeV_DelphesFCC_CMSJets  = cfg.MCComponent(
+  'MinBiasDistribution_100TeV_DelphesFCC_CMSJets',
+  files = [
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.0.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.10.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.11.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.12.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.13.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.14.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.15.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.16.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.17.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.18.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.19.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.1.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.2.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.3.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.4.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.5.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.6.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.7.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.8.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.9.root",
+  ],
+  xSection = 80, #mb
+  nGenEvents = 500000
 )
 
 # Max 4 jobs
-comp.splitFactor = len(comp.files) if len(comp.files) < 4 else 4
+_MBtest.splitFactor = len(_MBtest.files) if len(_MBtest.files) < 4 else 4
+MinBiasDistribution_100TeV_DelphesFCC_FCCJets.splitFactor = len(MinBiasDistribution_100TeV_DelphesFCC_FCCJets.files) if len(MinBiasDistribution_100TeV_DelphesFCC_FCCJets.files) < 4 else 4
+MinBiasDistribution_13TeV_DelphesFCC_FCCJets.splitFactor = len(MinBiasDistribution_13TeV_DelphesFCC_FCCJets.files) if len(MinBiasDistribution_13TeV_DelphesFCC_FCCJets.files) < 4 else 4
+MinBiasDistribution_13TeV_DelphesCMS_CMSJets.splitFactor = len(MinBiasDistribution_13TeV_DelphesCMS_CMSJets.files) if len(MinBiasDistribution_13TeV_DelphesCMS_CMSJets.files) < 4 else 4
+MinBiasDistribution_13TeV_DelphesFCC_CMSJets.splitFactor = len(MinBiasDistribution_13TeV_DelphesFCC_CMSJets.files) if len(MinBiasDistribution_13TeV_DelphesFCC_CMSJets.files) < 4 else 4
+MinBiasDistribution_100TeV_DelphesFCC_CMSJets.splitFactor = len(MinBiasDistribution_100TeV_DelphesFCC_CMSJets.files) if len(MinBiasDistribution_100TeV_DelphesFCC_CMSJets.files) < 4 else 4
 
-selectedComponents = [comp]
+selectedComponents = [
+  MinBiasDistribution_100TeV_DelphesFCC_CMSJets,
+  MinBiasDistribution_13TeV_DelphesCMS_CMSJets
+]
 
 # Defining pdgids
 
@@ -152,7 +199,6 @@ pdgIds = {
   'photon': 22
 }
 
-from heppy.analyzers.fcc.Reader import Reader
 source = cfg.Analyzer(
   Reader,
 
@@ -189,12 +235,9 @@ def particleCheckerFactory (ptcName):
 
 # All my stuff will be saved in this file
 
-from ROOT import gSystem
 gSystem.Load("libdatamodelDict")
 
-from EventStore import EventStore as Events
 
-from heppy.framework.services.tfile import TFileService
 tfile_service_1 = cfg.Service(
   TFileService,
   'tfile1',
@@ -231,9 +274,10 @@ etaGenJetSelector = cfg.Analyzer(
     filter_func = etaRestrictor
 )
 
+#====================================================
 # Defining analysers for electrons
+#====================================================
 
-from heppy.analyzers.triggerrates.Histogrammer import Histogrammer
 
 electronRecoPtDistribution = cfg.Analyzer(
   Histogrammer,
@@ -251,7 +295,6 @@ electronRecoPtDistribution = cfg.Analyzer(
   log_y = True
 )
 
-from heppy.analyzers.triggerrates.LeadingQuantityHistogrammer import LeadingQuantityHistogrammer
 
 electronLeadingRecoPtDistribution = cfg.Analyzer(
   LeadingQuantityHistogrammer,
@@ -287,6 +330,56 @@ electronLeadingRecoEtaDistribution = cfg.Analyzer(
   log_y = True
 )
 
+electronSubLeadingRecoPtDistribution = cfg.Analyzer(
+  SubLeadingQuantityHistogrammer,
+  'electronSubLeadingRecoPtDistribution',
+  file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
+  histo_name = 'electronSubLeadingRecoPtDistribution',
+  histo_title = 'Electron sub-leading transverse momentum distribution (reco level)',
+  min = 0,
+  max = 500,
+  nbins = 100,
+  input_objects = 'electrons',
+  key_func = pt,
+  value_func = pt,
+  log_y = True
+)
+
+electronSubLeadingRecoEtaDistribution = cfg.Analyzer(
+  SubLeadingQuantityHistogrammer,
+  'electronSubLeadingRecoEtaDistribution',
+  file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
+  histo_name = 'electronSubLeadingRecoEtaDistribution',
+  histo_title = 'Electron sub-leading eta distribution (reco level)',
+  min = -10,
+  max = +10,
+  nbins = 100,
+  input_objects = 'electrons',
+  key_func = pt,
+  value_func = eta,
+  log_y = True
+)
+
+electronRecoEtaDistribution = cfg.Analyzer(
+  Histogrammer,
+  'electronRecoEtaDistribution',
+  file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
+  histo_name = 'electronRecoEtaDistribution',
+  histo_title = 'Electron eta distribution (reco level)',
+  min = -10,
+  max = +10,
+  nbins = 100,
+  input_objects = 'electrons',
+  value_func = eta,
+  log_y = True
+)
+
 electronSelector = cfg.Analyzer(
     Selector,
     'sel_electrons',
@@ -311,7 +404,9 @@ electronGenPtDistribution = cfg.Analyzer(
   log_y = True
 )
 
+#====================================================
 # Muons
+#====================================================
 
 muonRecoPtDistribution = cfg.Analyzer(
   Histogrammer,
@@ -359,6 +454,56 @@ muonLeadingRecoEtaDistribution = cfg.Analyzer(
   nbins = 100,
   input_objects = 'muons',
   key_func = pt,
+  value_func = eta,
+  log_y = True
+)
+
+muonSubLeadingRecoPtDistribution = cfg.Analyzer(
+  SubLeadingQuantityHistogrammer,
+  'muonSubLeadingRecoPtDistribution',
+  file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
+  histo_name = 'muonSubLeadingRecoPtDistribution',
+  histo_title = 'Muon sub-leading transverse momentum distribution (reco level)',
+  min = 0,
+  max = 500,
+  nbins = 100,
+  input_objects = 'muons',
+  key_func = pt,
+  value_func = pt,
+  log_y = True
+)
+
+muonSubLeadingRecoEtaDistribution = cfg.Analyzer(
+  SubLeadingQuantityHistogrammer,
+  'muonSubLeadingRecoEtaDistribution',
+  file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
+  histo_name = 'muonSubLeadingRecoEtaDistribution',
+  histo_title = 'Muon sub-leading eta distribution (reco level)',
+  min = -10,
+  max = +10,
+  nbins = 100,
+  input_objects = 'muons',
+  key_func = pt,
+  value_func = eta,
+  log_y = True
+)
+
+muonRecoEtaDistribution = cfg.Analyzer(
+  Histogrammer,
+  'muonRecoEtaDistribution',
+  file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
+  histo_name = 'muonRecoEtaDistribution',
+  histo_title = 'Muon eta distribution (reco level)',
+  min = -10,
+  max = +10,
+  nbins = 100,
+  input_objects = 'muons',
   value_func = eta,
   log_y = True
 )
@@ -413,7 +558,9 @@ tauGenPtDistribution = cfg.Analyzer(
   log_y = True
 )
 
+#====================================================
 # Photons
+#====================================================
 
 photonRecoPtDistribution = cfg.Analyzer(
   Histogrammer,
@@ -465,6 +612,56 @@ photonLeadingRecoEtaDistribution = cfg.Analyzer(
   log_y = True
 )
 
+photonSubLeadingRecoPtDistribution = cfg.Analyzer(
+  SubLeadingQuantityHistogrammer,
+  'photonSubLeadingRecoPtDistribution',
+  file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
+  histo_name = 'photonSubLeadingRecoPtDistribution',
+  histo_title = 'Photon sub-leading transverse momentum distribution (reco level)',
+  min = 0,
+  max = 500,
+  nbins = 100,
+  input_objects = 'photons',
+  key_func = pt,
+  value_func = pt,
+  log_y = True
+)
+
+photonSubLeadingRecoEtaDistribution = cfg.Analyzer(
+  SubLeadingQuantityHistogrammer,
+  'photonSubLeadingRecoEtaDistribution',
+  file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
+  histo_name = 'photonSubLeadingRecoEtaDistribution',
+  histo_title = 'Photon sub-leading eta distribution (reco level)',
+  min = -10,
+  max = +10,
+  nbins = 100,
+  input_objects = 'photons',
+  key_func = pt,
+  value_func = eta,
+  log_y = True
+)
+
+photonRecoEtaDistribution = cfg.Analyzer(
+  Histogrammer,
+  'photonRecoEtaDistribution',
+  file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
+  histo_name = 'photonRecoEtaDistribution',
+  histo_title = 'Photon eta distribution (reco level)',
+  min = -10,
+  max = +10,
+  nbins = 100,
+  input_objects = 'photons',
+  value_func = eta,
+  log_y = True
+)
+
 photonSelector = cfg.Analyzer(
     Selector,
     'sel_photons',
@@ -489,7 +686,9 @@ photonGenPtDistribution = cfg.Analyzer(
   log_y = True
 )
 
+#====================================================
 # Jets
+#====================================================
 
 jetRecoPtDistribution = cfg.Analyzer(
   Histogrammer,
@@ -541,6 +740,56 @@ jetLeadingRecoEtaDistribution = cfg.Analyzer(
   log_y = True
 )
 
+jetSubLeadingRecoPtDistribution = cfg.Analyzer(
+  SubLeadingQuantityHistogrammer,
+  'jetSubLeadingRecoPtDistribution',
+  file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
+  histo_name = 'jetSubLeadingRecoPtDistribution',
+  histo_title = 'Jet sub-leading transverse momentum distribution (reco level)',
+  min = 0,
+  max = 500,
+  nbins = 100,
+  input_objects = 'jets',
+  key_func = pt,
+  value_func = pt,
+  log_y = True
+)
+
+jetSubLeadingRecoEtaDistribution = cfg.Analyzer(
+  SubLeadingQuantityHistogrammer,
+  'jetSubLeadingRecoEtaDistribution',
+  file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
+  histo_name = 'jetSubLeadingRecoEtaDistribution',
+  histo_title = 'Jet sub-leading eta distribution (reco level)',
+  min = -10,
+  max = +10,
+  nbins = 100,
+  input_objects = 'jets',
+  key_func = pt,
+  value_func = eta,
+  log_y = True
+)
+
+jetRecoEtaDistribution = cfg.Analyzer(
+  Histogrammer,
+  'jetRecoEtaDistribution',
+  file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
+  histo_name = 'jetRecoEtaDistribution',
+  histo_title = 'Jet eta distribution (reco level)',
+  min = -10,
+  max = +10,
+  nbins = 100,
+  input_objects = 'jets',
+  value_func = eta,
+  log_y = True
+)
+
 jetGenPtDistribution = cfg.Analyzer(
   Histogrammer,
   'jetGenPtDistribution',
@@ -556,8 +805,6 @@ jetGenPtDistribution = cfg.Analyzer(
   value_func = pt,
   log_y = True
 )
-
-from heppy.analyzers.triggerrates.Histogrammer_2D import Histogrammer_2D
 
 jetRecoPtEtaDistribution = cfg.Analyzer(
   Histogrammer_2D,
@@ -592,19 +839,29 @@ sequence = cfg.Sequence( [
   electronRecoPtDistribution,
   electronLeadingRecoPtDistribution,
   electronLeadingRecoEtaDistribution,
+  electronSubLeadingRecoPtDistribution,
+  electronSubLeadingRecoEtaDistribution,
+  electronRecoEtaDistribution,
   electronGenPtDistribution,
   muonRecoPtDistribution,
   muonLeadingRecoPtDistribution,
   muonLeadingRecoEtaDistribution,
+  muonRecoEtaDistribution,
   muonGenPtDistribution,
   tauGenPtDistribution,
   photonRecoPtDistribution,
   photonLeadingRecoPtDistribution,
+  photonSubLeadingRecoPtDistribution,
   photonLeadingRecoEtaDistribution,
+  photonSubLeadingRecoEtaDistribution,
+  photonRecoEtaDistribution,
   photonGenPtDistribution,
   jetRecoPtDistribution,
   jetLeadingRecoPtDistribution,
+  jetSubLeadingRecoPtDistribution,
   jetLeadingRecoEtaDistribution,
+  jetSubLeadingRecoEtaDistribution,
+  jetRecoEtaDistribution,
   jetGenPtDistribution,
   jetRecoPtEtaDistribution
 ] )
@@ -618,8 +875,6 @@ config = cfg.Config(
 )
 
 if __name__ == '__main__':
-  import sys
-  from heppy.framework.looper import Looper
 
   def next():
       loop.process(loop.iEvent+1)
@@ -628,5 +883,5 @@ if __name__ == '__main__':
                  nEvents=100,
                  nPrint=0,
                  timeReport=True)
-  loop.process(6)
+  loop.process()
   print loop.event

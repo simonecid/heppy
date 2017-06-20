@@ -1,7 +1,7 @@
 '''Generic histogrammer that takes a particle type and quantity and plots the higher one in the event'''
 
 from heppy.framework.analyzer import Analyzer
-from ROOT import TH1I
+from ROOT import TH1F
 import collections
 from ROOT import TCanvas
 from ROOT import TFile
@@ -60,7 +60,7 @@ class LeadingQuantityHistogrammer(Analyzer):
                                       self.cfg_ana.histo_name + '.root']),
                             'recreate')
       
-    self.histogram = TH1I(self.cfg_ana.histo_name, self.cfg_ana.histo_title, self.cfg_ana.nbins, self.cfg_ana.min, self.cfg_ana.max)
+    self.histogram = TH1F(self.cfg_ana.histo_name, self.cfg_ana.histo_title, self.cfg_ana.nbins, self.cfg_ana.min, self.cfg_ana.max)
       
   def process(self, event):
     '''event must contain
