@@ -1,5 +1,5 @@
 Universe = vanilla
-job = minBias_500kevents_4Job_ParticleInfo_13TeV_DelphesCMS
+job = minBias_500kevents
 cmd = runHeppyParticleInfoPlotter.sh
 args=$(cluster).$(process)
 # Better not to put logs in the same folder, as they are plenty
@@ -9,7 +9,7 @@ log = /storage/sb17498/logs/heppy/$(job)_$(cluster).$(process).log
 should_transfer_files = YES
 when_to_transfer_output = ON_EXIT_OR_EVICT
 
-request_cpus = 1
+request_cpus = 2
 request_memory = 10000
 request_disk = 100000
 
