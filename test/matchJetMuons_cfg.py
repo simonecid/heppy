@@ -10,7 +10,7 @@ from heppy.analyzers.triggerrates.Histogrammer import Histogrammer
 from heppy.framework.looper import Looper
 from heppy.analyzers.Matcher import Matcher
 from heppy.analyzers.Selector import Selector
-from heppy.analyzers.fcc.MatchedParticlesTreeProducer import MatchedParticlesTreeProducer
+from heppy.analyzers.triggerrates.MatchedParticlesTreeProducer import MatchedParticlesTreeProducer
 
 # next 2 lines necessary to deal with reimports from ipython
 logging.shutdown()
