@@ -10,6 +10,7 @@ from heppy.analyzers.triggerrates.Histogrammer import Histogrammer
 from heppy.framework.looper import Looper
 from heppy.analyzers.Matcher import Matcher
 from heppy.analyzers.Selector import Selector
+from heppy.analyzers.fcc.MatchedParticlesTreeProducer import MatchedParticlesTreeProducer
 
 # next 2 lines necessary to deal with reimports from ipython
 logging.shutdown()
@@ -410,12 +411,21 @@ jetEtaDistribution = cfg.Analyzer(
   y_label = "# events"
 )
 
+noRestrictionMuonJetTree = cfg.Analyzer(
+    MatchedParticlesTreeProducer,
+    file_label = "tfile1",
+    tree_name = 'noRestrictionMuonJetTree',
+    tree_title = 'Tree containing info about matched jet and muons',
+    matched_particle_collection = 'matchedMuons',
+  )
+
 # definition of a sequence of analyzers,
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
   source,
   noRestrictionMuonJetMatcher,
   matchedNoRestrictionMuonSelector,
+  noRestrictionMuonJetTree,
   deltaRNoRestrictionDistribution,
   pairedNoRestrictionMuonPtDistribution,
   pairedNoRestrictionMuonEtaDistribution,
@@ -438,7 +448,7 @@ sequence = cfg.Sequence( [
   muonPtDistribution,
   jetPtDistribution,
   muonEtaDistribution,
-  jetEtaDistribution,
+  jetEtaDistribution
 ] )
 
 
