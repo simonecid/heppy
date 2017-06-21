@@ -16,9 +16,13 @@ logging.shutdown()
 reload(logging)
 logging.basicConfig(level=logging.WARNING)
 
+#selectedComponents = [
+#  MinBiasDistribution_100TeV_DelphesFCC_CMSJets,
+#  MinBiasDistribution_13TeV_DelphesCMS_CMSJets
+#]
+
 selectedComponents = [
-  MinBiasDistribution_100TeV_DelphesFCC_CMSJets,
-  MinBiasDistribution_13TeV_DelphesCMS_CMSJets
+  MBtest
 ]
 
 # Defining pdgids
@@ -109,8 +113,8 @@ pairedMuonPtDistribution = cfg.Analyzer(
   histo_name = 'pairedMuonPtDistribution',
   histo_title = 'Matched muon p_{t} distribution',
   min = 0,
-  max = 300,
-  nbins = 100,
+  max = 100,
+  nbins = 200,
   input_objects = 'matchedMuons',
   value_func = pt,
   x_label = "p_{t} [GeV]",
@@ -146,6 +150,7 @@ pairedJetPtDistribution = cfg.Analyzer(
   x_label = "p_{t} [GeV]",
   y_label = "# events"
 )
+
 pairedJetEtaDistribution = cfg.Analyzer(
   Histogrammer,
   instance_label = 'pairedJetEtaDistribution',
@@ -161,6 +166,66 @@ pairedJetEtaDistribution = cfg.Analyzer(
   y_label = "# events"
 )
 
+muonPtDistribution = cfg.Analyzer(
+  Histogrammer,
+  instance_label='muonPtDistribution',
+  file_label = 'tfile1',
+  histo_name = 'muonPtDistribution',
+  histo_title = 'Muon p_{t} distribution',
+  min = 0,
+  max = 100,
+  nbins = 200,
+  input_objects = 'muons',
+  value_func = pt,
+  x_label = "p_{t} [GeV]",
+  y_label = "# events"
+)
+
+muonEtaDistribution = cfg.Analyzer(
+  Histogrammer,
+  instance_label='muonEtaDistribution',
+  file_label = 'tfile1',
+  histo_name = 'muonEtaDistribution',
+  histo_title = 'Muon #eta distribution',
+  min = -10,
+  max = +10,
+  nbins = 100,
+  input_objects = 'muons',
+  value_func = eta,
+  x_label = "#eta",
+  y_label = "# events"
+)
+
+jetPtDistribution = cfg.Analyzer(
+  Histogrammer,
+  instance_label = 'jetPtDistribution',
+  file_label = 'tfile1',
+  histo_name = 'jetPtDistribution',
+  histo_title = 'Jet p_{t} distribution',
+  min = 0,
+  max = 300,
+  nbins = 100,
+  input_objects = 'jets',
+  value_func = pt,
+  x_label = "p_{t} [GeV]",
+  y_label = "# events"
+)
+
+jetEtaDistribution = cfg.Analyzer(
+  Histogrammer,
+  instance_label = 'jetEtaDistribution',
+  file_label = 'tfile1',
+  histo_name = 'jetEtaDistribution',
+  histo_title = 'Jet #eta distribution',
+  min = -10,
+  max = 10,
+  nbins = 100,
+  input_objects = 'jets',
+  value_func = eta,
+  x_label = "#eta",
+  y_label = "# events"
+)
+
 # definition of a sequence of analyzers,
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
@@ -172,6 +237,10 @@ sequence = cfg.Sequence( [
   pairedMuonEtaDistribution,
   pairedJetPtDistribution,
   pairedJetEtaDistribution,
+  muonPtDistribution,
+  jetPtDistribution,
+  muonEtaDistribution,
+  jetEtaDistribution,
 ] )
 
 
