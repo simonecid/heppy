@@ -425,7 +425,7 @@ sequence = cfg.Sequence( [
   source,
   noRestrictionMuonJetMatcher,
   matchedNoRestrictionMuonSelector,
-  #noRestrictionMuonJetTree,
+  noRestrictionMuonJetTree,
   deltaRNoRestrictionDistribution,
   pairedNoRestrictionMuonPtDistribution,
   pairedNoRestrictionMuonEtaDistribution,

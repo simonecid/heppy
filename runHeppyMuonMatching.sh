@@ -21,4 +21,4 @@ heppy ${SAVE_DEST}/muonMatching test/matchJetMuons_cfg.py
 
 # Zip file
 cd ${SAVE_DEST}
-tar -czvf muonMatching_output.tar.gz muonMatching
+tar -czvf muonMatching_noTree_output.tar.gz muonMatching
