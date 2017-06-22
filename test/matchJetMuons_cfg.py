@@ -17,14 +17,14 @@ logging.shutdown()
 reload(logging)
 logging.basicConfig(level=logging.WARNING)
 
-selectedComponents = [
-  MinBiasDistribution_100TeV_DelphesFCC_CMSJets,
-  MinBiasDistribution_13TeV_DelphesCMS_CMSJets
-]
-
 #selectedComponents = [
-#  MBtest
+#  MinBiasDistribution_100TeV_DelphesFCC_CMSJets,
+#  MinBiasDistribution_13TeV_DelphesCMS_CMSJets
 #]
+
+selectedComponents = [
+  MBtest
+]
 
 # Defining pdgids
 

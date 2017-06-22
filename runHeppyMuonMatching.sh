@@ -9,7 +9,7 @@ python /cvmfs/fcc.cern.ch/sw/0.8.1/tools/hsf_get_platform.py --get=os
 echo "Running heppy job"
 
 HOME_FOLDER="$(pwd)"
-SAVE_DESTINATION = "muonMatching"
+SAVE_DESTINATION="muonMatching"
 
 mkdir ${SAVE_DESTINATION}
 
