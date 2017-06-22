@@ -105,7 +105,6 @@ class Matcher(Analyzer):
             pairs = matchObjectCollection(particles, match_ptcs_filtered,
                                           self.cfg_ana.delta_r)
             for ptc in particles:
-
                 matchname = 'match'
                 if pdgid: 
                     matchname = 'match_{pdgid}'.format(pdgid=pdgid)
@@ -117,7 +116,4 @@ class Matcher(Analyzer):
                         drname = 'dr_{pdgid}'.format(pdgid=pdgid)
                     dr = deltaR(ptc.theta(), ptc.phi(),
                                 match.theta(), match.phi())
-                            
-                    print event.iEv, '-', 
-
                     setattr(ptc, drname, dr)
