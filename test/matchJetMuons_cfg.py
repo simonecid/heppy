@@ -61,15 +61,23 @@ tfile_service_1 = cfg.Service(
 noRestrictionMuonJetMatcher = cfg.Analyzer(
   Matcher,
   instance_label = 'noRestrictionMuonJetMatcher',
-  delta_r = 10,
+  delta_r = 15,
+  particles = 'muons',
+  match_particles = 'jets',
+)
+
+looseRestrictionMuonJetMatcher = cfg.Analyzer(
+  Matcher,
+  instance_label = 'looseRestrictionMuonJetMatcher',
+  delta_r = 3,
   particles = 'muons',
   match_particles = 'jets',
 )
 
 ''' Selects around 48% of the noRestriction muons'''
-looseRestrictionMuonJetMatcher = cfg.Analyzer(
+mediumRestrictionMuonJetMatcher = cfg.Analyzer(
   Matcher,
-  instance_label = 'looseRestrictionMuonJetMatcher',
+  instance_label = 'mediumRestrictionMuonJetMatcher',
   delta_r = 1.5,
   particles = 'muons',
   match_particles = 'jets',
@@ -121,6 +129,14 @@ matchedLooseRestrictionMuonSelector = cfg.Analyzer(
   filter_func = isMatched
 )
 
+matchedMediumRestrictionMuonSelector = cfg.Analyzer(
+  Selector,
+  instance_label = 'matchedMediumRestrictionMuonSelector',
+  input_objects = 'muons',
+  output = 'matchedMuons',
+  filter_func = isMatched
+)
+
 matchedTightRestrictionMuonSelector = cfg.Analyzer(
   Selector,
   instance_label = 'matchedTightRestrictionMuonSelector',
@@ -134,7 +150,7 @@ deltaRNoRestrictionDistribution = cfg.Analyzer(
   instance_label = 'deltaRNoRestrictionDistribution',
   file_label = 'tfile1',
   histo_name = 'deltaRNoRestrictionDistribution',
-  histo_title = 'No-restriction nuon-jet #DeltaR distribution',
+  histo_title = 'No-restriction muon-jet #DeltaR distribution',
   min = 0,
   max = 10,
   nbins = 200,
@@ -330,6 +346,111 @@ pairedLooseRestrictionJetPhiDistribution = cfg.Analyzer(
   file_label = 'tfile1',
   histo_name = 'pairedLooseRestrictionJetPhiDistribution',
   histo_title = 'Loose-restriction matched jet #phi distribution',
+  min = -3.15,
+  max = +3.15,
+  nbins = 100,
+  input_objects = 'matchedMuons',
+  value_func = phi,
+  x_label = "#phi",
+  y_label = "# events"
+)
+
+deltaRMediumRestrictionDistribution = cfg.Analyzer(
+  Histogrammer,
+  instance_label = 'deltaRMediumRestrictionDistribution',
+  file_label = 'tfile1',
+  histo_name = 'deltaRMediumRestrictionDistribution',
+  histo_title = 'Medium-restriction muon-jet #DeltaR distribution',
+  min = 0,
+  max = 10,
+  nbins = 200,
+  input_objects = 'matchedMuons',
+  value_func = deltaR,
+  x_label = "#DeltaR",
+  y_label = "# events"
+)
+
+pairedMediumRestrictionMuonPtDistribution = cfg.Analyzer(
+  Histogrammer,
+  instance_label = 'pairedMediumRestrictionMuonPtDistribution',
+  file_label = 'tfile1',
+  histo_name = 'pairedMediumRestrictionMuonPtDistribution',
+  histo_title = 'Medium-restriction matched muon p_{t} distribution',
+  min = 0,
+  max = 100,
+  nbins = 200,
+  input_objects = 'matchedMuons',
+  value_func = pt,
+  x_label = "p_{t} [GeV]",
+  y_label = "# events"
+)
+
+pairedMediumRestrictionMuonEtaDistribution = cfg.Analyzer(
+  Histogrammer,
+  instance_label = 'pairedMediumRestrictionMuonEtaDistribution',
+  file_label = 'tfile1',
+  histo_name = 'pairedMediumRestrictionMuonEtaDistribution',
+  histo_title = 'Medium-restriction matched muon #eta distribution',
+  min = -10,
+  max = +10,
+  nbins = 100,
+  input_objects = 'matchedMuons',
+  value_func = eta,
+  x_label = "#eta",
+  y_label = "# events"
+)
+
+pairedMediumRestrictionMuonPhiDistribution = cfg.Analyzer(
+  Histogrammer,
+  instance_label = 'pairedMediumRestrictionMuonPhiDistribution',
+  file_label = 'tfile1',
+  histo_name = 'pairedMediumRestrictionMuonPhiDistribution',
+  histo_title = 'Medium-restriction matched muon #phi distribution',
+  min = -3.15,
+  max = +3.15,
+  nbins = 100,
+  input_objects = 'matchedMuons',
+  value_func = phi,
+  x_label = "#phi",
+  y_label = "# events"
+)
+
+pairedMediumRestrictionJetPtDistribution = cfg.Analyzer(
+  Histogrammer,
+  instance_label = 'pairedMediumRestrictionJetPtDistribution',
+  file_label = 'tfile1',
+  histo_name = 'pairedMediumRestrictionJetPtDistribution',
+  histo_title = 'Medium-restriction matched jet p_{t} distribution',
+  min = 0,
+  max = 300,
+  nbins = 100,
+  input_objects = 'matchedMuons',
+  value_func = matchedParticlePt,
+  x_label = "p_{t} [GeV]",
+  y_label = "# events"
+)
+
+pairedMediumRestrictionJetEtaDistribution = cfg.Analyzer(
+  Histogrammer,
+  instance_label = 'pairedMediumRestrictionJetEtaDistribution',
+  file_label = 'tfile1',
+  histo_name = 'pairedMediumRestrictionJetEtaDistribution',
+  histo_title = 'Medium-restriction matched jet #eta distribution',
+  min = -10,
+  max = 10,
+  nbins = 100,
+  input_objects = 'matchedMuons',
+  value_func = matchedParticleEta,
+  x_label = "#eta",
+  y_label = "# events"
+)
+
+pairedMediumRestrictionJetPhiDistribution = cfg.Analyzer(
+  Histogrammer,
+  instance_label = 'pairedMediumRestrictionJetPhiDistribution',
+  file_label = 'tfile1',
+  histo_name = 'pairedMediumRestrictionJetPhiDistribution',
+  histo_title = 'Medium-restriction matched jet #phi distribution',
   min = -3.15,
   max = +3.15,
   nbins = 100,
@@ -565,6 +686,15 @@ sequence = cfg.Sequence( [
   pairedLooseRestrictionJetPtDistribution,
   pairedLooseRestrictionJetEtaDistribution,
   pairedLooseRestrictionJetPhiDistribution,
+  mediumRestrictionMuonJetMatcher,
+  matchedMediumRestrictionMuonSelector,
+  deltaRMediumRestrictionDistribution,
+  pairedMediumRestrictionMuonPtDistribution,
+  pairedMediumRestrictionMuonEtaDistribution,
+  pairedMediumRestrictionMuonPhiDistribution,
+  pairedMediumRestrictionJetPtDistribution,
+  pairedMediumRestrictionJetEtaDistribution,
+  pairedMediumRestrictionJetPhiDistribution,
   tightRestrictionMuonJetMatcher,
   matchedTightRestrictionMuonSelector,
   deltaRTightRestrictionDistribution,
