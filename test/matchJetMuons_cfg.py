@@ -20,8 +20,8 @@ logging.basicConfig(level=logging.WARNING)
 selectedComponents = [
   #MinBiasDistribution_100TeV_DelphesFCC_CMSJets,
   #MinBiasDistribution_13TeV_DelphesCMS_CMSJets,
-  HardQCD_PtBinned_10_30_GeV,
-  #HardQCD_PtBinned_30_300_GeV,
+  #HardQCD_PtBinned_10_30_GeV,
+  HardQCD_PtBinned_30_300_GeV,
   #HardQCD_PtBinned_300_500_GeV,
 ]
 
