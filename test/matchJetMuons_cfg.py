@@ -1,7 +1,7 @@
 import os
 import copy
 import heppy.framework.config as cfg
-from heppy.test.minBiasSamples import *
+from heppy.test.mySamples import *
 import logging
 from heppy.analyzers.fcc.Reader import Reader
 from EventStore import EventStore as Events
@@ -18,8 +18,11 @@ reload(logging)
 logging.basicConfig(level=logging.WARNING)
 
 selectedComponents = [
-  MinBiasDistribution_100TeV_DelphesFCC_CMSJets,
-  MinBiasDistribution_13TeV_DelphesCMS_CMSJets
+  #MinBiasDistribution_100TeV_DelphesFCC_CMSJets,
+  #MinBiasDistribution_13TeV_DelphesCMS_CMSJets,
+  HardQCD_PtBinned_10_30_GeV,
+  #HardQCD_PtBinned_30_300_GeV,
+  #HardQCD_PtBinned_300_500_GeV,
 ]
 
 #selectedComponents = [
@@ -711,7 +714,6 @@ sequence = cfg.Sequence( [
   jetEtaDistribution,
   jetPhiDistribution,
 ] )
-
 
 config = cfg.Config(
   components = selectedComponents,
