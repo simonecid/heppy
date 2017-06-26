@@ -1,5 +1,19 @@
 #! /bin/bash
 
+while getopts "j:c:p:" o; do
+  case "${o}" in
+    j)
+      jobName=${OPTARG}
+      ;;
+    c)
+      clusterId=${OPTARG}
+      ;;
+    p)
+      processId=${OPTARG}
+      ;;
+    esac
+done
+
 echo "Dumping sysinfo"
 
 lsb_release -a
@@ -10,6 +24,7 @@ echo "Running heppy job"
 
 HOME_FOLDER="$(pwd)"
 SAVE_DESTINATION="muonMatching"
+
 
 mkdir ${SAVE_DESTINATION}
 
@@ -22,4 +37,4 @@ heppy ${HOME_FOLDER}/${SAVE_DESTINATION} test/matchJetMuons_cfg.py
 
 # Zip file
 cd ${HOME_FOLDER}
-tar -czvf muonMatching_output.tar.gz ${SAVE_DESTINATION}
+tar -czvf muonMatching_${jobName}_${clusterId}.${processId}.tar.gz ${SAVE_DESTINATION}

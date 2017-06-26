@@ -1,7 +1,7 @@
 Universe = vanilla
-job = muonMatching_MB_500kevents_CMS_FCC
+job = muonMatching_HardQCD_PtBinned_30_300_GeV
 cmd = runHeppyMuonMatching.sh
-args=$(cluster).$(process)
+args= -j $(job) -c $(cluster) -p $(process)
 # Better not to put logs in the same folder, as they are plenty
 output = /storage/sb17498/logs/heppy/$(job)_$(cluster).$(process).out
 error = /storage/sb17498/logs/heppy/$(job)_$(cluster).$(process).err
@@ -9,7 +9,7 @@ log = /storage/sb17498/logs/heppy/$(job)_$(cluster).$(process).log
 should_transfer_files = YES
 when_to_transfer_output = ON_EXIT_OR_EVICT
 
-request_cpus = 1
+request_cpus = 2
 request_memory = 10000
 request_disk = 100000
 
