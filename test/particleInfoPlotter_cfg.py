@@ -3,7 +3,7 @@
 import os
 import copy
 import heppy.framework.config as cfg
-from heppy.test.minBiasSamples import *
+from heppy.test.mySamples import *
 import logging
 from heppy.analyzers.Selector import Selector
 from heppy.analyzers.fcc.Reader import Reader
@@ -22,9 +22,14 @@ logging.shutdown()
 reload(logging)
 logging.basicConfig(level=logging.WARNING)
 
+#selectedComponents = [
+#  MinBiasDistribution_100TeV_DelphesFCC_CMSJets,
+#  MinBiasDistribution_13TeV_DelphesCMS_CMSJets
+#]
+
 selectedComponents = [
-  MinBiasDistribution_100TeV_DelphesFCC_CMSJets,
-  MinBiasDistribution_13TeV_DelphesCMS_CMSJets
+  #HardQCD_PtBinned_30_300_GeV
+  HardQCD_PtBinned_300_500_GeV
 ]
 
 # Defining pdgids
