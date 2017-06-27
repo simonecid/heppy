@@ -1,6 +1,8 @@
 #! /bin/bash
 
-while getopts "j:c:p:s;" o; do
+set -o xtrace
+
+while getopts "j:c:p:s:" o; do
   case "${o}" in
     j)
       jobName=${OPTARG}
