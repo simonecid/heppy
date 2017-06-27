@@ -1,6 +1,6 @@
 #! /bin/bash
 
-while getopts "j:c:p:" o; do
+while getopts "j:c:p:s;" o; do
   case "${o}" in
     j)
       jobName=${OPTARG}
@@ -10,6 +10,9 @@ while getopts "j:c:p:" o; do
       ;;
     p)
       processId=${OPTARG}
+      ;;
+    s)
+      sampleName=${OPTARG}
       ;;
     esac
 done
@@ -23,7 +26,7 @@ python /cvmfs/fcc.cern.ch/sw/0.8.1/tools/hsf_get_platform.py --get=os
 echo "Running heppy job"
 
 HOME_FOLDER="$(pwd)"
-SAVE_DESTINATION="muonMatching"
+SAVE_DESTINATION="muonMatching_${sampleName}"
 
 
 mkdir ${SAVE_DESTINATION}
@@ -33,8 +36,8 @@ cp -r /software/sb17498/heppy .
 cd heppy
 source init.sh
 
-heppy ${HOME_FOLDER}/${SAVE_DESTINATION} test/matchJetMuons_cfg.py
+heppy ${HOME_FOLDER}/${SAVE_DESTINATION} test/matchJetMuons_cfg.py --option=sample=${sampleName}
 
 # Zip file
 cd ${HOME_FOLDER}
-tar -czvf muonMatching_${jobName}_${clusterId}.${processId}.tar.gz ${SAVE_DESTINATION}
+tar -czvf muonMatching_${sampleName}_${jobName}_${clusterId}.${processId}.tar.gz ${SAVE_DESTINATION}
