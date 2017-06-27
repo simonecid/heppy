@@ -1,5 +1,5 @@
 Universe = vanilla
-job = muonMatching_HardQCD_PtBinned_30_300_GeV
+job = muonMatching_HardQCD_allBins
 cmd = runHeppyMuonMatching.sh
 args= -j $(job) -c $(cluster) -p $(process)
 # Better not to put logs in the same folder, as they are plenty
@@ -9,8 +9,8 @@ log = /storage/sb17498/logs/heppy/$(job)_$(cluster).$(process).log
 should_transfer_files = YES
 when_to_transfer_output = ON_EXIT_OR_EVICT
 
-request_cpus = 2
-request_memory = 10000
-request_disk = 100000
+request_cpus = 24
+request_memory = 5000
+request_disk = 1000000
 
 queue 1

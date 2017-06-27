@@ -18,11 +18,14 @@ reload(logging)
 logging.basicConfig(level=logging.WARNING)
 
 selectedComponents = [
-  #MinBiasDistribution_100TeV_DelphesFCC_CMSJets,
+  MinBiasDistribution_100TeV_DelphesFCC_CMSJets,
   #MinBiasDistribution_13TeV_DelphesCMS_CMSJets,
   #HardQCD_PtBinned_10_30_GeV,
   HardQCD_PtBinned_30_300_GeV,
-  #HardQCD_PtBinned_300_500_GeV,
+  HardQCD_PtBinned_300_500_GeV,
+  HardQCD_PtBinned_500_700_GeV,
+  HardQCD_PtBinned_700_900_GeV,
+  HardQCD_PtBinned_900_1000_GeV,
 ]
 
 #selectedComponents = [
