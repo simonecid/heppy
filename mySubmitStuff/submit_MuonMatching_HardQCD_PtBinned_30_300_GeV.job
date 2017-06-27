@@ -1,7 +1,7 @@
 Universe = vanilla
 job = muonMatching_HardQCD_PtBinned_30_300_GeV
-cmd = mySubmitStuff/runHeppyMuonMatching.sh
-args= -j $(job) -c $(cluster) -p $(process) -s HardQCD_PtBinned_30_300_GeV
+cmd = mySubmitStuff/runHeppyConfigFile.sh
+args= -j $(job) -c $(cluster) -p $(process) -i test/matchJetMuons_cfg.py -s HardQCD_PtBinned_30_300_GeV
 # Better not to put logs in the same folder, as they are plenty
 output = /storage/sb17498/logs/heppy/$(job)_$(cluster).$(process).out
 error = /storage/sb17498/logs/heppy/$(job)_$(cluster).$(process).err
