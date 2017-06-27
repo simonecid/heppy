@@ -16,6 +16,7 @@ from heppy.analyzers.triggerrates.SubLeadingQuantityHistogrammer import SubLeadi
 from heppy.analyzers.triggerrates.Histogrammer_2D import Histogrammer_2D
 import sys
 from heppy.framework.looper import Looper
+from heppy.framework.heppy_loop import _heppyGlobalOptions
 
 # next 2 lines necessary to deal with reimports from ipython
 logging.shutdown()
@@ -27,9 +28,13 @@ logging.basicConfig(level=logging.WARNING)
 #  MinBiasDistribution_13TeV_DelphesCMS_CMSJets
 #]
 
+# Retrieving the sample to analyse
+
+sampleName = _heppyGlobalOptions["sample"]
+sample = globals()[sampleName]
+
 selectedComponents = [
-  #HardQCD_PtBinned_30_300_GeV
-  HardQCD_PtBinned_300_500_GeV
+  sample
 ]
 
 # Defining pdgids
