@@ -11,21 +11,31 @@ from heppy.framework.looper import Looper
 from heppy.analyzers.Matcher import Matcher
 from heppy.analyzers.Selector import Selector
 from heppy.analyzers.triggerrates.MatchedParticlesTreeProducer import MatchedParticlesTreeProducer
+from heppy.framework.heppy_loop import _heppyGlobalOptions
 
 # next 2 lines necessary to deal with reimports from ipython
 logging.shutdown()
 reload(logging)
 logging.basicConfig(level=logging.WARNING)
 
+# Retrieving the sample to analyse
+
+sampleName = _heppyGlobalOptions["sample"]
+sample = globals()[sampleName]
+
+#selectedComponents = [
+#  MinBiasDistribution_100TeV_DelphesFCC_CMSJets,
+#  MinBiasDistribution_13TeV_DelphesCMS_CMSJets,
+#  HardQCD_PtBinned_10_30_GeV,
+#  HardQCD_PtBinned_30_300_GeV,
+#  HardQCD_PtBinned_300_500_GeV,
+#  HardQCD_PtBinned_500_700_GeV,
+#  HardQCD_PtBinned_700_900_GeV,
+#  HardQCD_PtBinned_900_1000_GeV,
+#]
+
 selectedComponents = [
-  MinBiasDistribution_100TeV_DelphesFCC_CMSJets,
-  #MinBiasDistribution_13TeV_DelphesCMS_CMSJets,
-  #HardQCD_PtBinned_10_30_GeV,
-  HardQCD_PtBinned_30_300_GeV,
-  HardQCD_PtBinned_300_500_GeV,
-  HardQCD_PtBinned_500_700_GeV,
-  HardQCD_PtBinned_700_900_GeV,
-  HardQCD_PtBinned_900_1000_GeV,
+  sample
 ]
 
 #selectedComponents = [
