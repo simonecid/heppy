@@ -24,9 +24,13 @@ done
 
 echo "Dumping sysinfo"
 
+echo "> lsb_release -a"
 lsb_release -a
 
+echo "> Platform name"
 python /cvmfs/fcc.cern.ch/sw/0.8.1/tools/hsf_get_platform.py --get=os 
+
+echo "I am running on" $HOSTNAME
 
 echo "Running heppy job"
 
