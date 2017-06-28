@@ -1152,15 +1152,15 @@ HardQCD_PtBinned_900_1000_GeV = cfg.MCComponent(
 )
 
 # Max 4 jobs
-MBtest.splitFactor = len(MBtest.files) if len(MBtest.files) < 4 else 4
-MinBiasDistribution_100TeV_DelphesFCC_FCCJets.splitFactor = len(MinBiasDistribution_100TeV_DelphesFCC_FCCJets.files) if len(MinBiasDistribution_100TeV_DelphesFCC_FCCJets.files) < 4 else 4
-MinBiasDistribution_13TeV_DelphesFCC_FCCJets.splitFactor = len(MinBiasDistribution_13TeV_DelphesFCC_FCCJets.files) if len(MinBiasDistribution_13TeV_DelphesFCC_FCCJets.files) < 4 else 4
-MinBiasDistribution_13TeV_DelphesCMS_CMSJets.splitFactor = len(MinBiasDistribution_13TeV_DelphesCMS_CMSJets.files) if len(MinBiasDistribution_13TeV_DelphesCMS_CMSJets.files) < 4 else 4
-MinBiasDistribution_13TeV_DelphesFCC_CMSJets.splitFactor = len(MinBiasDistribution_13TeV_DelphesFCC_CMSJets.files) if len(MinBiasDistribution_13TeV_DelphesFCC_CMSJets.files) < 4 else 4
-MinBiasDistribution_100TeV_DelphesFCC_CMSJets.splitFactor = 10
-HardQCD_PtBinned_10_30_GeV.splitFactor = len(HardQCD_PtBinned_10_30_GeV.files) if len(HardQCD_PtBinned_10_30_GeV.files) < 4 else 4
-HardQCD_PtBinned_30_300_GeV.splitFactor = 10
-HardQCD_PtBinned_300_500_GeV.splitFactor = 10
-HardQCD_PtBinned_500_700_GeV.splitFactor = 10
-HardQCD_PtBinned_700_900_GeV.splitFactor = 10
-HardQCD_PtBinned_900_1000_GeV.splitFactor = 10
+MBtest.splitFactor = len(MBtest.files)
+MinBiasDistribution_100TeV_DelphesFCC_FCCJets.splitFactor = len(MinBiasDistribution_100TeV_DelphesFCC_FCCJets.files)
+MinBiasDistribution_13TeV_DelphesFCC_FCCJets.splitFactor = len(MinBiasDistribution_13TeV_DelphesFCC_FCCJets.files)
+MinBiasDistribution_13TeV_DelphesCMS_CMSJets.splitFactor = len(MinBiasDistribution_13TeV_DelphesCMS_CMSJets.files)
+MinBiasDistribution_13TeV_DelphesFCC_CMSJets.splitFactor = len(MinBiasDistribution_13TeV_DelphesFCC_CMSJets.files)
+MinBiasDistribution_100TeV_DelphesFCC_CMSJets.splitFactor = len(MinBiasDistribution_100TeV_DelphesFCC_CMSJets.files)
+HardQCD_PtBinned_10_30_GeV.splitFactor = len(HardQCD_PtBinned_10_30_GeV.files)
+HardQCD_PtBinned_30_300_GeV.splitFactor = len(HardQCD_PtBinned_30_300_GeV.files)
+HardQCD_PtBinned_300_500_GeV.splitFactor = len(HardQCD_PtBinned_300_500_GeV.files)
+HardQCD_PtBinned_500_700_GeV.splitFactor = len(HardQCD_PtBinned_500_700_GeV.files)
+HardQCD_PtBinned_700_900_GeV.splitFactor = len(HardQCD_PtBinned_700_900_GeV.files)
+HardQCD_PtBinned_900_1000_GeV.splitFactor = len(HardQCD_PtBinned_900_1000_GeV.files)
