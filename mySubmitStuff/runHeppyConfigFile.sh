@@ -2,7 +2,7 @@
 
 set -o xtrace
 
-while getopts "j:c:p:s:i:" o; do
+while getopts "j:c:p:s:i:t:" o; do
   case "${o}" in
     j)
       jobName=${OPTARG}
@@ -18,6 +18,9 @@ while getopts "j:c:p:s:i:" o; do
       ;;
     i)
       inputFile=${OPTARG}
+      ;;
+    t)
+      numThreads=${OPTARG}
       ;;
     esac
 done
@@ -44,7 +47,7 @@ cp -r /software/sb17498/heppy .
 cd heppy
 source init.sh
 
-heppy ${HOME_FOLDER}/${SAVE_DESTINATION} ${inputFile} --option=sample=${sampleName}
+heppy ${HOME_FOLDER}/${SAVE_DESTINATION} ${inputFile} --option=sample=${sampleName} -j ${numThreads}
 
 # Zip file
 cd ${HOME_FOLDER}
