@@ -1787,8 +1787,8 @@ HardQCD_13TeV_PtBinned_900_1000_GeV = cfg.MCComponent(
   nGenEvents=500000
 )
 
-HardQCD_13TeV_PtBinned_900_1400_GeV = cfg.MCComponent(
-  'HardQCD_13TeV_PtBinned_900_1400_GeV',
+HardQCD_100TeV_PtBinned_900_1400_GeV = cfg.MCComponent(
+  'HardQCD_100TeV_PtBinned_900_1400_GeV',
   files = [
     "/hdfs/FCC-hh/HardQCD_100TeV_PtBinned_900_1400_GeV_DelphesFCC_CMSJets/events_HardQCD_PtBinned_900_1400_GeV_5kevents_100TeV_DelphesFCC_CMSJets_2329444.0.root",
     "/hdfs/FCC-hh/HardQCD_100TeV_PtBinned_900_1400_GeV_DelphesFCC_CMSJets/events_HardQCD_PtBinned_900_1400_GeV_5kevents_100TeV_DelphesFCC_CMSJets_2329444.100.root",
@@ -1994,8 +1994,8 @@ HardQCD_13TeV_PtBinned_900_1400_GeV = cfg.MCComponent(
   nGenEvents=1000000
 )
 
-HardQCD_13TeV_PtBinned_1400_2000_GeV = cfg.MCComponent(
-  'HardQCD_13TeV_PtBinned_1400_2000_GeV',
+HardQCD_100TeV_PtBinned_1400_2000_GeV = cfg.MCComponent(
+  'HardQCD_100TeV_PtBinned_1400_2000_GeV',
   files = [
     "/hdfs/FCC-hh/HardQCD_100TeV_PtBinned_1400_2000_GeV_DelphesFCC_CMSJets/events_HardQCD_PtBinned_1400_2000_GeV_5kevents_100TeV_DelphesFCC_CMSJets_2329445.0.root",
     "/hdfs/FCC-hh/HardQCD_100TeV_PtBinned_1400_2000_GeV_DelphesFCC_CMSJets/events_HardQCD_PtBinned_1400_2000_GeV_5kevents_100TeV_DelphesFCC_CMSJets_2329445.100.root",
