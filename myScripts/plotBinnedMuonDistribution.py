@@ -8,7 +8,7 @@ from ROOT import TLegend
 
 #matchedMuonFile = TFile("muonMatching/MinBiasDistribution_100TeV_DelphesFCC_CMSJets.root")
 #matchedMuonFile = TFile("_muonMatching/muonMatching_HardQCD_PtBinned_700_900_GeV/HardQCD_PtBinned_700_900_GeV.root")
-matchedMuonFile = TFile("_muonMatching/muonMatching.root")
+matchedMuonFile = TFile("_muonMatching_13TeV/muonMatching.root")
 matchedMuonTree = matchedMuonFile.Get("noRestrictionMuonJetTree")
 
 muonPtPlotSettings = lambda: 0
@@ -18,9 +18,9 @@ muonPtPlotSettings.max = 800
 muonPtPlotSettings.deltaRMax = 0.5
 
 muonJetPtRatioPlotSettings = lambda: 0
-muonJetPtRatioPlotSettings.nBins = 50
+muonJetPtRatioPlotSettings.nBins = 60
 muonJetPtRatioPlotSettings.min = 0
-muonJetPtRatioPlotSettings.max = 1.2
+muonJetPtRatioPlotSettings.max = 1.5
 muonJetPtRatioPlotSettings.deltaRMax = muonPtPlotSettings.deltaRMax
 
 
@@ -127,7 +127,9 @@ maximumY_muonPtHistograms *= 1.1
 muonJetPtRatioHistograms[0].GetYaxis().SetRangeUser(1e-6, maximumY_muonJetPtRatioHistograms)
 binnedMuonPtHistograms[0].GetYaxis().SetRangeUser(1e-6, maximumY_muonPtHistograms)
 
+canvasMuonPt.cd()
 legendMuonPt.Draw()
+canvasMuonJetPtRatio.cd()
 legendMuonJetPtRatio.Draw()
 
 canvasMuonPt.Print("matchedMuonPtDistributionBinnedInJetPt.png", "png")
