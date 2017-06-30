@@ -671,10 +671,10 @@ jetPhiDistribution = cfg.Analyzer(
   y_label = "# events"
 )
 
-noRestrictionMuonJetTree = cfg.Analyzer(
+muonJetTree = cfg.Analyzer(
     MatchedParticlesTreeProducer,
     file_label = "tfile1",
-    tree_name = 'noRestrictionMuonJetTree',
+    tree_name = 'muonJetTree',
     tree_title = 'Tree containing info about matched jet and muons',
     matched_particle_collection = 'matchedMuons',
   )

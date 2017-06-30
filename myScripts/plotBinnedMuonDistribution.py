@@ -7,66 +7,130 @@ from ROOT import TCanvas
 from ROOT import TLegend
 
 #matchedMuonFile = TFile("muonMatching/MinBiasDistribution_100TeV_DelphesFCC_CMSJets.root")
-matchedMuonFile = TFile("_testMuonMatch/HardQCD_PtBinned_10_30_GeV/histograms.root ")
+#matchedMuonFile = TFile("_muonMatching/muonMatching_HardQCD_PtBinned_700_900_GeV/HardQCD_PtBinned_700_900_GeV.root")
+matchedMuonFile = TFile("_muonMatching/muonMatching.root")
 matchedMuonTree = matchedMuonFile.Get("noRestrictionMuonJetTree")
 
-muonPlotSettings = lambda: 0
-muonPlotSettings.nBins = 100
-muonPlotSettings.min = 0
-muonPlotSettings.max = 100
-muonPlotSettings.deltaRMax = 3
+muonPtPlotSettings = lambda: 0
+muonPtPlotSettings.nBins = 800
+muonPtPlotSettings.min = 0
+muonPtPlotSettings.max = 800
+muonPtPlotSettings.deltaRMax = 0.5
+
+muonJetPtRatioPlotSettings = lambda: 0
+muonJetPtRatioPlotSettings.nBins = 50
+muonJetPtRatioPlotSettings.min = 0
+muonJetPtRatioPlotSettings.max = 1.2
+muonJetPtRatioPlotSettings.deltaRMax = muonPtPlotSettings.deltaRMax
+
 
 # Setting up jetPtBins and histograms
-jetPtBins = [0, 30, 45, 60, 90, 150]
-histograms = []
+jetPtBins = [30, 60, 100, 200, 300, 450, 600, 1200]
+binnedMuonPtHistograms = []
+muonJetPtRatioHistograms = []
 
 for x in xrange(0, len(jetPtBins) - 1):
   aHistogram = TH1F("muonPtDistribution" + str(jetPtBins[x]) + "_" + str(jetPtBins[x+1]),
     "Muon p_{t} distribution binned in p^{jet}_{t}",
-    muonPlotSettings.nBins,
-    muonPlotSettings.min,
-    muonPlotSettings.max
+    muonPtPlotSettings.nBins,
+    muonPtPlotSettings.min,
+    muonPtPlotSettings.max
   )
-  histograms.append(aHistogram)
   # Creating a consistent marker styling
   aHistogram.SetMarkerColor((x % 8) + 1) # colours from 1 (blk) to 8 (dark green)
   aHistogram.SetMarkerStyle(20 + x //8) # every 8 bins shift marker and go back to previous set of colors
-  aHistogram.SetLineColor(1)
+  aHistogram.SetLineColor((x % 8) + 1)
   aHistogram.SetStats(False)
-  aHistogram.GetXaxis().SetRangeUser(0, 30)
   aHistogram.GetXaxis().SetTitle("p^{#mu}_{t}")
   aHistogram.GetXaxis().SetTitleOffset(1.10)
   aHistogram.GetYaxis().SetTitle("a.u.")
+  binnedMuonPtHistograms.append(aHistogram)
 
+  aHistogram = TH1F("muonJetPtRatioDistribution" + str(jetPtBins[x]) + "_" + str(jetPtBins[x+1]),
+    "p_{t}^{#mu}/p_{t}^{jet} distribution binned in p^{jet}_{t}",
+    muonJetPtRatioPlotSettings.nBins,
+    muonJetPtRatioPlotSettings.min,
+    muonJetPtRatioPlotSettings.max
+  )
+  # Creating a consistent marker styling
+  aHistogram.SetMarkerColor((x % 8) + 1) # colours from 1 (blk) to 8 (dark green)
+  aHistogram.SetMarkerStyle(20 + x //8) # every 8 bins shift marker and go back to previous set of colors
+  aHistogram.SetLineColor((x % 8) + 1)
+  aHistogram.SetStats(False)
+  aHistogram.GetXaxis().SetTitle("#frac{p_{t}^{#mu}}{p_{t}^{jet}}")
+  aHistogram.GetXaxis().SetTitleOffset(1.10)
+  aHistogram.GetYaxis().SetTitle("a.u.")
+  muonJetPtRatioHistograms.append(aHistogram)
 
 # Browsing tree
 
 for iEv in xrange(0, matchedMuonTree.GetEntries()):
   
-  if iEv % 1000 == 0: print "Processing event", iEv, "out of", matchedMuonTree.GetEntries()
+  if iEv % 10000 == 0: print "Processing event", iEv, "out of", matchedMuonTree.GetEntries(), "-", float(iEv)/float(matchedMuonTree.GetEntries()), "%"
   matchedMuonTree.GetEvent(iEv)
   
-  if matchedMuonTree.dr < muonPlotSettings.deltaRMax:
+  if matchedMuonTree.dr < muonPtPlotSettings.deltaRMax:
     for x in xrange(0, len(jetPtBins) - 1):
       if (matchedMuonTree.matchedJet_pt > jetPtBins[x]) and (matchedMuonTree.matchedJet_pt < jetPtBins[x+1]):
-        histograms[x].Fill(matchedMuonTree.matchedMuon_pt)
+        binnedMuonPtHistograms[x].Fill(matchedMuonTree.matchedMuon_pt)
 
-canvas = TCanvas()
-canvas.SetLogy()
-legend = TLegend(0.65,0.7,0.90,0.9)
+  if matchedMuonTree.dr < muonJetPtRatioPlotSettings.deltaRMax:
+    for x in xrange(0, len(jetPtBins) - 1):
+      if (matchedMuonTree.matchedJet_pt > jetPtBins[x]) and (matchedMuonTree.matchedJet_pt < jetPtBins[x+1]):
+        muonJetPtRatioHistograms[x].Fill(matchedMuonTree.matchedMuon_pt/matchedMuonTree.matchedJet_pt)
+
+canvasMuonPt = TCanvas()
+canvasMuonPt.SetLogy()
+canvasMuonJetPtRatio = TCanvas()
+canvasMuonJetPtRatio.SetLogy()
+legendMuonPt = TLegend(0.65,0.7,0.90,0.9)
+legendMuonJetPtRatio = TLegend(0.65,0.7,0.90,0.9)
+
+saveFile = TFile("binnedMatchedMuonDistributions.root", "RECREATE")
+saveFile.cd()
+
+maximumY_muonJetPtRatioHistograms = float("-inf")
+maximumY_muonPtHistograms = float("-inf")
 
 # Normalising plots and plotting them
-for x in xrange(0, len(histograms)):  
-  histogram = histograms[x]
-  if histogram.GetEntries() == 0: 
+for x in xrange(0, len(binnedMuonPtHistograms)):  
+  canvasMuonPt.cd()
+  histogram = binnedMuonPtHistograms[x]
+  if histogram.GetEntries() == 0:
     print "Bin", str(jetPtBins[x]) + " < p_{t}^{jet} < " + str(jetPtBins[x+1]), "is empty"
     continue
   histogram.Scale(1/histogram.GetEntries())
-  histogram.Draw("PE SAME")
-  legend.AddEntry(histogram,
-  str(jetPtBins[x]) + " < p_{t}^{jet} < " + str(jetPtBins[x+1]),
-  "p")
+  maximumY_muonPtHistograms = histogram.GetMaximum() if histogram.GetMaximum() > maximumY_muonPtHistograms else maximumY_muonPtHistograms
+  histogram.Draw("HIST SAME")
+  legendMuonPt.AddEntry(histogram,
+    str(jetPtBins[x]) + " < p_{t}^{jet} < " + str(jetPtBins[x+1]),
+    "p"
+  )
+  histogram.Write()
 
-legend.Draw()
+  canvasMuonJetPtRatio.cd()
+  histogram = muonJetPtRatioHistograms[x]
+  if histogram.GetEntries() == 0:
+    print "Bin", str(jetPtBins[x]) + " < p_{t}^{jet} < " + str(jetPtBins[x+1]), "is empty"
+    continue
+  histogram.Scale(1/histogram.GetEntries())
+  maximumY_muonJetPtRatioHistograms = histogram.GetMaximum() if histogram.GetMaximum() > maximumY_muonJetPtRatioHistograms else maximumY_muonJetPtRatioHistograms
+  histogram.Draw("HIST SAME")
+  legendMuonJetPtRatio.AddEntry(histogram,
+    str(jetPtBins[x]) + " < p_{t}^{jet} < " + str(jetPtBins[x+1]),
+    "p"
+  )
+  histogram.Write()
 
-canvas.Print("matchedMuonPtDistributionBinnedInJetPt.png", "png")
+maximumY_muonJetPtRatioHistograms *= 1.1
+maximumY_muonPtHistograms *= 1.1
+muonJetPtRatioHistograms[0].GetYaxis().SetRangeUser(1e-6, maximumY_muonJetPtRatioHistograms)
+binnedMuonPtHistograms[0].GetYaxis().SetRangeUser(1e-6, maximumY_muonPtHistograms)
+
+legendMuonPt.Draw()
+legendMuonJetPtRatio.Draw()
+
+canvasMuonPt.Print("matchedMuonPtDistributionBinnedInJetPt.png", "png")
+canvasMuonJetPtRatio.Print("matchedMuonJetPtRatioDistributionBinnedInJetPt.png", "png")
+
+saveFile.Close()
