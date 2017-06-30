@@ -685,7 +685,7 @@ sequence = cfg.Sequence( [
   source,
   noRestrictionMuonJetMatcher,
   matchedNoRestrictionMuonSelector,
-  noRestrictionMuonJetTree,
+  muonJetTree,
   deltaRNoRestrictionDistribution,
   pairedNoRestrictionMuonPtDistribution,
   pairedNoRestrictionMuonEtaDistribution,
