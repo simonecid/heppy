@@ -44,7 +44,10 @@ pdgIds = {
   'muon-': 13,
   'tau-': 15,
   'photon': 22,
-  'pion+': 211
+  'pion+': 211,
+  'kaon+': 321,
+  'kaon_long': 130,
+  'kaon_short': 310,
 }
 
 source = cfg.Analyzer(
@@ -101,6 +104,10 @@ def pt (ptc):
 def eta (ptc):
       return ptc.eta()
 
+'''Return PDGID'''
+def pdgid(ptc):
+  return ptc.pdgid()
+
 # Restricting gen particles and jets in the abs(eta) < 6 region
 
 def etaRestrictor(ptc):
@@ -115,8 +122,24 @@ etaGenParticleSelector = cfg.Analyzer(
 )
 
 #====================================================
-# Defining analysers for electrons
+# Defining analysers
 #====================================================
+
+pdgidsDistribution = cfg.Analyzer(
+  Histogrammer,
+  'pdgidDistribution',
+  file_label = 'tfile1',
+  x_label = "PGDID",
+  y_label = "# particles",
+  histo_name = 'pdgidDistribution',
+  histo_title = 'PDGID distribution',
+  min = -2000,
+  max = 2000,
+  nbins = 4000,
+  input_objects = 'gen_particles_eta_restricted',
+  value_func = pdgid,
+  log_y = True
+)
 
 pionSelector = cfg.Analyzer(
     Selector,
@@ -124,6 +147,30 @@ pionSelector = cfg.Analyzer(
     output = 'gen_pions',
     input_objects = 'gen_particles_eta_restricted',
     filter_func = particleCheckerFactory("pion+")
+)
+
+chargedKaonSelector = cfg.Analyzer(
+    Selector,
+    'sel_charged_kaon',
+    output = 'gen_charged_kaons',
+    input_objects = 'gen_particles_eta_restricted',
+    filter_func = particleCheckerFactory("kaon+")
+)
+
+kaonLongSelector = cfg.Analyzer(
+    Selector,
+    'sel_kaon_long',
+    output = 'gen_kaons_long',
+    input_objects = 'gen_particles_eta_restricted',
+    filter_func = particleCheckerFactory("kaon_long")
+)
+
+kaonShortSelector = cfg.Analyzer(
+    Selector,
+    'sel_kaon_short',
+    output = 'gen_kaons_short',
+    input_objects = 'gen_particles_eta_restricted',
+    filter_func = particleCheckerFactory("kaon_short")
 )
 
 pionGenPtDistribution = cfg.Analyzer(
@@ -146,14 +193,110 @@ pionGenEtaDistribution = cfg.Analyzer(
   Histogrammer,
   'pionGenEtaDistribution',
   file_label = 'tfile1',
-  x_label = "pt [GeV]",
+  x_label = "#eta",
   y_label = "# events",
   histo_name = 'pionGenEtaDistribution',
   histo_title = 'Pion eta distribution (gen level)',
+  min = -10,
+  max = 10,
+  nbins = 200,
+  input_objects = 'gen_pions',
+  value_func = eta,
+  log_y = True
+)
+
+chargedKaonGenPtDistribution = cfg.Analyzer(
+  Histogrammer,
+  'chargedKaonGenPtDistribution',
+  file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
+  histo_name = 'chargedKaonGenPtDistribution',
+  histo_title = 'Charged kaon transverse momentum distribution (gen level)',
   min = 0,
   max = 2000,
   nbins = 400,
-  input_objects = 'gen_pions',
+  input_objects = 'gen_charged_kaons',
+  value_func = pt,
+  log_y = True
+)
+
+chargedKaonGenEtaDistribution = cfg.Analyzer(
+  Histogrammer,
+  'chargedKaonGenEtaDistribution',
+  file_label = 'tfile1',
+  x_label = "#eta",
+  y_label = "# events",
+  histo_name = 'chargedKaonGenEtaDistribution',
+  histo_title = 'Charged kaon eta distribution (gen level)',
+  min = -10,
+  max = 10,
+  nbins = 200,
+  input_objects = 'gen_charged_kaons',
+  value_func = eta,
+  log_y = True
+)
+
+kaonLongGenPtDistribution = cfg.Analyzer(
+  Histogrammer,
+  'kaonLongGenPtDistribution',
+  file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
+  histo_name = 'kaonLongGenPtDistribution',
+  histo_title = 'K_{L} transverse momentum distribution (gen level)',
+  min = 0,
+  max = 2000,
+  nbins = 400,
+  input_objects = 'gen_kaons_long',
+  value_func = pt,
+  log_y = True
+)
+
+kaonLongGenEtaDistribution = cfg.Analyzer(
+  Histogrammer,
+  'kaonLongGenEtaDistribution',
+  file_label = 'tfile1',
+  x_label = "#eta",
+  y_label = "# events",
+  histo_name = 'kaonLongGenEtaDistribution',
+  histo_title = 'K_{L} eta distribution (gen level)',
+  min = -10,
+  max = 10,
+  nbins = 200,
+  input_objects = 'gen_kaons_long',
+  value_func = eta,
+  log_y = True
+)
+
+kaonShortGenPtDistribution = cfg.Analyzer(
+  Histogrammer,
+  'kaonShortGenPtDistribution',
+  file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
+  histo_name = 'kaonShortGenPtDistribution',
+  histo_title = 'K_{S} transverse momentum distribution (gen level)',
+  min = 0,
+  max = 2000,
+  nbins = 400,
+  input_objects = 'gen_kaons_short',
+  value_func = pt,
+  log_y = True
+)
+
+kaonShortGenEtaDistribution = cfg.Analyzer(
+  Histogrammer,
+  'kaonShortGenEtaDistribution',
+  file_label = 'tfile1',
+  x_label = "#eta",
+  y_label = "# events",
+  histo_name = 'kaonShortGenEtaDistribution',
+  histo_title = 'K_{S} eta distribution (gen level)',
+  min = -10,
+  max = 10,
+  nbins = 200,
+  input_objects = 'gen_kaons_short',
   value_func = eta,
   log_y = True
 )
@@ -163,9 +306,19 @@ pionGenEtaDistribution = cfg.Analyzer(
 sequence = cfg.Sequence( [
   source,
   etaGenParticleSelector,
+  pdgidsDistribution,
   pionSelector,
+  chargedKaonSelector,
+  kaonLongSelector,
+  kaonShortSelector,
   pionGenPtDistribution,
-  pionGenEtaDistribution
+  pionGenEtaDistribution,
+  chargedKaonGenPtDistribution,
+  chargedKaonGenEtaDistribution,
+  kaonLongGenPtDistribution,
+  kaonLongGenEtaDistribution,
+  kaonShortGenPtDistribution,
+  kaonShortGenEtaDistribution,
 ] )
 
 
