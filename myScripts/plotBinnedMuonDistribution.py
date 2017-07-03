@@ -8,8 +8,8 @@ from ROOT import TLegend
 
 #matchedMuonFile = TFile("muonMatching/MinBiasDistribution_100TeV_DelphesFCC_CMSJets.root")
 #matchedMuonFile = TFile("_muonMatching/muonMatching_HardQCD_PtBinned_700_900_GeV/HardQCD_PtBinned_700_900_GeV.root")
-matchedMuonFile = TFile("_muonMatching_13TeV/muonMatching.root")
-matchedMuonTree = matchedMuonFile.Get("noRestrictionMuonJetTree")
+matchedMuonFile = TFile("_muonMatching/muonMatching_100TeV.root")
+matchedMuonTree = matchedMuonFile.Get("muonJetTree")
 
 muonPtPlotSettings = lambda: 0
 muonPtPlotSettings.nBins = 800
@@ -25,7 +25,7 @@ muonJetPtRatioPlotSettings.deltaRMax = muonPtPlotSettings.deltaRMax
 
 
 # Setting up jetPtBins and histograms
-jetPtBins = [30, 60, 100, 200, 300, 450, 600, 1200]
+jetPtBins = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000]
 binnedMuonPtHistograms = []
 muonJetPtRatioHistograms = []
 

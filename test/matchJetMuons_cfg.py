@@ -11,6 +11,7 @@ from heppy.framework.looper import Looper
 from heppy.analyzers.Matcher import Matcher
 from heppy.analyzers.Selector import Selector
 from heppy.analyzers.triggerrates.MatchedParticlesTreeProducer import MatchedParticlesTreeProducer
+from heppy.analyzers.triggerrates.ParticleTreeProducer import ParticleTreeProducer
 from heppy.framework.heppy_loop import _heppyGlobalOptions
 
 # next 2 lines necessary to deal with reimports from ipython
@@ -588,8 +589,8 @@ muonPtDistribution = cfg.Analyzer(
   histo_name = 'muonPtDistribution',
   histo_title = 'Muon p_{t} distribution',
   min = 0,
-  max = 100,
-  nbins = 200,
+  max = 2000,
+  nbins = 400,
   input_objects = 'muons',
   value_func = pt,
   x_label = "p_{t} [GeV]",
@@ -633,8 +634,8 @@ jetPtDistribution = cfg.Analyzer(
   histo_name = 'jetPtDistribution',
   histo_title = 'Jet p_{t} distribution',
   min = 0,
-  max = 300,
-  nbins = 100,
+  max = 2000,
+  nbins = 400,
   input_objects = 'jets',
   value_func = pt,
   x_label = "p_{t} [GeV]",
@@ -679,6 +680,22 @@ muonJetTree = cfg.Analyzer(
     matched_particle_collection = 'matchedMuons',
   )
 
+jetTree = cfg.Analyzer(
+    ParticleTreeProducer,
+    file_label = "tfile1",
+    tree_name = 'jetTree',
+    tree_title = 'Tree containing info about jets',
+    collection = 'jets',
+  )
+
+muonTree = cfg.Analyzer(
+    ParticleTreeProducer,
+    file_label = "tfile1",
+    tree_name = 'muonTree',
+    tree_title = 'Tree containing info about muons',
+    collection = 'muons',
+  )
+
 # definition of a sequence of analyzers,
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
@@ -686,6 +703,8 @@ sequence = cfg.Sequence( [
   noRestrictionMuonJetMatcher,
   matchedNoRestrictionMuonSelector,
   muonJetTree,
+  jetTree,
+  muonTree,
   deltaRNoRestrictionDistribution,
   pairedNoRestrictionMuonPtDistribution,
   pairedNoRestrictionMuonEtaDistribution,
