@@ -16,7 +16,7 @@ import sys
 
 gStyle.SetOptStat(0)
 
-muonFile = TFile("_muonMatching_13TeV/muonMatching_13TeV.root")
+muonFile = TFile("_muonMatching/muonMatching_100TeV.root")
 #muonFile = TFile("_testMuonMatch/HardQCD_PtBinned_10_30_GeV/histograms.root")
 #muonFile = TFile("_testMuonMatch/_MBtest/histograms.root")
 
@@ -104,7 +104,7 @@ legMuonPt.AddEntry(pairedMediumRestrictionMuonPtDistribution,"#DeltaR_{max}=1.5"
 legMuonPt.AddEntry(pairedTightRestrictionMuonPtDistribution,"#DeltaR_{max}=0.5","p")
 legMuonPt.Draw()
 
-canvasMuonPt.Print("matchedMuonFractionOfEventPtDistribution.png", "png")
+canvasSelectionEfficiency.Print("matchedMuonFractionOfEventPtDistribution.png", "png")
 
 canvasMuonPt.cd()
 

@@ -73,9 +73,9 @@ class MuonJetConvolutionCurvesProducer(Analyzer):
       aHistogram.SetLineColor((x % 8) + 1)
       aHistogram.SetLineStyle(1 + x // 8) # every 8 bins shift line and go back to previous set of colors
       aHistogram.SetStats(False)
-      aHistogram.GetXaxis().SetTitle("p^{#mu}_{t}")
+      aHistogram.GetXaxis().SetTitle(self.cfg_ana.x_label)
       aHistogram.GetXaxis().SetTitleOffset(1.10)
-      aHistogram.GetYaxis().SetTitle("a.u.")
+      aHistogram.GetYaxis().SetTitle(self.cfg_ana.y_label)
       self.binnedHistograms.append(aHistogram)
     
   

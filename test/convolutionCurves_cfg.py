@@ -144,6 +144,23 @@ muonPtDistributionBinnedInMatchedJet = cfg.Analyzer(
   y_label = "\# events"
 )
 
+muonEtaDistributionBinnedInMatchedJet = cfg.Analyzer(
+  MuonJetConvolutionCurvesProducer,
+  instance_label = 'muonEtaDistributionBinnedInMatchedJet',
+  histo_name = 'muonEtaDistributionBinnedInMatchedJet',
+  histo_title = '#eta^{#mu} distribution binned in p^{jet}_{t}',
+  matched_muons = 'matched_muons',
+  jet_bins = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
+  nbins = 100,
+  min = -10,
+  max = +10,
+  file_label = "tfile1",
+  value_func = eta,
+  log_y = True,
+  x_label = "#eta",
+  y_label = "\# events"
+)
+
 jetPtDistributionBinnedInMatchedJet = cfg.Analyzer(
   MuonJetConvolutionCurvesProducer,
   instance_label = 'jetPtDistributionBinnedInMatchedJet',
