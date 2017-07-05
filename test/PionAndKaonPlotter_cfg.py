@@ -56,21 +56,21 @@ source = cfg.Analyzer(
   gen_particles = 'skimmedGenParticles',
   #gen_vertices = 'genVertices',
 
-  gen_jets = 'genJets',
+  #gen_jets = 'genJets',
 
-  jets = 'jets',
+  #jets = 'jets',
   #bTags = 'bTags',
   #cTags = 'cTags',
   #tauTags = 'tauTags',
 
-  electrons = 'electrons',
-  electronITags = 'electronITags',
+  #electrons = 'electrons',
+  #electronITags = 'electronITags',
 
-  muons = 'muons',
-  muonITags = 'muonITags',
+  #muons = 'muons',
+  #muonITags = 'muonITags',
 
-  photons = 'photons',
-  met = 'met',
+  #photons = 'photons',
+  #met = 'met',
 )
 
 '''
