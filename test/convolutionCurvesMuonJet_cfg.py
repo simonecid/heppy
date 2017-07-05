@@ -206,6 +206,7 @@ sequence = cfg.Sequence( [
   tightRestrictionMuonJetMatcher,
   matchedTightRestrictionMuonSelector,
   muonPtDistributionBinnedInMatchedJet,
+  muonEtaDistributionBinnedInMatchedJet,
   jetPtDistributionBinnedInMatchedJet,
   muonJetPtRatioDistributionBinnedInMatchedJet,
 ] )
