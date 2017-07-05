@@ -48,24 +48,24 @@ selectedComponents = [
 source = cfg.Analyzer(
   Reader,
 
-  gen_particles = 'skimmedGenParticles',
+  #gen_particles = 'skimmedGenParticles',
   #gen_vertices = 'genVertices',
 
-  gen_jets = 'genJets',
+  #gen_jets = 'genJets',
 
   jets = 'jets',
   #bTags = 'bTags',
   #cTags = 'cTags',
   #tauTags = 'tauTags',
 
-  electrons = 'electrons',
-  electronITags = 'electronITags',
+  #electrons = 'electrons',
+  #electronITags = 'electronITags',
 
   muons = 'muons',
-  muonITags = 'muonITags',
+  #muonITags = 'muonITags',
 
-  photons = 'photons',
-  met = 'met',
+  #photons = 'photons',
+  #met = 'met',
 )
 
 tfile_service_1 = cfg.Service(
