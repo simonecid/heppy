@@ -8,44 +8,51 @@ from ROOT import TCanvas
 from ROOT import TLegend
 import collections
 
-class MuonJetConvolutionCurvesProducer(Analyzer):
-  '''Computes convolution curves for mun coming from hadron decays in jets
+class MatchedObjectBinnedDistributions(Analyzer):
+  '''Considers a pair of matched objects and draws a specific quantity binned in another quantity of the matched object
   
   Example::
+
+  I want the pt distribution of muon coming from hadron decays in jet.
+  I first perform a match with the heppy.matcher, then I select the matched muons with a selector.
+  I take the collecton in output from selector and I pass it to this analyser. 
+  The analysed will take the pt of the muon and the pt of the jet and will make the binned distributions.
 
   def pt(ptc):
     return ptc.pt()
   
   muonJetConvolutionCurvesProducer = cfg.Analyzer(
-    MuonJetConvolutionCurvesProducer,
+    MatchedObjectBinnedDistributions,
     histo_name = 'muonPtDistributionBinnedInJetPt',
     histo_title = 'p_{t}^{#mu} distribution binned in p^{jet}_{t}',
     instance_label = 'muonJetConvolutionCurvesProducer',
-    matched_muons = 'matched_muons',
-    jet_bins = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
+    matched_collection = 'matched_muons',
+    binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
     nbins = 1000
     min = 0,
     max = 1000,
     file_label = "myfile",
-    value_func = pt,
+    plot_func = pt,
+    bin_func = pt,
     log_y = True,
     x_label = "p_{t}^{#mu} [GeV]",
     y_label = "\# events"
   )
 
-  * matched_muons: collection of muon matched to jets via the heppy matcher
-  * jet_bins: binning for jets
+  * matched_collection: collection of muon matched to jets via the heppy matcher
+  * binning: binning for jets
   * nbins: number of bins in the convolution function plot
   * min: minimum in the convolution function plot
   * max: maximum in the convolution function plot
   * file_label: name of a TFileService where the plots will be saved in
-  * value_func: what to plot
+  * plot_func: what to plot
+  * bin_func: key in binning
   * log_y: log scale?
   * x_label (y): label for x (y) axis.
   '''
 
   def beginLoop(self, setup):
-    super(MuonJetConvolutionCurvesProducer, self).beginLoop(setup)
+    super(MatchedObjectBinnedDistributions, self).beginLoop(setup)
     self.hasTFileService = hasattr(self.cfg_ana, "file_label")
     if self.hasTFileService:
       servname = '_'.join(['heppy.framework.services.tfile.TFileService',
@@ -60,8 +67,8 @@ class MuonJetConvolutionCurvesProducer(Analyzer):
     
     self.binnedHistograms = []
 
-    for x in xrange(0, len(self.cfg_ana.jet_bins) - 1):
-      aHistogram = TH1F(self.cfg_ana.histo_name + "_" + str(self.cfg_ana.jet_bins[x]) + "_" + str(self.cfg_ana.jet_bins[x+1]),
+    for x in xrange(0, len(self.cfg_ana.binning) - 1):
+      aHistogram = TH1F(self.cfg_ana.histo_name + "_" + str(self.cfg_ana.binning[x]) + "_" + str(self.cfg_ana.binning[x+1]),
         self.cfg_ana.histo_title,
         self.cfg_ana.nbins,
         self.cfg_ana.min,
@@ -81,22 +88,22 @@ class MuonJetConvolutionCurvesProducer(Analyzer):
   
   def process(self, event):
     
-    matched_muons = getattr(event, self.cfg_ana.matched_muons)
-    if isinstance(matched_muons, collections.Mapping):
-      for key, val in matched_muons.iteritems():
-        value = self.cfg_ana.value_func(val)
+    matched_collection = getattr(event, self.cfg_ana.matched_collection)
+    if isinstance(matched_collection, collections.Mapping):
+      for key, val in matched_collection.iteritems():
+        value = self.cfg_ana.plot_func(val)
         if value is not None:
-          for x in xrange(0, len(self.cfg_ana.jet_bins) - 1):
-            matchedJet_pt = val.match.pt()
-            if (matchedJet_pt > self.cfg_ana.jet_bins[x]) and (matchedJet_pt < self.cfg_ana.jet_bins[x+1]):
+          for x in xrange(0, len(self.cfg_ana.binning) - 1):
+            bin_value = bin_func(val)
+            if (bin_value > self.cfg_ana.binning[x]) and (bin_value < self.cfg_ana.binning[x+1]):
               self.binnedHistograms[x].Fill(value)
     else:
-      for obj in matched_muons:
-        value = self.cfg_ana.value_func(obj)
+      for obj in matched_collection:
+        value = self.cfg_ana.plot_func(obj)
         if value is not None:
-          for x in xrange(0, len(self.cfg_ana.jet_bins) - 1):
-            matchedJet_pt = obj.match.pt()
-            if (matchedJet_pt > self.cfg_ana.jet_bins[x]) and (matchedJet_pt < self.cfg_ana.jet_bins[x+1]):
+          for x in xrange(0, len(self.cfg_ana.binning) - 1):
+            bin_value = bin_func(obj)
+            if (bin_value > self.cfg_ana.binning[x]) and (bin_value < self.cfg_ana.binning[x+1]):
               self.binnedHistograms[x].Fill(value)
 
   def write(self, setup):

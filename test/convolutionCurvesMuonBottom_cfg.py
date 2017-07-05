@@ -11,7 +11,7 @@ from heppy.framework.looper import Looper
 from heppy.analyzers.Matcher import Matcher
 from heppy.analyzers.Selector import Selector
 from heppy.analyzers.triggerrates.MatchedParticlesTreeProducer import MatchedParticlesTreeProducer
-from heppy.analyzers.triggerrates.MuonJetConvolutionCurvesProducer import MuonJetConvolutionCurvesProducer
+from heppy.analyzers.triggerrates.MatchedObjectBinnedDistributions import MatchedObjectBinnedDistributions
 from heppy.framework.heppy_loop import _heppyGlobalOptions
 
 # next 2 lines necessary to deal with reimports from ipython
@@ -128,68 +128,72 @@ matchedTightRestrictionMuonSelector = cfg.Analyzer(
 )
 
 muonPtDistributionBinnedInMatchedJet = cfg.Analyzer(
-  MuonJetConvolutionCurvesProducer,
+  MatchedObjectBinnedDistributions,
   instance_label = 'muonPtDistributionBinnedInMatchedJet',
   histo_name = 'muonPtDistributionBinnedInMatchedJet',
   histo_title = 'p_{t}^{#mu} distribution binned in p^{jet}_{t}',
-  matched_muons = 'matched_muons',
-  jet_bins = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
+  matched_collection = 'matched_muons',
+  binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
   nbins = 1000,
   min = 0,
   max = 1000,
   file_label = "tfile1",
   value_func = pt,
+  bin_func = pt,
   log_y = True,
   x_label = "p_{t}^{#mu} [GeV]",
   y_label = "\# events"
 )
 
 muonEtaDistributionBinnedInMatchedJet = cfg.Analyzer(
-  MuonJetConvolutionCurvesProducer,
+  MatchedObjectBinnedDistributions,
   instance_label = 'muonEtaDistributionBinnedInMatchedJet',
   histo_name = 'muonEtaDistributionBinnedInMatchedJet',
   histo_title = '#eta^{#mu} distribution binned in p^{jet}_{t}',
-  matched_muons = 'matched_muons',
-  jet_bins = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
+  matched_collection = 'matched_muons',
+  binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
   nbins = 100,
   min = -10,
   max = +10,
   file_label = "tfile1",
   value_func = eta,
+  bin_func = pt,
   log_y = True,
   x_label = "#eta",
   y_label = "\# events"
 )
 
 jetPtDistributionBinnedInMatchedJet = cfg.Analyzer(
-  MuonJetConvolutionCurvesProducer,
+  MatchedObjectBinnedDistributions,
   instance_label = 'jetPtDistributionBinnedInMatchedJet',
   histo_name = 'jetPtDistributionBinnedInMatchedJet',
   histo_title = 'p_{t}^{jet} distribution binned in p^{jet}_{t}',
-  matched_muons = 'matched_muons',
-  jet_bins = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
+  matched_collection = 'matched_muons',
+  binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
   nbins = 2500,
   min = 0,
   max = 2500,
   file_label = "tfile1",
   value_func = matchedParticlePt,
+  bin_func = pt,
   log_y = True,
   x_label = "p_{t}^{jet} [GeV]",
   y_label = "\# events"
 )
 
 muonJetPtRatioDistributionBinnedInMatchedJet = cfg.Analyzer(
-  MuonJetConvolutionCurvesProducer,
+  MatchedObjectBinnedDistributions,
   instance_label = 'muonJetPtRatioDistributionBinnedInMatchedJet',
   histo_name = 'muonJetPtRatioDistributionBinnedInMatchedJet',
   histo_title = 'p_{t}^{#mu}/p_{t}^{jet} distribution binned in p^{jet}_{t}',
-  matched_muons = 'matched_muons',
-  jet_bins = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
+  matched_collection = 'matched_muons',
+  binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
   nbins = 60,
   min = 0,
   max = 1.5,
   file_label = "tfile1",
   value_func = ptRatioWithMatched,
+  bin_func = pt,
   log_y = True,
   x_label = "p_{t}^{#mu}/p_{t}^{jet}",
   y_label = "\# events"
