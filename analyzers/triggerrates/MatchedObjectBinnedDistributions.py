@@ -33,7 +33,7 @@ class MatchedObjectBinnedDistributions(Analyzer):
     max = 1000,
     file_label = "myfile",
     plot_func = pt,
-    bin_func = pt,
+    self.cfg_ana.bin_func = pt,
     log_y = True,
     x_label = "p_{t}^{#mu} [GeV]",
     y_label = "\# events"
@@ -46,7 +46,7 @@ class MatchedObjectBinnedDistributions(Analyzer):
   * max: maximum in the convolution function plot
   * file_label: name of a TFileService where the plots will be saved in
   * plot_func: what to plot
-  * bin_func: key in binning
+  * self.cfg_ana.bin_func: key in binning
   * log_y: log scale?
   * x_label (y): label for x (y) axis.
   '''
@@ -94,7 +94,7 @@ class MatchedObjectBinnedDistributions(Analyzer):
         value = self.cfg_ana.plot_func(val)
         if value is not None:
           for x in xrange(0, len(self.cfg_ana.binning) - 1):
-            bin_value = bin_func(val)
+            bin_value = self.cfg_ana.bin_func(val.match)
             if (bin_value > self.cfg_ana.binning[x]) and (bin_value < self.cfg_ana.binning[x+1]):
               self.binnedHistograms[x].Fill(value)
     else:
@@ -102,7 +102,7 @@ class MatchedObjectBinnedDistributions(Analyzer):
         value = self.cfg_ana.plot_func(obj)
         if value is not None:
           for x in xrange(0, len(self.cfg_ana.binning) - 1):
-            bin_value = bin_func(obj)
+            bin_value = self.cfg_ana.bin_func(obj.match)
             if (bin_value > self.cfg_ana.binning[x]) and (bin_value < self.cfg_ana.binning[x+1]):
               self.binnedHistograms[x].Fill(value)
 

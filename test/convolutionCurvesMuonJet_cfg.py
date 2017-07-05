@@ -138,11 +138,11 @@ muonPtDistributionBinnedInMatchedJet = cfg.Analyzer(
   min = 0,
   max = 1000,
   file_label = "tfile1",
-  value_func = pt,
+  plot_func = pt,
   bin_func = pt,
   log_y = True,
   x_label = "p_{t}^{#mu} [GeV]",
-  y_label = "\# events"
+  y_label = "# events"
 )
 
 muonEtaDistributionBinnedInMatchedJet = cfg.Analyzer(
@@ -156,11 +156,11 @@ muonEtaDistributionBinnedInMatchedJet = cfg.Analyzer(
   min = -10,
   max = +10,
   file_label = "tfile1",
-  value_func = eta,
+  plot_func = eta,
   bin_func = pt,
   log_y = True,
   x_label = "#eta",
-  y_label = "\# events"
+  y_label = "# events"
 )
 
 jetPtDistributionBinnedInMatchedJet = cfg.Analyzer(
@@ -174,11 +174,11 @@ jetPtDistributionBinnedInMatchedJet = cfg.Analyzer(
   min = 0,
   max = 2500,
   file_label = "tfile1",
-  value_func = matchedParticlePt,
+  plot_func = matchedParticlePt,
   bin_func = pt,
   log_y = True,
   x_label = "p_{t}^{jet} [GeV]",
-  y_label = "\# events"
+  y_label = "# events"
 )
 
 muonJetPtRatioDistributionBinnedInMatchedJet = cfg.Analyzer(
@@ -192,11 +192,11 @@ muonJetPtRatioDistributionBinnedInMatchedJet = cfg.Analyzer(
   min = 0,
   max = 1.5,
   file_label = "tfile1",
-  value_func = ptRatioWithMatched,
+  plot_func = ptRatioWithMatched,
   bin_func = pt,
   log_y = True,
   x_label = "p_{t}^{#mu}/p_{t}^{jet}",
-  y_label = "\# events"
+  y_label = "# events"
 )
 
 # definition of a sequence of analyzers,
