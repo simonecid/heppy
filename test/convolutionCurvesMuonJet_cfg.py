@@ -86,14 +86,6 @@ tfile_service_1 = cfg.Service(
   option='recreate'
 )
 
-''' Selects around 18% of the noRestriction muons'''
-tightRestrictionMuonJetMatcher = cfg.Analyzer(
-  Matcher,
-  instance_label = 'tightRestrictionMuonJetMatcher',
-  delta_r = 0.5,
-  particles = 'cms_muons',
-  match_particles = 'jets',
-)
 
 def pt (ptc):
   return ptc.pt()
@@ -137,6 +129,15 @@ matchedTightRestrictionMuonSelector = cfg.Analyzer(
   input_objects = 'cms_muons',
   output = 'matched_muons',
   filter_func = isMatched
+)
+
+''' Selects around 18% of the noRestriction muons'''
+tightRestrictionMuonJetMatcher = cfg.Analyzer(
+  Matcher,
+  instance_label = 'tightRestrictionMuonJetMatcher',
+  delta_r = 0.5,
+  particles = 'cms_muons',
+  match_particles = 'jets',
 )
 
 muonPtDistributionBinnedInMatchedJet = cfg.Analyzer(
