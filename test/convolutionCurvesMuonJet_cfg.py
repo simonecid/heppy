@@ -119,10 +119,22 @@ def deltaR (ptc):
 def isMatched(ptc):
   return ptc.match is not None
 
+def cmsEtaPtRestriction(ptc):
+  return ((ptc.pt() > 1.5) and (abs(ptc.eta()) < 2.4))
+
+'''Applies CMS selections to muons'''
+cmsMuonSelector = cfg.Analyzer(
+  Selector,
+  instance_label = 'cmsMuonSelector',
+  input_objects = 'muons',
+  output = 'cms_muons',
+  filter_func = cmsEtaPtRestriction
+)
+
 matchedTightRestrictionMuonSelector = cfg.Analyzer(
   Selector,
   instance_label = 'matchedTightRestrictionMuonSelector',
-  input_objects = 'muons',
+  input_objects = 'cms_muons',
   output = 'matched_muons',
   filter_func = isMatched
 )
@@ -203,6 +215,7 @@ muonJetPtRatioDistributionBinnedInMatchedJet = cfg.Analyzer(
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
   source,
+  cmsMuonSelector,
   tightRestrictionMuonJetMatcher,
   matchedTightRestrictionMuonSelector,
   muonPtDistributionBinnedInMatchedJet,
