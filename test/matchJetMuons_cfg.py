@@ -79,7 +79,7 @@ noRestrictionMuonJetMatcher = cfg.Analyzer(
   Matcher,
   instance_label = 'noRestrictionMuonJetMatcher',
   delta_r = 15,
-  particles = 'muons',
+  particles = 'cms_muons',
   match_particles = 'jets',
 )
 
@@ -87,25 +87,25 @@ looseRestrictionMuonJetMatcher = cfg.Analyzer(
   Matcher,
   instance_label = 'looseRestrictionMuonJetMatcher',
   delta_r = 3,
-  particles = 'muons',
+  particles = 'cms_muons',
   match_particles = 'jets',
 )
 
-''' Selects around 48% of the noRestriction muons'''
+''' Selects around 48% of the noRestriction cms_muons'''
 mediumRestrictionMuonJetMatcher = cfg.Analyzer(
   Matcher,
   instance_label = 'mediumRestrictionMuonJetMatcher',
   delta_r = 1.5,
-  particles = 'muons',
+  particles = 'cms_muons',
   match_particles = 'jets',
 )
 
-''' Selects around 18% of the noRestriction muons'''
+''' Selects around 18% of the noRestriction cms_muons'''
 tightRestrictionMuonJetMatcher = cfg.Analyzer(
   Matcher,
   instance_label = 'tightRestrictionMuonJetMatcher',
   delta_r = 0.5,
-  particles = 'muons',
+  particles = 'cms_muons',
   match_particles = 'jets',
 )
 
@@ -130,10 +130,22 @@ def deltaR (ptc):
 def isMatched(ptc):
   return ptc.match is not None
 
+def cmsEtaPtRestriction(ptc):
+  return ((ptc.pt() > 1.5) and (abs(ptc.eta()) < 2.4))
+
+'''Applies CMS selections to muons'''
+cmsMuonSelector = cfg.Analyzer(
+  Selector,
+  instance_label = 'cmsMuonSelector',
+  input_objects = 'muons',
+  output = 'cms_muons',
+  filter_func = cmsEtaPtRestriction
+)
+
 matchedNoRestrictionMuonSelector = cfg.Analyzer(
   Selector,
   instance_label = 'matchedNoRestrictionMuonSelector',
-  input_objects = 'muons',
+  input_objects = 'cms_muons',
   output = 'matchedMuons',
   filter_func = isMatched
 )
@@ -141,7 +153,7 @@ matchedNoRestrictionMuonSelector = cfg.Analyzer(
 matchedLooseRestrictionMuonSelector = cfg.Analyzer(
   Selector,
   instance_label = 'matchedLooseRestrictionMuonSelector',
-  input_objects = 'muons',
+  input_objects = 'cms_muons',
   output = 'matchedMuons',
   filter_func = isMatched
 )
@@ -149,7 +161,7 @@ matchedLooseRestrictionMuonSelector = cfg.Analyzer(
 matchedMediumRestrictionMuonSelector = cfg.Analyzer(
   Selector,
   instance_label = 'matchedMediumRestrictionMuonSelector',
-  input_objects = 'muons',
+  input_objects = 'cms_muons',
   output = 'matchedMuons',
   filter_func = isMatched
 )
@@ -157,7 +169,7 @@ matchedMediumRestrictionMuonSelector = cfg.Analyzer(
 matchedTightRestrictionMuonSelector = cfg.Analyzer(
   Selector,
   instance_label = 'matchedTightRestrictionMuonSelector',
-  input_objects = 'muons',
+  input_objects = 'cms_muons',
   output = 'matchedMuons',
   filter_func = isMatched
 )
@@ -591,7 +603,7 @@ muonPtDistribution = cfg.Analyzer(
   min = 0,
   max = 2000,
   nbins = 400,
-  input_objects = 'muons',
+  input_objects = 'cms_muons',
   value_func = pt,
   x_label = "p_{t} [GeV]",
   y_label = "# events"
@@ -606,7 +618,7 @@ muonEtaDistribution = cfg.Analyzer(
   min = -10,
   max = +10,
   nbins = 100,
-  input_objects = 'muons',
+  input_objects = 'cms_muons',
   value_func = eta,
   x_label = "#eta",
   y_label = "# events"
@@ -621,7 +633,7 @@ muonPhiDistribution = cfg.Analyzer(
   min = -3.15,
   max = +3.15,
   nbins = 100,
-  input_objects = 'muons',
+  input_objects = 'cms_muons',
   value_func = phi,
   x_label = "#phi",
   y_label = "# events"
@@ -693,13 +705,14 @@ muonTree = cfg.Analyzer(
     file_label = "tfile1",
     tree_name = 'muonTree',
     tree_title = 'Tree containing info about muons',
-    collection = 'muons',
+    collection = 'cms_muons',
   )
 
 # definition of a sequence of analyzers,
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
   source,
+  cmsMuonSelector,
   noRestrictionMuonJetMatcher,
   matchedNoRestrictionMuonSelector,
   muonJetTree,
