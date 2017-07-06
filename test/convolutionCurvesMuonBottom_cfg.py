@@ -129,12 +129,26 @@ def deltaR (ptc):
   return ptc.dr
 
 def isMatched(ptc):
+  if ptc.match is not None :
+    print "Match!"
   return ptc.match is not None
 
 def particleCheckerFactory (ptcName):
   def particleChecker (ptc):
     return (abs(ptc.pdgid()) == pdgIds[ptcName])
   return particleChecker
+
+def cmsEtaPtRestriction(ptc):
+  return ((ptc.pt() > 1.5) and (abs(ptc.eta()) < 2.4))
+
+'''Applies CMS selections to muons'''
+cmsMuonSelector = cfg.Analyzer(
+  Selector,
+  instance_label = 'cmsMuonSelector',
+  input_objects = 'muons',
+  output = 's',
+  filter_func = cmsEtaPtRestriction
+)
 
 matchedTightRestrictionMuonSelector = cfg.Analyzer(
   Selector,
@@ -160,7 +174,7 @@ bQuarkSelector = cfg.Analyzer(
     'sel_bottom',
     output = 'b_quarks',
     input_objects = 'gen_particles_eta_restricted',
-    filter_func = particleCheckerFactory("pion+")
+    filter_func = particleCheckerFactory("bottom")
 )
 
 muonPtDistributionBinnedInMatchedBottom = cfg.Analyzer(
@@ -239,6 +253,7 @@ muonJetPtRatioDistributionBinnedInMatchedBottom = cfg.Analyzer(
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
   source,
+  cmsMuonSelector,
   etaGenParticleSelector,
   bQuarkSelector,
   tightRestrictionMuonBottomMatcher,
