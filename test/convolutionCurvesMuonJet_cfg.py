@@ -153,7 +153,7 @@ muonPtDistributionBinnedInMatchedJet = cfg.Analyzer(
   file_label = "tfile1",
   plot_func = pt,
   bin_func = pt,
-  log_y = True,
+  log_y = False,
   x_label = "p_{t}^{#mu} [GeV]",
   y_label = "# events"
 )
@@ -171,7 +171,7 @@ muonEtaDistributionBinnedInMatchedJet = cfg.Analyzer(
   file_label = "tfile1",
   plot_func = eta,
   bin_func = pt,
-  log_y = True,
+  log_y = False,
   x_label = "#eta",
   y_label = "# events"
 )
@@ -189,7 +189,25 @@ jetPtDistributionBinnedInMatchedJet = cfg.Analyzer(
   file_label = "tfile1",
   plot_func = matchedParticlePt,
   bin_func = pt,
-  log_y = True,
+  log_y = False,
+  x_label = "p_{t}^{jet} [GeV]",
+  y_label = "# events"
+)
+
+deltaRDistributionBinnedInMatchedJet = cfg.Analyzer(
+  MatchedObjectBinnedDistributions,
+  instance_label = 'deltaRDistributionBinnedInMatchedJet',
+  histo_name = 'deltaRDistributionBinnedInMatchedJet',
+  histo_title = '#DeltaR distribution binned in p^{jet}_{t}',
+  matched_collection = 'matched_muons',
+  binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
+  nbins = 300,
+  min = 0,
+  max = 15,
+  file_label = "tfile1",
+  plot_func = deltaR,
+  bin_func = pt,
+  log_y = False,
   x_label = "p_{t}^{jet} [GeV]",
   y_label = "# events"
 )
@@ -207,8 +225,8 @@ muonJetPtRatioDistributionBinnedInMatchedJet = cfg.Analyzer(
   file_label = "tfile1",
   plot_func = ptRatioWithMatched,
   bin_func = pt,
-  log_y = True,
-  x_label = "p_{t}^{#mu}/p_{t}^{jet}",
+  log_y = False,
+  x_label = "#DeltaR",
   y_label = "# events"
 )
 
@@ -223,6 +241,7 @@ sequence = cfg.Sequence( [
   muonEtaDistributionBinnedInMatchedJet,
   jetPtDistributionBinnedInMatchedJet,
   muonJetPtRatioDistributionBinnedInMatchedJet,
+  deltaRDistributionBinnedInMatchedJet,
 ] )
 
 config = cfg.Config(
