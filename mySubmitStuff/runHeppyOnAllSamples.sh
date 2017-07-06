@@ -39,7 +39,9 @@ echo "Running heppy job"
 
 HOME_FOLDER="$(pwd)"
 
-mkdir ${SAVE_DESTINATION}
+OUTPUT_FOLDER="${jobName}_allSamples_${clusterId}.${processId}"
+
+mkdir ${OUTPUT_FOLDER}
 
 source /software/sb17498/FCCSW/init.sh
 cp -r /software/sb17498/heppy .
@@ -49,13 +51,12 @@ source init.sh
 samples=(MinBiasDistribution_100TeV_DelphesFCC_CMSJets HardQCD_100TeV_PtBinned_10_30_GeV HardQCD_100TeV_PtBinned_30_300_GeV HardQCD_100TeV_PtBinned_300_500_GeV HardQCD_100TeV_PtBinned_500_700_GeV HardQCD_100TeV_PtBinned_700_900_GeV HardQCD_100TeV_PtBinned_900_1000_GeV HardQCD_100TeV_PtBinned_900_1400_GeV HardQCD_100TeV_PtBinned_1400_2000_GeV)
 
 for sampleName in ${samples[*]}; do
-  SAVE_DESTINATION="${jobName}_${sampleName}"
-  heppy ${HOME_FOLDER}/${SAVE_DESTINATION} ${inputFile} -f --option=sample=${sampleName} -j ${numThreads} 
+  heppy ${HOME_FOLDER}/${OUTPUT_FOLDER} ${inputFile} -f --option=sample=${sampleName} -j ${numThreads} 
   #echo ${sampleName}
 done
 
 # Zip file
-  cd ${HOME_FOLDER}
-tar -czvf ${jobName}_allSamples_${clusterId}.${processId}.tar.gz ${SAVE_DESTINATION}
+cd ${HOME_FOLDER}
+tar -czvf ${jobName}_allSamples_${clusterId}.${processId}.tar.gz ${HOME_FOLDER}/${OUTPUT_FOLDER}
 
 set +o xtrace

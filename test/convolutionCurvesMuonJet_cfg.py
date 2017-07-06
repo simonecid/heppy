@@ -126,7 +126,7 @@ cmsMuonSelector = cfg.Analyzer(
 matchedTightRestrictionMuonSelector = cfg.Analyzer(
   Selector,
   instance_label = 'matchedTightRestrictionMuonSelector',
-  input_objects = 'cms_muons',
+  input_objects = 'muons',
   output = 'matched_muons',
   filter_func = isMatched
 )
@@ -136,7 +136,7 @@ tightRestrictionMuonJetMatcher = cfg.Analyzer(
   Matcher,
   instance_label = 'tightRestrictionMuonJetMatcher',
   delta_r = 0.5,
-  particles = 'cms_muons',
+  particles = 'muons',
   match_particles = 'jets',
 )
 

@@ -1,5 +1,5 @@
 Universe = vanilla
-job = convolutionCurvesMuonJet_EtaPtRestricted
+job = convolutionCurvesMuonJet
 cmd = mySubmitStuff/runHeppyOnAllSamples.sh
 args= -j $(job) -c $(cluster) -p $(process) -i test/convolutionCurvesMuonJet_cfg.py -t 16
 # Better not to put logs in the same folder, as they are plenty
