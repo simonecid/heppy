@@ -1,7 +1,7 @@
 Universe = vanilla
-job = convolutionCurvesMuonJet
-cmd = mySubmitStuff/runHeppyConfigFile.sh
-args= -j $(job) -c $(cluster) -p $(process) -i test/convolutionCurvesMuonJet_cfg.py -s all -t 4
+job = convolutionCurvesMuonJet_EtaPtRestricted
+cmd = mySubmitStuff/runHeppyOnAllSamples.sh
+args= -j $(job) -c $(cluster) -p $(process) -i test/convolutionCurvesMuonJet_cfg.py -t 16
 # Better not to put logs in the same folder, as they are plenty
 output = /storage/sb17498/logs/heppy/$(job)_$(cluster).$(process).out
 error = /storage/sb17498/logs/heppy/$(job)_$(cluster).$(process).err
