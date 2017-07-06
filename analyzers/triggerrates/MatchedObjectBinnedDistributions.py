@@ -108,11 +108,13 @@ class MatchedObjectBinnedDistributions(Analyzer):
 
   def write(self, setup):
     self.rootfile.cd()
-    canvas = TCanvas (self.cfg_ana.histo_name, self.cfg_ana.histo_title , 600, 600)
-    canvas.cd()
+#    canvas = TCanvas (self.cfg_ana.histo_name, self.cfg_ana.histo_title , 600, 600)
+#    canvas.cd()
     for x in xrange(0, len(self.binnedHistograms)):
       histogram = self.binnedHistograms[x]
       if histogram.GetEntries() == 0:
         continue
-      histogram.Draw("AP")
+#      histogram.Draw("AP")
 #      histogram.Write()
+
+      del histogram
