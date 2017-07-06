@@ -213,10 +213,10 @@ muonEtaDistributionBinnedInMatchedBottom = cfg.Analyzer(
   y_label = "# events"
 )
 
-jetPtDistributionBinnedInMatchedBottom = cfg.Analyzer(
+bottomPtDistributionBinnedInMatchedBottom = cfg.Analyzer(
   MatchedObjectBinnedDistributions,
-  instance_label = 'jetPtDistributionBinnedInMatchedBottom',
-  histo_name = 'jetPtDistributionBinnedInMatchedBottom',
+  instance_label = 'bottomPtDistributionBinnedInMatchedBottom',
+  histo_name = 'bottomPtDistributionBinnedInMatchedBottom',
   histo_title = 'p_{t}^{b} distribution binned in p^{b}_{t}',
   matched_collection = 'matched_muons',
   binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
@@ -231,10 +231,10 @@ jetPtDistributionBinnedInMatchedBottom = cfg.Analyzer(
   y_label = "# events"
 )
 
-muonJetPtRatioDistributionBinnedInMatchedBottom = cfg.Analyzer(
+muonBottomPtRatioDistributionBinnedInMatchedBottom = cfg.Analyzer(
   MatchedObjectBinnedDistributions,
-  instance_label = 'muonJetPtRatioDistributionBinnedInMatchedBottom',
-  histo_name = 'muonJetPtRatioDistributionBinnedInMatchedBottom',
+  instance_label = 'muonBottomPtRatioDistributionBinnedInMatchedBottom',
+  histo_name = 'muonBottomPtRatioDistributionBinnedInMatchedBottom',
   histo_title = 'p_{t}^{#mu}/p_{t}^{b} distribution binned in p^{b}_{t}',
   matched_collection = 'matched_muons',
   binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
@@ -259,8 +259,8 @@ sequence = cfg.Sequence( [
   tightRestrictionMuonBottomMatcher,
   matchedTightRestrictionMuonSelector,
   muonPtDistributionBinnedInMatchedBottom,
-  jetPtDistributionBinnedInMatchedBottom,
-  muonJetPtRatioDistributionBinnedInMatchedBottom,
+  bottomPtDistributionBinnedInMatchedBottom,
+  muonBottomPtRatioDistributionBinnedInMatchedBottom,
   muonEtaDistributionBinnedInMatchedBottom
 ] )
 

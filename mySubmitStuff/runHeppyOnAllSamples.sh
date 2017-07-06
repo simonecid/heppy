@@ -57,6 +57,6 @@ done
 
 # Zip file
 cd ${HOME_FOLDER}
-tar -czvf ${jobName}_allSamples_${clusterId}.${processId}.tar.gz ${HOME_FOLDER}/${OUTPUT_FOLDER}
+tar -czvf ${jobName}_allSamples_${clusterId}.${processId}.tar.gz ${OUTPUT_FOLDER}
 
 set +o xtrace
