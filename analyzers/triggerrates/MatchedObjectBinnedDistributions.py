@@ -115,4 +115,4 @@ class MatchedObjectBinnedDistributions(Analyzer):
       if histogram.GetEntries() == 0:
         continue
       histogram.Draw("AP")
-      histogram.Write()
+#      histogram.Write()
