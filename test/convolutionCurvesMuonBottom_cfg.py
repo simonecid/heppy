@@ -130,7 +130,7 @@ def deltaR (ptc):
 
 def isMatched(ptc):
   if ptc.match is not None :
-  return ptc.match is not None
+    return ptc.match is not None
 
 def particleCheckerFactory (ptcName):
   def particleChecker (ptc):
