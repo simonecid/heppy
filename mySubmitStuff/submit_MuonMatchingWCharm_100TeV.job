@@ -1,7 +1,7 @@
 Universe = vanilla
-job = muonMatching_100TeV_CMSMuons
-cmd = mySubmitStuff/runHeppyOnAllSamples.sh
-args= -j $(job) -c $(cluster) -p $(process) -i test/matchJetMuons_cfg.py -t 24
+job = muonMatchingWCharm
+cmd = mySubmitStuff/runHeppyConfigFile.sh
+args= -j $(job) -c $(cluster) -p $(process) -i test/matchCharmMuons_cfg.py -t 24 --option=sample=MinBiasDistribution_100TeV_DelphesFCC_CMSJets
 # Better not to put logs in the same folder, as they are plenty
 output = /storage/sb17498/logs/heppy/$(job)_$(cluster).$(process).out
 error = /storage/sb17498/logs/heppy/$(job)_$(cluster).$(process).err
