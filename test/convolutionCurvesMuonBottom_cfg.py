@@ -130,7 +130,6 @@ def deltaR (ptc):
 
 def isMatched(ptc):
   if ptc.match is not None :
-    print "Match!"
   return ptc.match is not None
 
 def particleCheckerFactory (ptcName):
@@ -249,6 +248,24 @@ muonBottomPtRatioDistributionBinnedInMatchedBottom = cfg.Analyzer(
   y_label = "# events"
 )
 
+deltaRDistributionBinnedInMatchedBottom = cfg.Analyzer(
+  MatchedObjectBinnedDistributions,
+  instance_label = 'deltaRDistributionBinnedInMatchedBottom',
+  histo_name = 'deltaRDistributionBinnedInMatchedBottom',
+  histo_title = '#DeltaR distribution binned in p^{bottom}_{t}',
+  matched_collection = 'matched_muons',
+  binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
+  nbins = 300,
+  min = 0,
+  max = 15,
+  file_label = "tfile1",
+  plot_func = deltaR,
+  bin_func = pt,
+  log_y = False,
+  x_label = "#DeltaR",
+  y_label = "# events"
+)
+
 # definition of a sequence of analyzers,
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
@@ -261,7 +278,8 @@ sequence = cfg.Sequence( [
   muonPtDistributionBinnedInMatchedBottom,
   bottomPtDistributionBinnedInMatchedBottom,
   muonBottomPtRatioDistributionBinnedInMatchedBottom,
-  muonEtaDistributionBinnedInMatchedBottom
+  muonEtaDistributionBinnedInMatchedBottom,
+  deltaRDistributionBinnedInMatchedBottom
 ] )
 
 config = cfg.Config(

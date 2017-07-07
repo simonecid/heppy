@@ -208,7 +208,7 @@ deltaRDistributionBinnedInMatchedJet = cfg.Analyzer(
   plot_func = deltaR,
   bin_func = pt,
   log_y = False,
-  x_label = "p_{t}^{jet} [GeV]",
+  x_label = "#DeltaR",
   y_label = "# events"
 )
 

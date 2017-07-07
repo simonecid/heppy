@@ -63,7 +63,8 @@ pdgIds = {
   'kaon+': 321,
   'kaon_long': 130,
   'kaon_short': 310,
-  'bottom': 5
+  'bottom': 5,
+  'charm': 4
 }
 
 # Defining pdgids
@@ -99,9 +100,9 @@ tfile_service_1 = cfg.Service(
 )
 
 ''' Selects around 18% of the noRestriction muons'''
-tightRestrictionMuonBottomMatcher = cfg.Analyzer(
+tightRestrictionMuonCharmMatcher = cfg.Analyzer(
   Matcher,
-  instance_label = 'tightRestrictionMuonBottomMatcher',
+  instance_label = 'tightRestrictionMuonCharmMatcher',
   delta_r = 0.5,
   particles = 'muons',
   match_particles = 'b_quarks',
@@ -129,12 +130,25 @@ def deltaR (ptc):
   return ptc.dr
 
 def isMatched(ptc):
-  return ptc.match is not None
+  if ptc.match is not None :
+    return ptc.match is not None
 
 def particleCheckerFactory (ptcName):
   def particleChecker (ptc):
     return (abs(ptc.pdgid()) == pdgIds[ptcName])
   return particleChecker
+
+def cmsEtaPtRestriction(ptc):
+  return ((ptc.pt() > 1.5) and (abs(ptc.eta()) < 2.4))
+
+'''Applies CMS selections to muons'''
+cmsMuonSelector = cfg.Analyzer(
+  Selector,
+  instance_label = 'cmsMuonSelector',
+  input_objects = 'muons',
+  output = 's',
+  filter_func = cmsEtaPtRestriction
+)
 
 matchedTightRestrictionMuonSelector = cfg.Analyzer(
   Selector,
@@ -157,17 +171,17 @@ etaGenParticleSelector = cfg.Analyzer(
 
 bQuarkSelector = cfg.Analyzer(
     Selector,
-    'sel_bottom',
+    'sel_charm',
     output = 'b_quarks',
     input_objects = 'gen_particles_eta_restricted',
-    filter_func = particleCheckerFactory("pion+")
+    filter_func = particleCheckerFactory("charm")
 )
 
-muonPtDistributionBinnedInMatchedBottom = cfg.Analyzer(
+muonPtDistributionBinnedInMatchedCharm = cfg.Analyzer(
   MatchedObjectBinnedDistributions,
-  instance_label = 'muonPtDistributionBinnedInMatchedBottom',
-  histo_name = 'muonPtDistributionBinnedInMatchedBottom',
-  histo_title = 'p_{t}^{#mu} distribution binned in p^{b}_{t}',
+  instance_label = 'muonPtDistributionBinnedInMatchedCharm',
+  histo_name = 'muonPtDistributionBinnedInMatchedCharm',
+  histo_title = 'p_{t}^{#mu} distribution binned in p^{c}_{t}',
   matched_collection = 'matched_muons',
   binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
   nbins = 1000,
@@ -181,11 +195,11 @@ muonPtDistributionBinnedInMatchedBottom = cfg.Analyzer(
   y_label = "# events"
 )
 
-muonEtaDistributionBinnedInMatchedBottom = cfg.Analyzer(
+muonEtaDistributionBinnedInMatchedCharm = cfg.Analyzer(
   MatchedObjectBinnedDistributions,
-  instance_label = 'muonEtaDistributionBinnedInMatchedBottom',
-  histo_name = 'muonEtaDistributionBinnedInMatchedBottom',
-  histo_title = '#eta^{#mu} distribution binned in p^{b}_{t}',
+  instance_label = 'muonEtaDistributionBinnedInMatchedCharm',
+  histo_name = 'muonEtaDistributionBinnedInMatchedCharm',
+  histo_title = '#eta^{#mu} distribution binned in p^{c}_{t}',
   matched_collection = 'matched_muons',
   binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
   nbins = 100,
@@ -199,11 +213,11 @@ muonEtaDistributionBinnedInMatchedBottom = cfg.Analyzer(
   y_label = "# events"
 )
 
-jetPtDistributionBinnedInMatchedBottom = cfg.Analyzer(
+charmPtDistributionBinnedInMatchedCharm = cfg.Analyzer(
   MatchedObjectBinnedDistributions,
-  instance_label = 'jetPtDistributionBinnedInMatchedBottom',
-  histo_name = 'jetPtDistributionBinnedInMatchedBottom',
-  histo_title = 'p_{t}^{b} distribution binned in p^{b}_{t}',
+  instance_label = 'charmPtDistributionBinnedInMatchedCharm',
+  histo_name = 'charmPtDistributionBinnedInMatchedCharm',
+  histo_title = 'p_{t}^{c} distribution binned in p^{c}_{t}',
   matched_collection = 'matched_muons',
   binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
   nbins = 2500,
@@ -213,15 +227,15 @@ jetPtDistributionBinnedInMatchedBottom = cfg.Analyzer(
   plot_func = matchedParticlePt,
   bin_func = pt,
   log_y = True,
-  x_label = "p_{t}^{b} [GeV]",
+  x_label = "p_{t}^{c} [GeV]",
   y_label = "# events"
 )
 
-muonJetPtRatioDistributionBinnedInMatchedBottom = cfg.Analyzer(
+muonCharmPtRatioDistributionBinnedInMatchedCharm = cfg.Analyzer(
   MatchedObjectBinnedDistributions,
-  instance_label = 'muonJetPtRatioDistributionBinnedInMatchedBottom',
-  histo_name = 'muonJetPtRatioDistributionBinnedInMatchedBottom',
-  histo_title = 'p_{t}^{#mu}/p_{t}^{b} distribution binned in p^{b}_{t}',
+  instance_label = 'muonCharmPtRatioDistributionBinnedInMatchedCharm',
+  histo_name = 'muonCharmPtRatioDistributionBinnedInMatchedCharm',
+  histo_title = 'p_{t}^{#mu}/p_{t}^{c} distribution binned in p^{c}_{t}',
   matched_collection = 'matched_muons',
   binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
   nbins = 60,
@@ -231,7 +245,25 @@ muonJetPtRatioDistributionBinnedInMatchedBottom = cfg.Analyzer(
   plot_func = ptRatioWithMatched,
   bin_func = pt,
   log_y = True,
-  x_label = "p_{t}^{#mu}/p_{t}^{b}",
+  x_label = "p_{t}^{#mu}/p_{t}^{c}",
+  y_label = "# events"
+)
+
+deltaRDistributionBinnedInMatchedCharm = cfg.Analyzer(
+  MatchedObjectBinnedDistributions,
+  instance_label = 'deltaRDistributionBinnedInMatchedCharm',
+  histo_name = 'deltaRDistributionBinnedInMatchedCharm',
+  histo_title = '#DeltaR distribution binned in p^{charm}_{t}',
+  matched_collection = 'matched_muons',
+  binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
+  nbins = 300,
+  min = 0,
+  max = 15,
+  file_label = "tfile1",
+  plot_func = deltaR,
+  bin_func = pt,
+  log_y = False,
+  x_label = "#DeltaR",
   y_label = "# events"
 )
 
@@ -239,14 +271,16 @@ muonJetPtRatioDistributionBinnedInMatchedBottom = cfg.Analyzer(
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
   source,
+  cmsMuonSelector,
   etaGenParticleSelector,
   bQuarkSelector,
-  tightRestrictionMuonBottomMatcher,
+  tightRestrictionMuonCharmMatcher,
   matchedTightRestrictionMuonSelector,
-  muonPtDistributionBinnedInMatchedBottom,
-  jetPtDistributionBinnedInMatchedBottom,
-  muonJetPtRatioDistributionBinnedInMatchedBottom,
-  muonEtaDistributionBinnedInMatchedBottom
+  muonPtDistributionBinnedInMatchedCharm,
+  charmPtDistributionBinnedInMatchedCharm,
+  muonCharmPtRatioDistributionBinnedInMatchedCharm,
+  muonEtaDistributionBinnedInMatchedCharm,
+  deltaRDistributionBinnedInMatchedCharm
 ] )
 
 config = cfg.Config(
