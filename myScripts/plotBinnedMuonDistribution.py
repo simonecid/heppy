@@ -6,7 +6,7 @@ from ROOT import TTree
 from ROOT import TCanvas
 from ROOT import TLegend
 
-convolutionFile = TFile("_convolutionCurvesMuonBottom/convolutionCurvesMuonBottom.root")
+convolutionFile = TFile("_convolutionCurvesJetBottom/convolutionCurvesJetBottom.root")
 
 jetPtBins = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000]
 binnedMuonPtNormalisedDistributionHistograms = []

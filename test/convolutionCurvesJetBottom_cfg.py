@@ -12,6 +12,8 @@ from heppy.analyzers.Matcher import Matcher
 from heppy.analyzers.Selector import Selector
 from heppy.analyzers.triggerrates.MatchedParticlesTreeProducer import MatchedParticlesTreeProducer
 from heppy.analyzers.triggerrates.MatchedObjectBinnedDistributions import MatchedObjectBinnedDistributions
+from heppy.analyzers.triggerrates.ObjectFinder import ObjectFinder
+from heppy.analyzers.triggerrates.HistogrammerCumulative import HistogrammerCumulative
 from heppy.framework.heppy_loop import _heppyGlobalOptions
 
 # next 2 lines necessary to deal with reimports from ipython
@@ -74,9 +76,9 @@ source = cfg.Analyzer(
   gen_particles = 'skimmedGenParticles',
   #gen_vertices = 'genVertices',
 
-  #gen_jets = 'genJets',
+  gen_jets = 'genJets',
 
-  jets = 'jets',
+  #jets = 'jets',
   #bTags = 'bTags',
   #cTags = 'cTags',
   #tauTags = 'tauTags',
@@ -98,10 +100,17 @@ tfile_service_1 = cfg.Service(
   option='recreate'
 )
 
-''' Selects around 18% of the noRestriction muons'''
 tightRestrictionJetBottomMatcher = cfg.Analyzer(
   Matcher,
   instance_label = 'tightRestrictionJetBottomMatcher',
+  delta_r = 0.5,
+  particles = 'b_quarks',
+  match_particles = 'jets',
+)
+
+tightRestrictionJetBottomFinder = cfg.Analyzer(
+  ObjectFinder,
+  instance_label = 'tightRestrictionJetBottomFinder',
   delta_r = 0.5,
   particles = 'jets',
   match_particles = 'b_quarks',
@@ -129,24 +138,38 @@ def deltaR (ptc):
   return ptc.dr
 
 def isMatched(ptc):
-  if ptc.match is not None :
-    return ptc.match is not None
+  return ptc.match is not None
+
+def hasMatches(ptc):
+  return len(ptc.matches) > 0
 
 def particleCheckerFactory (ptcName):
   def particleChecker (ptc):
     return (abs(ptc.pdgid()) == pdgIds[ptcName])
   return particleChecker
 
+matchedTightRestrictionBottomSelector = cfg.Analyzer(
+  Selector,
+  instance_label = 'matchedTightRestrictionBottomSelector',
+  input_objects = 'b_quarks',
+  output = 'matched_b_quarks',
+  filter_func = isMatched
+)
+
 matchedTightRestrictionJetSelector = cfg.Analyzer(
   Selector,
   instance_label = 'matchedTightRestrictionJetSelector',
   input_objects = 'jets',
   output = 'matched_jets',
-  filter_func = isMatched
+  filter_func = hasMatches
 )
 
 def etaRestrictor(ptc):
   return abs(ptc.eta()) < 6
+
+def etaPtRestrictor(ptc):
+  return (abs(ptc.eta()) < 6 and ptc.pt() > 30)
+
 
 etaGenParticleSelector = cfg.Analyzer(
     Selector,
@@ -154,6 +177,14 @@ etaGenParticleSelector = cfg.Analyzer(
     output = 'gen_particles_eta_restricted',
     input_objects = 'gen_particles',
     filter_func = etaRestrictor
+)
+
+genJetSelector = cfg.Analyzer(
+    Selector,
+    'genJetSelector',
+    output = 'jets',
+    input_objects = 'gen_jets',
+    filter_func = etaPtRestrictor
 )
 
 bQuarkSelector = cfg.Analyzer(
@@ -164,12 +195,12 @@ bQuarkSelector = cfg.Analyzer(
     filter_func = particleCheckerFactory("bottom")
 )
 
-muonPtDistributionBinnedInMatchedBottom = cfg.Analyzer(
+bottomPtDistributionBinnedInMatchedJet = cfg.Analyzer(
   MatchedObjectBinnedDistributions,
-  instance_label = 'muonPtDistributionBinnedInMatchedBottom',
-  histo_name = 'muonPtDistributionBinnedInMatchedBottom',
-  histo_title = 'p_{t}^{#mu} distribution binned in p^{b}_{t}',
-  matched_collection = 'matched_jets',
+  instance_label = 'bottomPtDistributionBinnedInMatchedJet',
+  histo_name = 'bottomPtDistributionBinnedInMatchedJet',
+  histo_title = 'p_{t}^{b} distribution binned in p^{jet}_{t}',
+  matched_collection = 'matched_b_quarks',
   binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
   nbins = 1000,
   min = 0,
@@ -177,17 +208,17 @@ muonPtDistributionBinnedInMatchedBottom = cfg.Analyzer(
   file_label = "tfile1",
   plot_func = pt,
   bin_func = pt,
-  log_y = True,
-  x_label = "p_{t}^{#mu} [GeV]",
+  log_y = False,
+  x_label = "p_{t}^{b} [GeV]",
   y_label = "# events"
 )
 
-muonEtaDistributionBinnedInMatchedBottom = cfg.Analyzer(
+bottomEtaDistributionBinnedInMatchedJet = cfg.Analyzer(
   MatchedObjectBinnedDistributions,
-  instance_label = 'muonEtaDistributionBinnedInMatchedBottom',
-  histo_name = 'muonEtaDistributionBinnedInMatchedBottom',
-  histo_title = '#eta^{#mu} distribution binned in p^{b}_{t}',
-  matched_collection = 'matched_jets',
+  instance_label = 'bottomEtaDistributionBinnedInMatchedJet',
+  histo_name = 'bottomEtaDistributionBinnedInMatchedJet',
+  histo_title = '#eta^{b} distribution binned in p^{jet}_{t}',
+  matched_collection = 'matched_b_quarks',
   binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
   nbins = 100,
   min = -10,
@@ -195,17 +226,17 @@ muonEtaDistributionBinnedInMatchedBottom = cfg.Analyzer(
   file_label = "tfile1",
   plot_func = eta,
   bin_func = pt,
-  log_y = True,
+  log_y = False,
   x_label = "#eta",
   y_label = "# events"
 )
 
-bottomPtDistributionBinnedInMatchedBottom = cfg.Analyzer(
+jetPtDistributionBinnedInMatchedJet = cfg.Analyzer(
   MatchedObjectBinnedDistributions,
-  instance_label = 'bottomPtDistributionBinnedInMatchedBottom',
-  histo_name = 'bottomPtDistributionBinnedInMatchedBottom',
-  histo_title = 'p_{t}^{b} distribution binned in p^{b}_{t}',
-  matched_collection = 'matched_jets',
+  instance_label = 'jetPtDistributionBinnedInMatchedJet',
+  histo_name = 'jetPtDistributionBinnedInMatchedJet',
+  histo_title = 'p_{jet}^{b} distribution binned in p^{jet}_{t}',
+  matched_collection = 'matched_b_quarks',
   binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
   nbins = 2500,
   min = 0,
@@ -213,35 +244,35 @@ bottomPtDistributionBinnedInMatchedBottom = cfg.Analyzer(
   file_label = "tfile1",
   plot_func = matchedParticlePt,
   bin_func = pt,
-  log_y = True,
-  x_label = "p_{t}^{b} [GeV]",
+  log_y = False,
+  x_label = "p_{t}^{jet} [GeV]",
   y_label = "# events"
 )
 
-muonBottomPtRatioDistributionBinnedInMatchedBottom = cfg.Analyzer(
+bottomJetPtRatioDistributionBinnedInMatchedJet = cfg.Analyzer(
   MatchedObjectBinnedDistributions,
-  instance_label = 'muonBottomPtRatioDistributionBinnedInMatchedBottom',
-  histo_name = 'muonBottomPtRatioDistributionBinnedInMatchedBottom',
-  histo_title = 'p_{t}^{#mu}/p_{t}^{b} distribution binned in p^{b}_{t}',
-  matched_collection = 'matched_jets',
+  instance_label = 'bottomJetPtRatioDistributionBinnedInMatchedJet',
+  histo_name = 'bottomJetPtRatioDistributionBinnedInMatchedJet',
+  histo_title = 'p_{t}^{b}/p_{t}^{jet} distribution binned in p^{b}_{jet}',
+  matched_collection = 'matched_b_quarks',
   binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
-  nbins = 60,
+  nbins = 800,
   min = 0,
-  max = 1.5,
+  max = 20,
   file_label = "tfile1",
   plot_func = ptRatioWithMatched,
   bin_func = pt,
-  log_y = True,
-  x_label = "p_{t}^{#mu}/p_{t}^{b}",
+  log_y = False,
+  x_label = "p_{t}^{b}/p_{t}^{jet}",
   y_label = "# events"
 )
 
-deltaRDistributionBinnedInMatchedBottom = cfg.Analyzer(
+deltaRDistributionBinnedInMatchedJet = cfg.Analyzer(
   MatchedObjectBinnedDistributions,
-  instance_label = 'deltaRDistributionBinnedInMatchedBottom',
-  histo_name = 'deltaRDistributionBinnedInMatchedBottom',
-  histo_title = '#DeltaR distribution binned in p^{bottom}_{t}',
-  matched_collection = 'matched_jets',
+  instance_label = 'deltaRDistributionBinnedInMatchedJet',
+  histo_name = 'deltaRDistributionBinnedInMatchedJet',
+  histo_title = '#DeltaR distribution binned in p^{jet}_{t}',
+  matched_collection = 'matched_b_quarks',
   binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
   nbins = 300,
   min = 0,
@@ -254,19 +285,130 @@ deltaRDistributionBinnedInMatchedBottom = cfg.Analyzer(
   y_label = "# events"
 )
 
+
+def totalPtFractionCarriedByMatchedParticles(ptc):
+  totFraction = 0
+  if len(ptc.matches) > 1:
+    for b_q in ptc.matches:
+      totFraction += (b_q.pt()/ptc.pt())
+    return totFraction
+  return None
+
+def totalPtFractionCarriedByMatchedParticles_2(ptc):
+  jet = ptc.match
+  totFraction = 0
+  if not hasattr(jet, "isPtFractionPlotted"):
+    jet.isPtFractionPlotted = True
+    if len(jet.matches) > 1:
+      for b_q in jet.matches:
+        totFraction += (b_q.pt()/jet.pt())
+      return totFraction
+  return None
+
+def numberOfFoundParticles_2(ptc):
+  jet = ptc.match
+  totFraction = 0
+  if not hasattr(jet, "isNumberOfFoundParticlesPlotted"):
+    jet.isNumberOfFoundParticlesPlotted = True
+    return len(jet.matches)
+  return None
+
+totalBottomJetPtRatioDistributionBinnedInMatchedJet = cfg.Analyzer(
+  MatchedObjectBinnedDistributions,
+  instance_label = 'totalBottomJetPtRatioDistributionBinnedInMatchedJet',
+  histo_name = 'totalBottomJetPtRatioDistributionBinnedInMatchedJet',
+  histo_title = 'Total p_{t} fraction carried by the matched bottom quarks binned in p^{jet}_{t}',
+  matched_collection = 'matched_b_quarks',
+  binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
+  nbins = 800,
+  min = 0,
+  max = 20,
+  file_label = "tfile1",
+  plot_func = totalPtFractionCarriedByMatchedParticles_2,
+  bin_func = pt,
+  log_y = False,
+  x_label = "#sum p_{t}^{b} / p_{t}^{jet}",
+  y_label = "# events"
+)
+
+numberOfBottomQuarksDistributionBinnedInMatchedJet = cfg.Analyzer(
+  MatchedObjectBinnedDistributions,
+  instance_label = 'numberOfBottomQuarksDistributionBinnedInMatchedJet',
+  histo_name = 'numberOfBottomQuarksDistributionBinnedInMatchedJet',
+  histo_title = 'Number of matched bottom quarks binned in p^{jet}_{t}',
+  matched_collection = 'matched_b_quarks',
+  binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
+  min = 0,
+  max = 100,
+  nbins = 100,
+  file_label = "tfile1",
+  plot_func = numberOfFoundParticles_2,
+  bin_func = pt,
+  log_y = False,
+  x_label = "# b quarks",
+  y_label = "# events"
+)
+
+totalPtFractionCarriedByBottomQuarksDistribution = cfg.Analyzer(
+  Histogrammer,
+  file_label = 'tfile1',
+  histo_name = 'totalPtFractionCarriedByBottomQuarksDistribution',
+  histo_title = 'Total p_{t} fraction carried by the matched bottom quarks',
+  min = 0,
+  max = 20,
+  nbins = 800,
+  input_objects = 'matched_jets',
+  value_func = totalPtFractionCarriedByMatchedParticles,
+  x_label = "#sum p_{t}^{b} / p_{t}^{jet}",
+  y_label = "# events"
+)
+
+def numberOfFoundParticles(ptc):
+  return len(ptc.matches)
+
+numberOfMatchedBottomQuarksDistribution = cfg.Analyzer(
+  Histogrammer,
+  file_label = 'tfile1',
+  histo_name = 'numberOfMatchedBottomQuarksDistribution',
+  histo_title = 'Number of bottom quarks within the jet cone',
+  min = 0,
+  max = 100,
+  nbins = 100,
+  input_objects = 'matched_jets',
+  value_func = numberOfFoundParticles,
+  x_label = "# b quarks",
+  y_label = "# events"
+)
+
+bottomJetTree = cfg.Analyzer(
+  MatchedParticlesTreeProducer,
+  file_label = "tfile1",
+  tree_name = 'bottomJetTree',
+  tree_title = 'Tree containing info about matched jet and bottoms',
+  matched_particle_collection = 'matched_b_quarks'
+)
+
 # definition of a sequence of analyzers,
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
   source,
   etaGenParticleSelector,
+  genJetSelector,
   bQuarkSelector,
   tightRestrictionJetBottomMatcher,
+  tightRestrictionJetBottomFinder,
+  matchedTightRestrictionBottomSelector,
   matchedTightRestrictionJetSelector,
-  muonPtDistributionBinnedInMatchedBottom,
-  bottomPtDistributionBinnedInMatchedBottom,
-  muonBottomPtRatioDistributionBinnedInMatchedBottom,
-  muonEtaDistributionBinnedInMatchedBottom,
-  deltaRDistributionBinnedInMatchedBottom
+  jetPtDistributionBinnedInMatchedJet,
+  bottomPtDistributionBinnedInMatchedJet,
+  bottomJetPtRatioDistributionBinnedInMatchedJet,
+  bottomEtaDistributionBinnedInMatchedJet,
+  deltaRDistributionBinnedInMatchedJet,
+  totalBottomJetPtRatioDistributionBinnedInMatchedJet,
+  numberOfBottomQuarksDistributionBinnedInMatchedJet,
+  totalPtFractionCarriedByBottomQuarksDistribution,
+  numberOfMatchedBottomQuarksDistribution,
+  bottomJetTree
 ] )
 
 config = cfg.Config(
