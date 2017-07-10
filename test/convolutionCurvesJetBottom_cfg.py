@@ -369,6 +369,24 @@ totalPtFractionCarriedByBottomQuarksDistribution = cfg.Analyzer(
 def numberOfFoundParticles(ptc):
   return len(ptc.matches)
 
+bottomJetPtRatioDistributionBinnedInNumberOfFoundBQuarks = cfg.Analyzer(
+  MatchedObjectBinnedDistributions,
+  instance_label = 'bottomJetPtRatioDistributionBinnedInNumberOfFoundBQuarks',
+  histo_name = 'bottomJetPtRatioDistributionBinnedInNumberOfFoundBQuarks',
+  histo_title = 'p_{t}^{b}/p_{t}^{jet} distribution binned in n of found b quarks',
+  matched_collection = 'matched_b_quarks',
+  binning = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+  min = 0,
+  max = 20,
+  nbins = 800,
+  file_label = "tfile1",
+  plot_func = ptRatioWithMatched,
+  bin_func = numberOfFoundParticles,
+  log_y = False,
+  x_label = "p_{t}^{b}/p_{t}^{jet}",
+  y_label = "# events"
+)
+
 numberOfMatchedBottomQuarksDistribution = cfg.Analyzer(
   Histogrammer,
   file_label = 'tfile1',
@@ -411,6 +429,7 @@ sequence = cfg.Sequence( [
   deltaRDistributionBinnedInMatchedJet,
   totalBottomJetPtRatioDistributionBinnedInMatchedJet,
   numberOfBottomQuarksDistributionBinnedInMatchedJet,
+  bottomJetPtRatioDistributionBinnedInNumberOfFoundBQuarks,
   totalPtFractionCarriedByBottomQuarksDistribution,
   numberOfMatchedBottomQuarksDistribution,
   bottomJetTree
