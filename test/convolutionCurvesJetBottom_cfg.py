@@ -202,9 +202,9 @@ bottomPtDistributionBinnedInMatchedJet = cfg.Analyzer(
   histo_title = 'p_{t}^{b} distribution binned in p^{jet}_{t}',
   matched_collection = 'matched_b_quarks',
   binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
-  nbins = 1000,
+  nbins = 2000,
   min = 0,
-  max = 1000,
+  max = 2000,
   file_label = "tfile1",
   plot_func = pt,
   bin_func = pt,
@@ -385,7 +385,9 @@ bottomJetTree = cfg.Analyzer(
   file_label = "tfile1",
   tree_name = 'bottomJetTree',
   tree_title = 'Tree containing info about matched jet and bottoms',
-  matched_particle_collection = 'matched_b_quarks'
+  matched_particle_collection = 'matched_b_quarks',
+  particle_name = "b_quark",
+  matched_particle_name = "jet"
 )
 
 # definition of a sequence of analyzers,

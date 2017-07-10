@@ -39,8 +39,8 @@ class MatchedParticlesTreeProducer(Analyzer):
     self.tree = Tree( self.cfg_ana.tree_name,
                       self.cfg_ana.tree_title )
     
-    bookParticle(self.tree, "matchedMuon")
-    bookParticle(self.tree, "matchedJet")
+    bookParticle(self.tree, self.cfg_ana.particle_name)
+    bookParticle(self.tree, self.cfg_ana.matched_particle_name)
     var(self.tree, 'dr')
 
   def process(self, event):
@@ -52,7 +52,7 @@ class MatchedParticlesTreeProducer(Analyzer):
       '''
     matched_particle_collection = getattr(event, self.cfg_ana.matched_particle_collection)
     for ptc in matched_particle_collection:
-      fillParticle(self.tree, 'matchedMuon', ptc)
-      fillParticle(self.tree, 'matchedJet', ptc.match)
+      fillParticle(self.tree, self.cfg_ana.particle_name, ptc)
+      fillParticle(self.tree, self.cfg_ana.matched_particle_name, ptc.match)
       fill(self.tree, 'dr', ptc.dr)
       self.tree.tree.Fill()
