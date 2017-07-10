@@ -148,6 +148,9 @@ def particleCheckerFactory (ptcName):
     return (abs(ptc.pdgid()) == pdgIds[ptcName])
   return particleChecker
 
+def getFinalStateBQuark (ptc):
+  return (abs(ptc.pdgid()) == 5) and (ptc.status() == 71)
+
 matchedTightRestrictionBottomSelector = cfg.Analyzer(
   Selector,
   instance_label = 'matchedTightRestrictionBottomSelector',
@@ -192,7 +195,7 @@ bQuarkSelector = cfg.Analyzer(
     'sel_bottom',
     output = 'b_quarks',
     input_objects = 'gen_particles_eta_restricted',
-    filter_func = particleCheckerFactory("bottom")
+    filter_func = getFinalStateBQuark
 )
 
 bottomPtDistributionBinnedInMatchedJet = cfg.Analyzer(
