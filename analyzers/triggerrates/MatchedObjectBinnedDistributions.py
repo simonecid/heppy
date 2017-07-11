@@ -95,7 +95,7 @@ class MatchedObjectBinnedDistributions(Analyzer):
         if value is not None:
           for x in xrange(0, len(self.cfg_ana.binning) - 1):
             bin_value = self.cfg_ana.bin_func(val.match)
-            if (bin_value > self.cfg_ana.binning[x]) and (bin_value < self.cfg_ana.binning[x+1]):
+            if (bin_value >= self.cfg_ana.binning[x]) and (bin_value < self.cfg_ana.binning[x+1]):
               self.binnedHistograms[x].Fill(value)
     else:
       for obj in matched_collection:
@@ -103,7 +103,7 @@ class MatchedObjectBinnedDistributions(Analyzer):
         if value is not None:
           for x in xrange(0, len(self.cfg_ana.binning) - 1):
             bin_value = self.cfg_ana.bin_func(obj.match)
-            if (bin_value > self.cfg_ana.binning[x]) and (bin_value < self.cfg_ana.binning[x+1]):
+            if (bin_value >= self.cfg_ana.binning[x]) and (bin_value < self.cfg_ana.binning[x+1]):
               self.binnedHistograms[x].Fill(value)
 
   def write(self, setup):
