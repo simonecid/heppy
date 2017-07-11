@@ -238,7 +238,7 @@ jetPtDistributionBinnedInMatchedJet = cfg.Analyzer(
   MatchedObjectBinnedDistributions,
   instance_label = 'jetPtDistributionBinnedInMatchedJet',
   histo_name = 'jetPtDistributionBinnedInMatchedJet',
-  histo_title = 'p_{jet}^{b} distribution binned in p^{jet}_{t}',
+  histo_title = 'p_{t}^{b} distribution binned in p^{jet}_{t}',
   matched_collection = 'matched_b_quarks',
   binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
   nbins = 2500,
@@ -406,7 +406,7 @@ bottomJetTree = cfg.Analyzer(
   file_label = "tfile1",
   tree_name = 'bottomJetTree',
   tree_title = 'Tree containing info about matched jet and bottoms',
-  matched_particle_collection = 'matched_b_quarks',
+  particle_collection = 'matched_b_quarks',
   particle_name = "b_quark",
   matched_particle_name = "jet"
 )
