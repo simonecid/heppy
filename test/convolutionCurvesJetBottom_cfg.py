@@ -256,7 +256,7 @@ bottomJetPtRatioDistributionBinnedInMatchedJet = cfg.Analyzer(
   MatchedObjectBinnedDistributions,
   instance_label = 'bottomJetPtRatioDistributionBinnedInMatchedJet',
   histo_name = 'bottomJetPtRatioDistributionBinnedInMatchedJet',
-  histo_title = 'p_{t}^{b}/p_{t}^{jet} distribution binned in p^{b}_{jet}',
+  histo_title = 'p_{t}^{b}/p_{t}^{jet} distribution binned in p^{jet}_{t}',
   matched_collection = 'matched_b_quarks',
   binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
   nbins = 800,
