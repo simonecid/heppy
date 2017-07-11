@@ -5,6 +5,11 @@ MBtest = cfg.MCComponent(
   files = ["../FCCSW/minimumBias_10000evts.root"]
 )
 
+MBtest_GenParticles_GenVertices = cfg.MCComponent(
+  'MBtest_GenParticles_GenVertices',
+  files = ["../FCCSW/events_genParticles_genVertices.root"]
+)
+
 MinBiasDistribution_100TeV_DelphesFCC_FCCJets = cfg.MCComponent(
   'MinBiasDistribution_100TeV_DelphesFCC_FCCJets',
   files = [
