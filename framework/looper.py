@@ -233,7 +233,7 @@ Make sure that the configuration object is of class cfg.Analyzer.
                         self.start_time = timeit.default_timer()
                         self.start_time_event = iEv
                     else:
-                        self.logger.warning( 'event %d (%.1f ev/s)' % (iEv, (iEv-self.start_time_event)/float(timeit.default_timer() - self.start_time)) )
+                        self.logger.warning( 'event %d out of %d (%.1f ev/s)' % (iEv, len(self.events), (iEv-self.start_time_event)/float(timeit.default_timer() - self.start_time)) )
                 try:
                     self.process( iEv )
                     self.nEvProcessed += 1
