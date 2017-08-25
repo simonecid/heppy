@@ -20,6 +20,7 @@ muonJetTotalPtRatioHistograms = []
 muonJetAbsoluteSecondOrderPtRatioHistograms = []
 '''Ratio of ratio is computed considering the previous bin as a reference, it might show some interesting trend'''
 muonJetProgressiveSecondOrderPtRatioHistograms = []
+numberOfBottomQuarkHistograms = []
 
 # Preparing canvases
 
@@ -41,6 +42,8 @@ canvasMuonJetAbsoluteSecondOrderPtRatio = TCanvas("canvasMuonJetAbsoluteSecondOr
 canvasMuonJetAbsoluteSecondOrderPtRatio.SetLogy(False)
 canvasMuonJetProgressiveSecondOrderPtRatio = TCanvas("canvasMuonJetProgressiveSecondOrderPtRatio", "canvasMuonJetProgressiveSecondOrderPtRatio")
 canvasMuonJetProgressiveSecondOrderPtRatio.SetLogy(False)
+canvasNumberOfBottomQuark = TCanvas("canvasNumberOfBottomQuark", "canvasNumberOfBottomQuark")
+canvasNumberOfBottomQuark.SetLogy(False)
 legendNormalisedMuonPt = TLegend(0.65, 0.7, 0.90, 0.9)
 legendNormalisedDeltaR = TLegend(0.65, 0.7, 0.90, 0.9)
 legendMuonPt = TLegend(0.65, 0.7, 0.90, 0.9)
@@ -50,6 +53,7 @@ legendMuonJetPtRatio = TLegend(0.65, 0.7, 0.90, 0.9)
 legendMuonJetTotalPtRatio = TLegend(0.65, 0.7, 0.90, 0.9)
 legendMuonJetAbsoluteSecondOrderPtRatio = TLegend(0.65, 0.7, 0.90, 0.9)
 legendMuonJetProgressiveSecondOrderPtRatio = TLegend(0.65, 0.7, 0.90, 0.9)
+legendNumberOfBottomQuark = TLegend(0.65, 0.7, 0.90, 0.9)
 
 saveFile = TFile("binnedMatchedMuonDistributions.root", "RECREATE")
 saveFile.cd()
@@ -63,6 +67,7 @@ maximumY_muonNormalisedDeltaRHistograms = float("-inf")
 maximumY_muonPtHistograms = float("-inf")
 maximumY_muonEtaNormalisedHistograms = float("-inf")
 maximumY_jetPtHistograms = float("-inf")
+maximumY_numberOfBottomQuarks = float("-inf")
 
 for x in xrange(0, len(jetPtBins) - 1):
   
@@ -92,6 +97,9 @@ for x in xrange(0, len(jetPtBins) - 1):
   
   aHistogram = aHistogram.Clone("bottomJetProgressiveSecondOrderPtRatioDistributionBinnedInMatchedJet_" + str(jetPtBins[x]) + "_" + str(jetPtBins[x+1]))
   muonJetProgressiveSecondOrderPtRatioHistograms.append(aHistogram)
+  
+  aHistogram = convolutionFile.Get("numberOfBottomQuarksDistributionBinnedInMatchedJet_" + str(jetPtBins[x]) + "_" + str(jetPtBins[x+1]))
+  numberOfBottomQuarkHistograms.append(aHistogram)
 
   # Normalising plots and plotting them
   canvasNormalisedMuonPt.cd()
@@ -104,6 +112,21 @@ for x in xrange(0, len(jetPtBins) - 1):
   maximumY_muonNormalisedPtHistograms = histogram.GetMaximum() if histogram.GetMaximum() > maximumY_muonNormalisedPtHistograms else maximumY_muonNormalisedPtHistograms
   histogram.Draw("HIST SAME")
   legendNormalisedMuonPt.AddEntry(histogram,
+    str(jetPtBins[x]) + " < p_{t}^{jet} < " + str(jetPtBins[x+1]),
+    "l"
+  )
+  histogram.Write()
+
+  canvasNumberOfBottomQuark.cd()
+  histogram = numberOfBottomQuarkHistograms[x]
+  if histogram.GetEntries() == 0:
+    print "Bin", str(jetPtBins[x]) + " < p_{t}^{jet} < " + str(jetPtBins[x+1]), "is empty"
+    continue
+  histogram.Scale(1/histogram.GetEntries())
+  histogram.GetYaxis().SetTitle("a.u.")
+  maximumY_numberOfBottomQuarks = histogram.GetMaximum() if histogram.GetMaximum() > maximumY_numberOfBottomQuarks else maximumY_numberOfBottomQuarks
+  histogram.Draw("HIST SAME")
+  legendNumberOfBottomQuark.AddEntry(histogram,
     str(jetPtBins[x]) + " < p_{t}^{jet} < " + str(jetPtBins[x+1]),
     "l"
   )
@@ -245,7 +268,9 @@ maximumY_muonEtaNormalisedHistograms *= 1.1
 maximumY_jetPtHistograms *= 1.1
 maximumY_muonJetAbsoluteSecondOrderPtRatioHistograms *= 1.1
 maximumY_muonJetProgressiveSecondOrderPtRatioHistograms *= 1.1
+maximumY_numberOfBottomQuarks *= 1.1
 muonJetPtRatioHistograms[0].GetYaxis().SetRangeUser(1e-6, maximumY_muonJetPtRatioHistograms)
+numberOfBottomQuarkHistograms[0].GetYaxis().SetRangeUser(1e-6, maximumY_numberOfBottomQuarks)
 muonJetTotalPtRatioHistograms[0].GetYaxis().SetRangeUser(1e-6, maximumY_muonJetTotalPtRatioHistograms)
 muonJetAbsoluteSecondOrderPtRatioHistograms[0].GetYaxis().SetRangeUser(1e-6, maximumY_muonJetAbsoluteSecondOrderPtRatioHistograms)
 muonJetProgressiveSecondOrderPtRatioHistograms[0].GetYaxis().SetRangeUser(1e-6, maximumY_muonJetProgressiveSecondOrderPtRatioHistograms)
@@ -258,6 +283,9 @@ binnedJetPtDistributionHistograms[0].GetYaxis().SetRangeUser(0.1, maximumY_jetPt
 canvasNormalisedMuonPt.cd()
 legendNormalisedMuonPt.Draw()
 canvasNormalisedMuonPt.Write()
+canvasNumberOfBottomQuark.cd()
+legendNumberOfBottomQuark.Draw()
+canvasNumberOfBottomQuark.Write()
 canvasNormalisedDeltaR.cd()
 legendNormalisedDeltaR.Draw()
 canvasNormalisedDeltaR.Write()
@@ -284,6 +312,7 @@ legendMuonJetProgressiveSecondOrderPtRatio.Draw()
 canvasMuonJetProgressiveSecondOrderPtRatio.Write()
 
 canvasNormalisedMuonPt.Update()
+canvasNumberOfBottomQuark.Update()
 canvasNormalisedDeltaR.Update()
 canvasMuonPt.Update()
 canvasMuonEta.Update()
