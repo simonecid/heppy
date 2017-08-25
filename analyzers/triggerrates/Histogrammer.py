@@ -85,7 +85,7 @@ class Histogrammer(Analyzer):
 
   def write(self, setup):
     self.rootfile.cd()
-    #self.histogram.Write()
+    self.histogram.Write()
     c1 = TCanvas ("c1", "c1", 600, 600)
     c1.SetGridx()
     c1.SetGridy()

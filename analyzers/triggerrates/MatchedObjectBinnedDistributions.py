@@ -36,7 +36,8 @@ class MatchedObjectBinnedDistributions(Analyzer):
     self.cfg_ana.bin_func = pt,
     log_y = True,
     x_label = "p_{t}^{#mu} [GeV]",
-    y_label = "\# events"
+    y_label = "\# events",
+    normalise = True
   )
 
   * matched_collection: collection of muon matched to jets via the heppy matcher
@@ -49,6 +50,7 @@ class MatchedObjectBinnedDistributions(Analyzer):
   * self.cfg_ana.bin_func: key in binning
   * log_y: log scale?
   * x_label (y): label for x (y) axis.
+  * normalisation: normalisation to apply to the conv histograms, every bin will multiplied by this number
   '''
 
   def beginLoop(self, setup):
@@ -116,5 +118,5 @@ class MatchedObjectBinnedDistributions(Analyzer):
         continue
 #      histogram.Draw("AP")
 #      histogram.Write()
-
-      del histogram
+      if getattr(self.cfg_ana, "normalise", False):
+        histogram.Scale(1.0/histogram.GetEntries())
