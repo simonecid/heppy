@@ -22,8 +22,8 @@ reload(logging)
 logging.basicConfig(level=logging.WARNING)
 
 #Object name
-triggerObjectName = "L1T obj"
-sampleName = "cmsMatching_QCD_15_3000_L1TJet_GenJet"
+triggerObjectName = "#tau^{L1T}"
+sampleName = "cmsMatching_QCD_15_3000_L1TTau_GenJet"
 
 # Retrieving the sample to analyse
 
@@ -91,10 +91,10 @@ tightRestrictionMatchSelector = cfg.Analyzer(
   filter_func = dr2Selection 
 )
 
-l1tJetPtDistributionBinnedInGenJet = cfg.Analyzer(
+l1tTauPtDistributionBinnedInGenJet = cfg.Analyzer(
   MatchedObjectBinnedDistributions,
-  instance_label = 'l1tJetPtDistributionBinnedInGenJet',
-  histo_name = 'l1tJetPtDistributionBinnedInGenJet',
+  instance_label = 'l1tTauPtDistributionBinnedInGenJet',
+  histo_name = 'l1tTauPtDistributionBinnedInGenJet',
   histo_title = 'p_{t}^{' + triggerObjectName + '} distribution binned in p^{gen jet}_{t}',
   matched_collection = 'matched_trigger_object',
   binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
@@ -109,10 +109,10 @@ l1tJetPtDistributionBinnedInGenJet = cfg.Analyzer(
   y_label = "# events"
 )
 
-l1tJetEtaDistributionBinnedInGenJet = cfg.Analyzer(
+l1tTauEtaDistributionBinnedInGenJet = cfg.Analyzer(
   MatchedObjectBinnedDistributions,
-  instance_label = 'l1tJetEtaDistributionBinnedInGenJet',
-  histo_name = 'l1tJetEtaDistributionBinnedInGenJet',
+  instance_label = 'l1tTauEtaDistributionBinnedInGenJet',
+  histo_name = 'l1tTauEtaDistributionBinnedInGenJet',
   histo_title = '#eta^{' + triggerObjectName + '} distribution binned in p^{gen jet}_{t}',
   matched_collection = 'matched_trigger_object',
   binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
@@ -127,28 +127,10 @@ l1tJetEtaDistributionBinnedInGenJet = cfg.Analyzer(
   y_label = "# events"
 )
 
-jetPtDistributionBinnedInGenJet = cfg.Analyzer(
+l1tTauGenJetPtRatioDistributionBinnedInGenJet = cfg.Analyzer(
   MatchedObjectBinnedDistributions,
-  instance_label = 'jetPtDistributionBinnedInGenJet',
-  histo_name = 'jetPtDistributionBinnedInGenJet',
-  histo_title = 'p_{t}^{' + triggerObjectName + '} distribution binned in p^{gen jet}_{t}',
-  matched_collection = 'matched_trigger_object',
-  binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
-  nbins = 2500,
-  min = 0,
-  max = 2500,
-  file_label = "tfile1",
-  plot_func = matchedParticlePt,
-  bin_func = pt,
-  log_y = False,
-  x_label = "p_{t}^{gen jet} [GeV]",
-  y_label = "# events"
-)
-
-l1tJetGenJetPtRatioDistributionBinnedInGenJet = cfg.Analyzer(
-  MatchedObjectBinnedDistributions,
-  instance_label = 'l1tJetGenJetPtRatioDistributionBinnedInGenJet',
-  histo_name = 'l1tJetGenJetPtRatioDistributionBinnedInGenJet',
+  instance_label = 'l1tTauGenJetPtRatioDistributionBinnedInGenJet',
+  histo_name = 'l1tTauGenJetPtRatioDistributionBinnedInGenJet',
   histo_title = 'p_{t}^{' + triggerObjectName + '}/p_{t}^{gen jet} distribution binned in p^{gen jet}_{t}',
   matched_collection = 'matched_trigger_object',
   binning = [30, 60, 100, 200, 300, 450, 600, 750, 1000, 1500, 2000],
@@ -188,10 +170,9 @@ deltaRDistributionBinnedInGenJet = cfg.Analyzer(
 sequence = cfg.Sequence( [
   source,
   tightRestrictionMatchSelector,
-  jetPtDistributionBinnedInGenJet,
-  l1tJetPtDistributionBinnedInGenJet,
-  l1tJetGenJetPtRatioDistributionBinnedInGenJet,
-  l1tJetEtaDistributionBinnedInGenJet,
+  l1tTauPtDistributionBinnedInGenJet,
+  l1tTauGenJetPtRatioDistributionBinnedInGenJet,
+  l1tTauEtaDistributionBinnedInGenJet,
   deltaRDistributionBinnedInGenJet,
 ] )
 
