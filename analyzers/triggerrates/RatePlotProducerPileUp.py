@@ -165,12 +165,7 @@ class RatePlotProducerPileUp(Analyzer):
     self.histogram.Draw("AP")
     c1.SetLogy(True)
 
-    line = TLine(xMin, self.cfg_ana.yscale, xMax, self.cfg_ana.yscale)
-    line.SetLineColor(2)
-    line.Draw()
-
     c1.Update()
-    c1.Write()
     c1.Print(self.cfg_ana.plot_name + ".svg", "svg")
 
     #self.rootfile.Close()

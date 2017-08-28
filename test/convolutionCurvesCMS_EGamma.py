@@ -23,7 +23,7 @@ logging.basicConfig(level=logging.WARNING)
 
 #Object name
 triggerObjectName = "EGamma^{L1T}"
-sampleName = "cmsMatching_QCD_15_3000_L1TEGamma_GenJet"
+sampleName = "l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_L11Obj_To_GenJet_Match_ClosestDR"
 
 # Retrieving the sample to analyse
 

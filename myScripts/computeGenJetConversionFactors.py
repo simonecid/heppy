@@ -4,10 +4,10 @@ from ROOT import TCanvas
 from ROOT import TChain
 
 chainGenJet = TChain ("MatchGenJetWithL1Objects/genJetTree")
-chainGenJet.Add("/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_L11Obj_To_GenJet_Match_ClosestDR/*")
+chainGenJet.Add("/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_HybridMatching_DeltaR_0.25/*")
 
 chainL1TEGammaGenJet = TChain ("MatchGenJetWithL1Objects/matchedL1TEGammaGenJetTree")
-chainL1TEGammaGenJet.Add("/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_L11Obj_To_GenJet_Match_ClosestDR/*")
+chainL1TEGammaGenJet.Add("/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_HybridMatching_DeltaR_0.25/*")
 
 bins = []
 
