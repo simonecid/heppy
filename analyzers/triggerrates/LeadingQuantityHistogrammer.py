@@ -99,6 +99,7 @@ class LeadingQuantityHistogrammer(Analyzer):
     self.histogram.SetMarkerStyle(21)
     self.histogram.SetMarkerColor(4)
     self.histogram.SetLineColor(1)
+    self.histogram.Write()
     if hasattr(self.cfg_ana, "log_y"):
       c1.SetLogy(self.cfg_ana.log_y)
     self.histogram.Draw("")
