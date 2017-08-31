@@ -143,6 +143,7 @@ class RatePlotProducerPileUp(Analyzer):
 
   def write(self, setup):
 
+    self.rootfile.cd()
     #Rescaling to corresponding rate    
     normalisation = self.cfg_ana.zerobias_rate/self.numberOfEvents
     #Rescaling everything to have rates
@@ -152,7 +153,7 @@ class RatePlotProducerPileUp(Analyzer):
       for x in xrange(0, len(self.cfg_ana.scale_factors)):
         self.histogram.SetBinContent(x+1, self.histogram.GetBinContent(x+1)*self.cfg_ana.scale_factors[x])
     
-    #self.histogram.Write()
+    self.histogram.Write()
     xMax = self.histogram.GetXaxis().GetXmax()
     xMin = self.histogram.GetXaxis().GetXmin()
     yMin = self.histogram.GetMinimum()
