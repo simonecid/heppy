@@ -13,6 +13,11 @@ import sys
 from heppy.framework.looper import Looper
 from heppy.test.mySamples import *
 from heppy.analyzers.triggerrates.JetTransformer import JetTransformer  
+from importlib import import_module
+from heppy.analyzers.triggerrates.Histogrammer import Histogrammer
+from heppy.analyzers.triggerrates.LeadingQuantityHistogrammer import LeadingQuantityHistogrammer
+
+
 
 logging.shutdown()
 reload(logging)
@@ -25,17 +30,11 @@ sampleName = "NeutrinoGun_NoTau_13TeV_DelphesCMS"
 #if specified in sample, a specific set will be used, otherwise the full set will be employed
 if "sample" in _heppyGlobalOptions:
   sampleName = _heppyGlobalOptions["sample"]
-if sampleName == "all":
-  selectedComponents = [
-    cmsMatching_QCD_15_3000_L1TMuon_GenJet,
-    cmsMatching_QCD_15_3000_L1TEGamma_GenJet,
-    cmsMatching_QCD_15_3000_L1TTau_GenJet,
-  ]
-else:  
-  sample = globals()[sampleName]
-  selectedComponents = [
-    sample
-  ]
+
+sample = getattr(import_module("heppy.test.mySamples"), sampleName)
+selectedComponents = [
+  sample
+]
 
 mySettings = lambda a: None
 mySettings.yScale = 1e6
@@ -48,7 +47,7 @@ source = cfg.Analyzer(
   #gen_particles = 'skimmedGenParticles',
   #gen_vertices = 'genVertices',
 
-  gen_jets = 'genJets',
+  #gen_jets = 'genJets',
 
   #jets = 'jets',
   #bTags = 'bTags',
@@ -58,7 +57,7 @@ source = cfg.Analyzer(
   #electrons = 'electrons',
   #electronITags = 'electronITags',
 
-  #muons = 'muons',
+  muons = 'muons',
   #muonITags = 'muonITags',
 
   #photons = 'photons',
@@ -98,24 +97,106 @@ tfile_service_1 = cfg.Service(
   option='recreate'
 )
 
-triggerRate = cfg.Analyzer(
+l1tEGammaTriggerRate = cfg.Analyzer(
   RatePlotProducerPileUp,
-  instance_label = 'triggerRate',
+  instance_label = 'l1tEGammaTriggerRate',
   file_label = 'ratePlotFile',
-  plot_name = 'triggerRate',
-  plot_title = 'Trigger rate',
+  plot_name = 'l1tEGammaTriggerRate',
+  plot_title = 'L1T EGamma trigger rate',
   zerobias_rate = mySettings.bunchCrossingFrequency,
   input_objects = 'l1tEGamma',
   bins = steps,
   yscale = mySettings.yScale,
 )
 
+muonRate = cfg.Analyzer(
+  RatePlotProducerPileUp,
+  instance_label = 'muonRate',
+  file_label = 'ratePlotFile',
+  plot_name = 'muonTriggerRate',
+  plot_title = 'Muon trigger rate',
+  zerobias_rate = mySettings.bunchCrossingFrequency,
+  input_objects = 'muons',
+  bins = steps,
+  yscale = mySettings.yScale,
+)
+
+def pt (ptc):
+  return ptc.pt()
+  
+genJetPtDistribution = cfg.Analyzer(
+  Histogrammer,
+  instance_label = 'genJetPtDistribution',
+  file_label = 'ratePlotFile',
+  histo_name = 'genJetPtDistribution',
+  histo_title = 'Gen-Jet transverse momentum distribution',
+  min = 0,
+  max = 300,
+  nbins = 300,
+  input_objects = 'gen_jets',
+  value_func = pt,
+  x_label = "pt [GeV]",
+  y_label = "\# events"
+)
+
+l1tEGammaPtDistribution = cfg.Analyzer(
+  Histogrammer,
+  instance_label = 'l1tEGammaPtDistribution',
+  file_label = 'ratePlotFile',
+  histo_name = 'l1tEGammaPtDistribution',
+  histo_title = 'L1TEGamma transverse momentum distribution',
+  min = 0,
+  max = 300,
+  nbins = 300,
+  input_objects = 'l1tEGamma',
+  value_func = pt,
+  x_label = "pt [GeV]",
+  y_label = "\# events"
+)
+
+l1tEGammaLeadingPtDistribution = cfg.Analyzer(
+  LeadingQuantityHistogrammer,
+  instance_label = 'l1tEGammaLeadingPtDistribution',
+  file_label = 'ratePlotFile',
+  histo_name = 'l1tEGammaLeadingPtDistribution',
+  histo_title = 'L1TEGamma leading transverse momentum distribution',
+  min = 0,
+  max = 300,
+  nbins = 300,
+  input_objects = 'l1tEGamma',
+  key_func = pt,
+  value_func = pt,
+  x_label = "pt [GeV]",
+  y_label = "\# events"
+)
+
+genJetLeadingPtDistribution = cfg.Analyzer(
+  LeadingQuantityHistogrammer,
+  instance_label = 'genJetLeadingPtDistribution',
+  file_label = 'ratePlotFile',
+  histo_name = 'genJetLeadingPtDistribution',
+  histo_title = 'Gen-Jet leading transverse momentum distribution',
+  min = 0,
+  max = 300,
+  nbins = 300,
+  input_objects = 'gen_jets',
+  value_func = pt,
+  key_func = pt,
+  x_label = "pt [GeV]",
+  y_label = "\# events"
+)
+
 # definition of a sequence of analyzers,
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
   source,
-  jetToL1TEGammaTrasformer,
-  triggerRate
+  #jetToL1TEGammaTrasformer,
+  #genJetPtDistribution,
+  #l1tEGammaPtDistribution,
+  #genJetLeadingPtDistribution,
+  #l1tEGammaLeadingPtDistribution,
+  muonRate,
+  #l1tEGammaTriggerRate
 ] )
 
 
