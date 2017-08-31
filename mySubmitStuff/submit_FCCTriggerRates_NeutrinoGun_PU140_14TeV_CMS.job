@@ -1,7 +1,7 @@
 Universe = vanilla
 job = fccTriggerRates_NeutrinoGun_PU140_14TeV_CMS
 cmd = mySubmitStuff/runHeppyConfigFile.sh
-args= -j $(job) -c $(cluster) -p $(process) -i test/fccTriggerRates_cfg.py -s NeutrinoGun_NoTau_13TeV_DelphesCMS
+args= -j $(job) -c $(cluster) -p $(process) -i test/fccTriggerRates_cfg.py -s NeutrinoGun_NoTau_13TeV_DelphesCMS -t 10
 # Better not to put logs in the same folder, as they are plenty
 output = /storage/sb17498/logs/heppy/$(job)_$(cluster).$(process).out
 error = /storage/sb17498/logs/heppy/$(job)_$(cluster).$(process).err

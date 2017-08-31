@@ -42,13 +42,20 @@ SAVE_DESTINATION="${jobName}_${sampleName}"
 
 mkdir ${SAVE_DESTINATION}
 
+set +o xtrace
 source /software/sb17498/FCCSW/init.sh
+set -o xtrace
+
 cp -r /software/sb17498/heppy .
 cd heppy
+set +o xtrace
 source init.sh
+set -o xtrace
 
 heppy ${HOME_FOLDER}/${SAVE_DESTINATION} ${inputFile} --option=sample=${sampleName} -j ${numThreads}
 
 # Zip file
 cd ${HOME_FOLDER}
 tar -czvf ${jobName}_${sampleName}_${clusterId}.${processId}.tar.gz ${SAVE_DESTINATION}
+
+set +o xtrace
