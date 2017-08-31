@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.WARNING)
 
 mySettings = lambda a: None
 '''Pile up level for that kind of event'''
-mySettings.pileup = 180 # FCC
+mySettings.pileup = 140 # FCC
 #mySettings.pileup = 40 # LHC
 mySettings.yScale = 1e6
 '''Cross section of the event in mb'''
