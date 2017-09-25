@@ -57,5 +57,6 @@ class CMSMatchingReader(Analyzer):
       trigger_object._eta = getattr(tree, self.cfg_comp.trigger_object + "_eta")
       trigger_object._phi = getattr(tree, self.cfg_comp.trigger_object + "_phi")
       trigger_object.match = gen_object
-      trigger_object.deltaR2 = tree.deltaR2
+      trigger_object.deltaR2 = getattr(tree, "deltaR2", None)
+      if trigger_object.deltaR2 is None: trigger_object.deltaR2 = tree.dr**2
       event.trigger_objects = [trigger_object]

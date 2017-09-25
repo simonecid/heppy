@@ -11,8 +11,8 @@ from heppy.framework.services.tfile import TFileService
 from heppy.analyzers.triggerrates.RatePlotProducerPileUp import RatePlotProducerPileUp
 import sys
 from heppy.framework.looper import Looper
-from heppy.test.mySamples import *
-from heppy.analyzers.triggerrates.JetTransformer import JetTransformer  
+from heppy.analyzers.triggerrates.Transformer import Transformer  
+from heppy.analyzers.triggerrates.Smearer import Smearer
 from importlib import import_module
 from heppy.analyzers.triggerrates.Histogrammer import Histogrammer
 from heppy.analyzers.triggerrates.LeadingQuantityHistogrammer import LeadingQuantityHistogrammer
@@ -25,13 +25,13 @@ logging.basicConfig(level=logging.WARNING)
 
 # Retrieving the sample to analyse
 
-sampleName = "NeutrinoGun_NoTau_13TeV_DelphesCMS"
+sampleName = "NeutrinoGun_NoTau_13TeV_DelphesCMS_JetPTMin_5"
 
 #if specified in sample, a specific set will be used, otherwise the full set will be employed
 if "sample" in _heppyGlobalOptions:
   sampleName = _heppyGlobalOptions["sample"]
 
-sample = getattr(import_module("heppy.test.mySamples"), sampleName)
+sample = getattr(import_module("heppy.test.sample_NeutrinoGun_NoTau_13TeV_DelphesCMS_JetPTMin_5"), sampleName)
 selectedComponents = [
   sample
 ]
@@ -39,7 +39,7 @@ selectedComponents = [
 mySettings = lambda a: None
 mySettings.yScale = 1e6
 '''Instantaneous lumi in cm^-2 s^-1'''
-mySettings.bunchCrossingFrequency = 1/25e-9 # 40 MHz
+mySettings.bunchCrossingFrequency = 31.6e6 # 2808 bunches
 
 source = cfg.Analyzer(
   Reader,
@@ -68,17 +68,30 @@ gSystem.Load("libdatamodelDict")
 
 conv_factors = [0.011819013935167239, 0.031229420147026607, 0.05894886980069262, 0.0907587832763081, 0.12402859051977241, 0.15813355388380312, 0.19814191561633573, 0.23492730751504826, 0.26182982128567617, 0.2845614757205836, 0.2970284287607943, 0.29759263057788055, 0.29220468675274985, 0.2753409348224655, 0.24452178272228595, 0.21978538702676634, 0.19757806594173402, 0.18528040586864117, 0.1688296130655273, 0.1591269021552021, 0.15380284573651345]
 genJetPtBins = [0, 5, 7, 9, 11, 13, 15, 18, 21, 24, 27, 30, 35, 40, 50, 60, 70, 80, 90, 100, 110, 120]
+muon_conv_factors = [1, 1, 1, 1, 1, 1]
+muon_ptBins = [0, 10, 20, 30, 40, 50, 60]
 
 jetToL1TEGammaTrasformer = cfg.Analyzer(
-  JetTransformer ,
+  Transformer ,
   'jetToL1TEGammaTrasformer',
-  jet_collection = 'gen_jets',
-  output_objects = 'l1tEGamma',
+  input_collection = 'gen_jets',
+  output_collection = 'l1tEGamma',
   convolution_file = "_l1tObjectGenJetMatching/cmsMatching_QCD_15_3000_L1TEGamma_GenJet/histograms.root",
   convolution_histogram_prefix = "l1tEGammaPtDistributionBinnedInGenJet",
   bins = genJetPtBins,
   conversion_factors = conv_factors,
   object_x_range = (0, 260)
+)
+
+muonSmearer = cfg.Analyzer(
+  Smearer ,
+  'muonSmearer',
+  input_collection = 'muons',
+  output_collection = 'l1tMuons',
+  convolution_file = "_muonTriggerRates//cmsMatching_QCD_15_3000_L1TMuon_GenMuon/histograms.root",
+  convolution_histogram_prefix = "deltaRDistributionBinnedInGenMuon",
+  bins = muon_ptBins,
+  object_x_range = (-100, 200)
 )
 
 steps = []
@@ -107,6 +120,7 @@ l1tEGammaTriggerRate = cfg.Analyzer(
   input_objects = 'l1tEGamma',
   bins = steps,
   yscale = mySettings.yScale,
+  normalise = False
 )
 
 muonRate = cfg.Analyzer(
@@ -116,9 +130,10 @@ muonRate = cfg.Analyzer(
   plot_name = 'muonTriggerRate',
   plot_title = 'Muon trigger rate',
   zerobias_rate = mySettings.bunchCrossingFrequency,
-  input_objects = 'muons',
+  input_objects = 'l1tMuons',
   bins = steps,
   yscale = mySettings.yScale,
+  normalise = False
 )
 
 def pt (ptc):
@@ -190,6 +205,7 @@ genJetLeadingPtDistribution = cfg.Analyzer(
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
   source,
+  muonSmearer,
   #jetToL1TEGammaTrasformer,
   #genJetPtDistribution,
   #l1tEGammaPtDistribution,

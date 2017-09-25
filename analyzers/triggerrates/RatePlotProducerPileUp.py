@@ -61,7 +61,7 @@ class RatePlotProducerPileUp(Analyzer):
 
     bins = array("f", self.cfg_ana.bins)
     self.histogram = TH1F(self.cfg_ana.plot_name, self.cfg_ana.plot_title, len(bins) - 1 , bins)
-    self.numberOfEvents = 0 
+    self.numberOfEvents = self.cfg_comp.nGenEvents
 
   def process(self, event):
     '''Process the event.
@@ -73,8 +73,6 @@ class RatePlotProducerPileUp(Analyzer):
     '''
 
     input_collection = getattr(event, self.cfg_ana.input_objects)
-
-    self.numberOfEvents += 1
 
     #We want accept events without objects if the threshold is 0 or less
     startIdx = 0
@@ -145,9 +143,10 @@ class RatePlotProducerPileUp(Analyzer):
 
     self.rootfile.cd()
     #Rescaling to corresponding rate    
-    normalisation = self.cfg_ana.zerobias_rate/self.numberOfEvents
+    if self.cfg_ana.normalise:
+      normalisation = self.cfg_ana.zerobias_rate/self.numberOfEvents
+      self.histogram.Scale(normalisation)
     #Rescaling everything to have rates
-    self.histogram.Scale(normalisation)
 
     if hasattr(self.cfg_ana, "scale_factors"):
       for x in xrange(0, len(self.cfg_ana.scale_factors)):
@@ -159,11 +158,14 @@ class RatePlotProducerPileUp(Analyzer):
     yMin = self.histogram.GetMinimum()
     yMax = self.histogram.GetMaximum()
 
+    self.histogram.SetMarkerStyle(20)
+    self.histogram.SetMarkerColor(4)
+    self.histogram.SetLineColor(1)    
 
     c1 = TCanvas ("canvas_" + self.cfg_ana.plot_name, self.cfg_ana.plot_title, 600, 600)
     c1.SetGridx()
     c1.SetGridy()
-    self.histogram.Draw("AP")
+    self.histogram.Draw("PE")
     c1.SetLogy(True)
 
     c1.Update()

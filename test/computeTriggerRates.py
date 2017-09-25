@@ -9,6 +9,8 @@ from ROOT import gSystem
 from heppy.framework.chain import Chain as Events
 from heppy.framework.services.tfile import TFileService
 from heppy.analyzers.triggerrates.RatePlotProducerPileUp import RatePlotProducerPileUp
+from heppy.analyzers.triggerrates.Histogrammer import Histogrammer
+from heppy.analyzers.triggerrates.LeadingQuantityHistogrammer import LeadingQuantityHistogrammer
 import sys
 from heppy.framework.looper import Looper
 from heppy.test.mySamples import *
@@ -19,7 +21,7 @@ logging.basicConfig(level=logging.WARNING)
 
 # Retrieving the sample to analyse
 
-sampleName = "cmsMatching_SingleNeutrinoPU140_L1TEGamma"
+sampleName = "cmsMatching_SingleNeutrinoPU140_L1TMuon"
 
 #if specified in sample, a specific set will be used, otherwise the full set will be employed
 if "sample" in _heppyGlobalOptions:
@@ -39,7 +41,7 @@ else:
 mySettings = lambda a: None
 mySettings.yScale = 1e6
 '''Instantaneous lumi in cm^-2 s^-1'''
-mySettings.bunchCrossingFrequency = 1/25e-9 # 40 MHz
+mySettings.bunchCrossingFrequency = 31.6e6 # 2808 bunches
 
 source = cfg.Analyzer(
   CMSMatchingReader,
@@ -51,6 +53,9 @@ x = 0
 while x <= 100:
   steps.append(x)
   x += 0.5
+
+def pt(ptc):
+  return ptc.pt()
 
 # File in which all the rate plots will be stored 
 
@@ -71,13 +76,50 @@ triggerRate = cfg.Analyzer(
   input_objects = 'gen_objects',
   bins = steps,
   yscale = mySettings.yScale,
+  normalise = True
+)
+
+ptDistribution = cfg.Analyzer(
+  Histogrammer,
+  'ptDistribution',
+  file_label = 'ratePlotFile',
+  x_label= "pt [GeV]",
+  y_label = "# events",
+  histo_name = 'ptDistribution',
+  histo_title = 'Transverse momentum distribution',
+  min = 0,
+  max = 100,
+  nbins = 100,
+  input_objects = 'gen_objects',
+  value_func = pt,
+  log_y = True
+)
+
+
+leadingPtDistribution = cfg.Analyzer(
+  LeadingQuantityHistogrammer,
+  'leadingPtDistribution',
+  file_label = 'ratePlotFile',
+  x_label = "pt [GeV]",
+  y_label = "# events",
+  histo_name = 'leadingPtDistribution',
+  histo_title = 'Leading transverse momentum distribution',
+  min = 0,
+  max = 100,
+  nbins = 100,
+  input_objects = 'gen_objects',
+  key_func = pt,
+  value_func = pt,
+  log_y = True
 )
 
 # definition of a sequence of analyzers,
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
   source,
-  triggerRate
+  triggerRate,
+  ptDistribution,
+  leadingPtDistribution
 ] )
 
 
