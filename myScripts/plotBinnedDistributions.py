@@ -1,0 +1,116 @@
+''' Prepares muon distributions binned in the matched jet pt '''
+
+from ROOT import TFile
+from ROOT import TH1F
+from ROOT import TTree
+from ROOT import TCanvas
+from ROOT import TLegend
+
+convolutionFile = TFile("_binnedDistributions/cmsMatching_QCD_15_3000_L1TEGamma_GenJet/histograms.root")
+
+'''List of every distribution to plot'''
+distributionNames = [
+  "objectPtDistributionBinnedInMatchedObject",
+  "objectMatchedObjectPtRatioDistributionBinnedInMatchedObject",
+  "objectEtaDistributionBinnedInMatchedObject",
+  "deltaRDistributionBinnedInMatchedObject",
+  "deltaPtDistributionBinnedInMatchedObject"
+]
+
+'''Bins of binned distributions'''
+#ptBins = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]
+ptBins = [0, 10, 20, 30, 40, 50, 60]
+
+'''Contains the distributions'''
+distributions = {}
+'''Contains the canvases'''
+canvases = {}
+'''Contains the legends'''
+legends = {}
+'''Maximum value container, used to scale histograms'''
+maximumYs = {}
+
+saveFile = TFile("binnedDistributions.root", "RECREATE")
+saveFile.cd()
+
+#'''Ratio of ratio is computed considering the first bin as a reference, since it has an higher statistic'''
+#muonJetAbsoluteSecondOrderPtRatioHistograms = []
+#'''Ratio of ratio is computed considering the previous bin as a reference, it might show some interesting trend'''
+#muonJetProgressiveSecondOrderPtRatioHistograms = []
+#numberOfBottomQuarkHistograms = []
+
+for name in distributionNames:
+  # --- Preparing the data structure ---
+  #Distribution histogram container
+  distributions.update({
+    name: []
+  })
+  #Canvas container
+  canvas_tmp = TCanvas("canvas_" + name, "canvas_" + name)
+  canvas_tmp.SetLogy(False)
+  canvases.update({
+    name: canvas_tmp
+  })
+  #Legend container
+  legend_tmp = TLegend(0.65, 0.7, 0.90, 0.9)
+  legends.update({
+    name: legend_tmp
+  })
+  #Maximum value container
+  maximumYs.update({
+    name: float("-inf")
+  })
+
+  # --- Filling the structure
+
+
+  for x in xrange(0, len(ptBins) - 1):
+    aHistogram = convolutionFile.Get(name + "_" + str(ptBins[x]) + "_" + str(ptBins[x+1]))
+    distributions[name].append(aHistogram)
+    
+    #aHistogram = aHistogram.Clone("bottomJetAbsoluteSecondOrderPtRatioDistributionBinnedInMatchedJet_" + str(ptBins[x]) + "_" + str(ptBins[x+1]))
+    #muonJetAbsoluteSecondOrderPtRatioHistograms.append(aHistogram)
+    #
+    #aHistogram = aHistogram.Clone("bottomJetProgressiveSecondOrderPtRatioDistributionBinnedInMatchedJet_" + str(ptBins[x]) + "_" + str(ptBins[x+1]))
+    #muonJetProgressiveSecondOrderPtRatioHistograms.append(aHistogram)
+
+    # Normalising plots and plotting them
+    canvas_tmp = canvases[name]
+    canvas_tmp.cd()
+    histogram = distributions[name][x]
+    if histogram.GetEntries() == 0:
+      print "Bin", str(ptBins[x]) + " < p_{t}^{jet} < " + str(ptBins[x+1]), "is empty"
+      continue
+    histogram.Scale(1/histogram.GetEntries())
+    histogram.GetYaxis().SetTitle("a.u.")
+    maximumYs[name] = histogram.GetMaximum() if histogram.GetMaximum() > maximumYs[name] else maximumYs[name]
+    histogram.Draw("HIST SAME")
+    legends[name].AddEntry(histogram,
+      str(ptBins[x]) + " < p_{t}^{gen muon} < " + str(ptBins[x+1]),
+      "l"
+    )
+    histogram.Write()
+
+for maxY in maximumYs.values():
+  maxY *= 1.1
+
+for name in distributionNames:
+  distributions[name][0].GetYaxis().SetRangeUser(1e-6, maximumYs[name])
+  canvases[name].cd()
+  legends[name].Draw()
+  canvases[name].Write()
+  canvases[name].Update()
+
+#canvasMuonJetAbsoluteSecondOrderPtRatio.cd()
+#legendMuonJetAbsoluteSecondOrderPtRatio.Draw()
+#canvasMuonJetAbsoluteSecondOrderPtRatio.Write()
+#canvasMuonJetProgressiveSecondOrderPtRatio.cd()
+#legendMuonJetProgressiveSecondOrderPtRatio.Draw()
+#canvasMuonJetProgressiveSecondOrderPtRatio.Write()
+
+#canvasNormalisedMuonPt.Print("matchedMuonNormalisedPtDistributionBinnedInJetPt.png", "png")
+#canvasMuonPt.Print("matchedMuonPtDistributionBinnedInJetPt.png", "png")
+#canvasJetPt.Print("matchedJetPtDistributionBinnedInJetPt.png", "png")
+#canvasMuonJetPtRatio.Print("matchedMuonJetPtRatioDistributionBinnedInJetPt.png", "png")
+
+saveFile.Close()
