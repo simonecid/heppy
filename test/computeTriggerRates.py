@@ -11,6 +11,7 @@ from heppy.framework.services.tfile import TFileService
 from heppy.analyzers.triggerrates.RatePlotProducerPileUp import RatePlotProducerPileUp
 from heppy.analyzers.triggerrates.Histogrammer import Histogrammer
 from heppy.analyzers.triggerrates.LeadingQuantityHistogrammer import LeadingQuantityHistogrammer
+from heppy.analyzers.Selector import Selector
 import sys
 from heppy.framework.looper import Looper
 from heppy.test.mySamples import *
@@ -21,7 +22,7 @@ logging.basicConfig(level=logging.WARNING)
 
 # Retrieving the sample to analyse
 
-sampleName = "cmsMatching_SingleNeutrinoPU140_L1TMuon"
+sampleName = "cmsMatching_SingleNeutrinoPU140_LeadingL1TMuon_QualityCut8"
 
 #if specified in sample, a specific set will be used, otherwise the full set will be employed
 if "sample" in _heppyGlobalOptions:
@@ -66,6 +67,28 @@ tfile_service_1 = cfg.Service(
   option='recreate'
 )
 
+def barrelCut(ptc):
+  return abs(ptc.eta()) < 1.1
+
+def endcapCut(ptc):
+  return (abs(ptc.eta()) > 1.1 and abs(ptc.eta()) < 2.4)
+
+barrelSelector = cfg.Analyzer(
+  Selector,
+  'barrelSelector',
+  output = 'gen_objects_barrel',
+  input_objects = 'gen_objects',
+  filter_func = barrelCut 
+)
+
+endcapSelector = cfg.Analyzer(
+  Selector,
+  'endcapSelector',
+  output = 'gen_objects_endcap',
+  input_objects = 'gen_objects',
+  filter_func = endcapCut
+)
+
 triggerRate = cfg.Analyzer(
   RatePlotProducerPileUp,
   instance_label = 'triggerRate',
@@ -74,6 +97,32 @@ triggerRate = cfg.Analyzer(
   plot_title = 'Trigger rate',
   zerobias_rate = mySettings.bunchCrossingFrequency,
   input_objects = 'gen_objects',
+  bins = steps,
+  yscale = mySettings.yScale,
+  normalise = True
+)
+
+barrelTriggerRate = cfg.Analyzer(
+  RatePlotProducerPileUp,
+  instance_label = 'barrelTriggerRate',
+  file_label = 'ratePlotFile',
+  plot_name = 'barrelTriggerRate',
+  plot_title = 'abs(#eta) < 1.1 trigger rate',
+  zerobias_rate = mySettings.bunchCrossingFrequency,
+  input_objects = 'gen_objects_barrel',
+  bins = steps,
+  yscale = mySettings.yScale,
+  normalise = True
+)
+
+endcapTriggerRate = cfg.Analyzer(
+  RatePlotProducerPileUp,
+  instance_label = 'endcapTriggerRate',
+  file_label = 'ratePlotFile',
+  plot_name = 'endcapTriggerRate',
+  plot_title = '1.1 < abs(#eta) < 2.4 trigger rate',
+  zerobias_rate = mySettings.bunchCrossingFrequency,
+  input_objects = 'gen_objects_endcap',
   bins = steps,
   yscale = mySettings.yScale,
   normalise = True
@@ -117,6 +166,10 @@ leadingPtDistribution = cfg.Analyzer(
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
   source,
+  barrelSelector,
+  endcapSelector,
+  barrelTriggerRate,
+  endcapTriggerRate,
   triggerRate,
   ptDistribution,
   leadingPtDistribution
