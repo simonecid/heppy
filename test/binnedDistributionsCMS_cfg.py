@@ -11,6 +11,7 @@ from heppy.analyzers.Matcher import Matcher
 from heppy.analyzers.Selector import Selector
 from heppy.analyzers.triggerrates.MatchedParticlesTreeProducer import MatchedParticlesTreeProducer
 from heppy.analyzers.triggerrates.MatchedObjectBinnedDistributions import MatchedObjectBinnedDistributions
+from heppy.analyzers.triggerrates.MatchedObjectBinnedCumulativeDistributions import MatchedObjectBinnedCumulativeDistributions
 from heppy.analyzers.triggerrates.CMSMatchingReader import CMSMatchingReader
 from heppy.analyzers.triggerrates.ObjectFinder import ObjectFinder
 from heppy.analyzers.triggerrates.HistogrammerCumulative import HistogrammerCumulative
@@ -23,9 +24,10 @@ reload(logging)
 logging.basicConfig(level=logging.WARNING)
 
 #Object name
-objectName = "L1T EGamma"
-matchedObjectName = "Gen jet"
-sampleName = "l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_L11Obj_To_GenJet_Match_ClosestDR_L1TEGamma_GenJet"
+objectName = "L1T Muon"
+matchedObjectName = "Gen Muon"
+#sampleName = "l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_L11Obj_To_GenJet_Match_ClosestDR_L1TEGamma_GenJet"
+sampleName = "l1tMuonGenMuonMatching_SingleMu_FlatPt_8to100_QualityCut_WQualityBranch"
 
 # Retrieving the sample to analyse
 
@@ -85,19 +87,33 @@ def deltaR (ptc):
 def isMatched(ptc):
   return ptc.match is not None
 
+def qualityCut(ptc):
+  return ptc.quality >=8
+
+def quality(ptc):
+  return ptc.quality
+
 def dr2Selection(ptc):
   return abs(ptc.deltaR2) < 0.25 #dr < 0.5
+
+muonQualityCut = cfg.Analyzer(
+  Selector,
+  'muonQualityCut',
+  output = 'good_trigger_objects',
+  input_objects = 'trigger_objects',
+  filter_func = qualityCut
+)
 
 tightRestrictionMatchSelector = cfg.Analyzer(
   Selector,
   'tightRestrictionMatchSelector',
   output = 'matched_trigger_object',
-  input_objects = 'trigger_objects',
+  input_objects = 'good_trigger_objects',
   filter_func = dr2Selection 
 )
 
 #ptBins = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]
-ptBins = [0, 10, 20, 30, 40, 50, 60]
+ptBins = [0, 1.5, 3, 5, 8, 11, 15, 20, 30, 40, 50, 70, 100, 140, 200]
 
 #ptBins = []
 #for x in xrange(0, 130, 10):
@@ -119,6 +135,25 @@ objectPtDistributionBinnedInMatchedObject = cfg.Analyzer(
   log_y = False,
   x_label = "p_{t}^{" + objectName + "} [GeV]",
   y_label = "# events",
+)
+
+objectPtCumulativeDistributionBinnedInMatchedObject = cfg.Analyzer(
+  MatchedObjectBinnedCumulativeDistributions,
+  instance_label = 'objectPtCumulativeDistributionBinnedInMatchedObject',
+  histo_name = 'objectPtCumulativeDistributionBinnedInMatchedObject',
+  histo_title = 'p_{t}^{' + objectName + '} cumulative distribution binned in p^{' + matchedObjectName +'}_{t}',
+  matched_collection = 'matched_trigger_object',
+  binning = ptBins,
+  nbins = 200,
+  min = 0,
+  max = 100,
+  file_label = "tfile1",
+  plot_func = pt,
+  bin_func = pt,
+  log_y = False,
+  x_label = "p_{t}^{" + objectName + "} [GeV]",
+  y_label = "# events",
+  inverted = True
 )
 
 matchedObjectPtDistributionBinnedInMatchedObject = cfg.Analyzer(
@@ -153,7 +188,7 @@ deltaPtDistributionBinnedInMatchedObject = cfg.Analyzer(
   plot_func = deltaPt,
   bin_func = pt,
   log_y = False,
-  x_label = "p_{t}^{" + objectName + "} [GeV]",
+  x_label = "p_{t}^{" + objectName + "} - p_{t}^{match} [GeV]",
   y_label = "# events",
 )
 
@@ -226,6 +261,21 @@ objectPtDistribution = cfg.Analyzer(
   y_label = "\# events"
 )
 
+objectQualityDistribution = cfg.Analyzer(
+  Histogrammer,
+  'objectQualityDistribution',
+  file_label = 'tfile1',
+  histo_name = 'objectQualityDistribution',
+  histo_title = 'Quality^{' + objectName + '} distribution',
+  min = 0,
+  max = 20,
+  nbins = 20,
+  input_objects = 'matched_trigger_object',
+  value_func = quality,
+  x_label = "Quality^{" + objectName + "}",
+  y_label = "\# events"
+)
+
 matchedObjectPtDistribution = cfg.Analyzer(
   Histogrammer,
   'matchedObjectPtDistribution',
@@ -245,6 +295,7 @@ matchedObjectPtDistribution = cfg.Analyzer(
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
   source,
+  muonQualityCut,
   tightRestrictionMatchSelector,
   objectPtDistributionBinnedInMatchedObject,
   objectMatchedObjectPtRatioDistributionBinnedInMatchedObject,
@@ -252,8 +303,10 @@ sequence = cfg.Sequence( [
   deltaRDistributionBinnedInMatchedObject,
   deltaPtDistributionBinnedInMatchedObject,
   objectPtDistribution,
+  objectQualityDistribution,
   matchedObjectPtDistribution,
-  matchedObjectPtDistributionBinnedInMatchedObject
+  matchedObjectPtDistributionBinnedInMatchedObject,
+  objectPtCumulativeDistributionBinnedInMatchedObject,
 ] )
 
 config = cfg.Config(
