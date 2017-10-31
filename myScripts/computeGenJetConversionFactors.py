@@ -11,7 +11,7 @@ chainL1TEGammaGenJet.Add("/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1
 
 bins = []
 
-bins = [0, 5, 7, 9, 11, 13, 15, 18, 21, 24, 27, 30, 35, 40, 50, 60, 70, 80, 90, 100, 110, 120]
+bins = [3, 4, 5, 6, 7, 9, 11, 13, 15, 18, 21, 24, 27, 30, 35, 40, 50, 60, 70, 80, 90, 100, 110, 120]
 conversion_factors = []
 
 #for x in xrange(0, 120, 10):
