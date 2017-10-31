@@ -23,7 +23,7 @@ logging.basicConfig(level=logging.WARNING)
 
 #Object name
 triggerObjectName = "EGamma^{L1T}"
-sampleName = "l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_L11Obj_To_GenJet_Match_ClosestDR"
+sampleName = "l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_L11Obj_To_GenJet_Match_ClosestDR_L1TEGamma_GenJet"
 
 # Retrieving the sample to analyse
 
@@ -83,7 +83,7 @@ def isMatched(ptc):
 def dr2Selection(ptc):
   return abs(ptc.deltaR2) < 0.25
 
-genJetPtBins = [0, 5, 7, 9, 11, 13, 15, 18, 21, 24, 27, 30, 35, 40, 50, 60, 70, 80, 90, 100, 110, 120]
+genJetPtBins = [3, 4, 5, 6, 7, 9, 11, 13, 15, 18, 21, 24, 27, 30, 35, 40, 50, 60, 70, 80, 90, 100, 110, 120]
 
 tightRestrictionMatchSelector = cfg.Analyzer(
   Selector,
