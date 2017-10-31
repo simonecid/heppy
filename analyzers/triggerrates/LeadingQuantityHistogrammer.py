@@ -70,7 +70,7 @@ class LeadingQuantityHistogrammer(Analyzer):
        self.cfg_ana.trigger_func.
     '''
 
-    maximumKey = 0
+    maximumKey = float("-inf")
     maximumValue = 0
 
     input_collection = getattr(event, self.cfg_ana.input_objects)
@@ -85,7 +85,7 @@ class LeadingQuantityHistogrammer(Analyzer):
           maximumKey = self.cfg_ana.key_func(obj)
           maximumValue = self.cfg_ana.value_func(obj)
 
-    if maximumKey != 0:
+    if maximumKey > float("-inf"):
       self.histogram.Fill(maximumValue)
 
   def write(self, setup):
@@ -109,4 +109,4 @@ class LeadingQuantityHistogrammer(Analyzer):
       self.histogram.GetYaxis().SetTitle(self.cfg_ana.y_label)
     c1.Update()
     c1.Print("/".join([self.dirName, self.cfg_ana.histo_name + ".svg"]), "svg")
-    c1.Print("/".join([self.dirName, self.cfg_ana.histo_name + ".C"]), "cxx")
+    c1.Print("/".join([self.dirName, self.cfg_ana.histo_name + ".root"]), "root")
