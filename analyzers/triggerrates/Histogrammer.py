@@ -5,6 +5,7 @@ from ROOT import TH1F
 import collections
 from ROOT import TCanvas
 from ROOT import TFile
+from array import array
 
 class Histogrammer(Analyzer):
   '''Generic histogrammer that takes a particle type and quantity and plots it.
@@ -29,6 +30,20 @@ class Histogrammer(Analyzer):
       min = 0,
       max = 300,
       nbins = 100,
+      input_objects = 'jets',
+      value_func = pt,
+      x_label = "pt [GeV]",
+      y_label = "\# events"
+    )
+
+    --- OR ---
+
+    histogrammer = cfg.Analyzer(
+      Histogrammer,
+      file_label = 'tfile1',
+      histo_name = 'jetPtDistribution',
+      histo_title = 'Jet transverse momentum distribution',
+      bins = [0, 10, 20, 30, 50, 100],
       input_objects = 'jets',
       value_func = pt,
       x_label = "pt [GeV]",
@@ -62,7 +77,12 @@ class Histogrammer(Analyzer):
                                       self.cfg_ana.histo_name + '.root']),
                             'recreate')
       
-    self.histogram = TH1F(self.cfg_ana.histo_name, self.cfg_ana.histo_title, self.cfg_ana.nbins, self.cfg_ana.min, self.cfg_ana.max)
+    bins = getattr(self.cfg_ana, "bins", None)
+    if bins is None:
+      self.histogram = TH1F(self.cfg_ana.histo_name, self.cfg_ana.histo_title, self.cfg_ana.nbins, self.cfg_ana.min, self.cfg_ana.max)
+    else: 
+      binsArray = array("f", bins)
+      self.histogram = TH1F(self.cfg_ana.histo_name, self.cfg_ana.histo_title, len(binsArray)-1, binsArray)
       
   def process(self, event):
     '''event must contain
@@ -103,5 +123,6 @@ class Histogrammer(Analyzer):
       self.histogram.GetYaxis().SetTitle(self.cfg_ana.y_label)
     c1.Update()
     c1.Print("/".join([self.dirName, self.cfg_ana.histo_name + ".svg"]), "svg")
-    c1.Print("/".join([self.dirName, self.cfg_ana.histo_name + ".C"]), "cxx")
+    c1.Print("/".join([self.dirName, self.cfg_ana.histo_name + ".png"]), "png")
+    c1.Print("/".join([self.dirName, self.cfg_ana.histo_name + ".root"]), "root")
     
