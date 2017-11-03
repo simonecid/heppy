@@ -163,11 +163,12 @@ class RatePlotProducer(Analyzer):
 
   def write(self, setup):
 
-    #Rescaling to corresponding rate    
-    expected_rate = self.cfg_ana.instantaneous_luminosity * 1e-27 * self.cfg_ana.cross_section
-    normalisation = expected_rate/self.numberOfEvents
-    #Rescaling everything to have rates
-    self.histogram.Scale(normalisation)
+    #Rescaling to corresponding rate
+    if getattr(self.cfg_ana, "normalise", False):
+      expected_rate = self.cfg_ana.instantaneous_luminosity * 1e-27 * self.cfg_ana.cross_section
+      normalisation = expected_rate/self.numberOfEvents
+      #Rescaling everything to have rates
+      self.histogram.Scale(normalisation)
 
     if hasattr(self.cfg_ana, "scale_factors"):
       for x in xrange(0, len(self.cfg_ana.scale_factors)):
@@ -215,5 +216,7 @@ class RatePlotProducer(Analyzer):
     c1.Update()
     c1.Write()
     c1.Print(self.cfg_ana.plot_name + ".svg", "svg")
+
+    self.histogram.Write()
 
     #self.rootfile.Close()
