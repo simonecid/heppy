@@ -43,6 +43,8 @@ if "binning" in _heppyGlobalOptions:
 #if specified in sample, a specific set will be used, otherwise the full set will be employed
 if "sample" in _heppyGlobalOptions:
   sampleName = _heppyGlobalOptions["sample"]
+  moduleName = _heppyGlobalOptions["sampleModule"]
+
 if "convolutionFileName" in _heppyGlobalOptions:
   convolutionFileName = _heppyGlobalOptions["convolutionFileName"]
 
@@ -53,7 +55,7 @@ else:
   probabilityFile = ""
   probabilityHistogram = ""
 
-sample = getattr(import_module("heppy.samples.sample_NeutrinoGun_NoTau_13TeV_DelphesCMS_JetPTMin_5"), sampleName)
+sample = getattr(import_module("heppy.samples." + moduleName), sampleName)
 selectedComponents = [
   sample
 ]
@@ -79,7 +81,7 @@ source = cfg.Analyzer(
   #electrons = 'electrons',
   #electronITags = 'electronITags',
 
-  muons = 'muons',
+  muons = 'genMuons',
   #muonITags = 'muonITags',
 
   #photons = 'photons',
@@ -117,12 +119,12 @@ def muonInDetector(ptc):
     return (ptc.pt() > muonMinimumPtInEndcap)
   
 
-lowPtMuonSelector = cfg.Analyzer(
+goodMuonSelector = cfg.Analyzer(
   Selector,
-  'lowPtMuonSelector',
+  'goodMuonSelector',
   output = 'good_muons',
   input_objects = 'muons',
-  filter_func = muonInDetector 
+  filter_func = genMuonInDetector 
 )
 
 muonSmearer = cfg.Analyzer(
@@ -281,7 +283,7 @@ endcapMuonRate = cfg.Analyzer(
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
   source,
-  lowPtMuonSelector,
+  goodMuonSelector,
   muonSmearer,
   smearedSelector,
   leadingPtMuonFinder,
