@@ -8,7 +8,7 @@ from heppy.analyzers.fcc.Reader import Reader
 from ROOT import gSystem
 from EventStore import EventStore as Events
 from heppy.framework.services.tfile import TFileService
-from heppy.analyzers.triggerrates.RatePlotProducerPileUp import RatePlotProducerPileUp
+from heppy.analyzers.triggerrates.RatePlotProducer import RatePlotProducer
 from heppy.analyzers.triggerrates.MatchedParticlesTreeProducer import MatchedParticlesTreeProducer
 import sys
 from heppy.framework.looper import Looper
@@ -53,7 +53,13 @@ else:
   probabilityFile = ""
   probabilityHistogram = ""
 
-sample = getattr(import_module("heppy.samples.sample_NeutrinoGun_NoTau_13TeV_DelphesCMS_JetPTMin_5"), sampleName)
+sample = getattr(import_module("heppy.samples.sample_NeutrinoGun_NoTau_13TeV_DelphesCMS_JetPTMin_5"), sampleName, None)
+if sample is None:
+  sample = getattr(import_module("heppy.samples.mySamples"), sampleName, None)
+
+if sample is None:
+  raise Exception("ERROR: You have selected a non-declared sample, exiting script.")
+
 selectedComponents = [
   sample
 ]
@@ -155,27 +161,27 @@ tfile_service_1 = cfg.Service(
 )
 
 l1tMuonRate = cfg.Analyzer(
-  RatePlotProducerPileUp,
+  RatePlotProducer,
   instance_label = 'l1tMuonRate',
   file_label = 'ratePlotFile',
   plot_name = 'simL1TMuonTriggerRate',
   plot_title = 'Muon trigger rate',
-  zerobias_rate = mySettings.bunchCrossingFrequency,
   input_objects = 'l1tMuons',
   bins = steps,
+  pileup = 140,
   yscale = mySettings.yScale,
   normalise = False
 )
 
 muonRate = cfg.Analyzer(
-  RatePlotProducerPileUp,
+  RatePlotProducer,
   instance_label = 'muonRate',
   file_label = 'ratePlotFile',
   plot_name = 'muonTriggerRate',
   plot_title = 'Muon trigger rate',
-  zerobias_rate = mySettings.bunchCrossingFrequency,
   input_objects = 'good_muons',
   bins = steps,
+  pileup = 140,
   yscale = mySettings.yScale,
   normalise = False
 )
@@ -184,11 +190,11 @@ def pt (ptc):
   return ptc.pt()
 
 
-muonLeadingPtDistribution = cfg.Analyzer(
+simL1TMuonLeadingPtDistribution = cfg.Analyzer(
   LeadingQuantityHistogrammer,
-  instance_label = 'muonLeadingPtDistribution',
+  instance_label = 'simL1TMuonLeadingPtDistribution',
   file_label = 'ratePlotFile',
-  histo_name = 'muonLeadingPtDistribution',
+  histo_name = 'simL1TMuonLeadingPtDistribution',
   histo_title = 'Muon leading transverse momentum distribution',
   min = 0,
   max = 50,
@@ -252,20 +258,20 @@ smearedSelector = cfg.Analyzer(
 )
 
 barrelMuonRate = cfg.Analyzer(
-  RatePlotProducerPileUp,
+  RatePlotProducer,
   instance_label = 'barrelMuonRate',
   file_label = 'ratePlotFile',
   plot_name = 'barrelMuonRate',
   plot_title = 'abs(#eta) < 1.1 trigger rate',
-  zerobias_rate = mySettings.bunchCrossingFrequency,
   input_objects = 'leading_muon_barrel',
   bins = steps,
+  pileup = 140,
   yscale = mySettings.yScale,
   normalise = False
 )
 
 endcapMuonRate = cfg.Analyzer(
-  RatePlotProducerPileUp,
+  RatePlotProducer,
   instance_label = 'endcapMuonRate',
   file_label = 'ratePlotFile',
   plot_name = 'endcapMuonRate',
@@ -273,6 +279,7 @@ endcapMuonRate = cfg.Analyzer(
   zerobias_rate = mySettings.bunchCrossingFrequency,
   input_objects = 'leading_muon_endcap',
   bins = steps,
+  pileup = 140,
   yscale = mySettings.yScale,
   normalise = False
 )
@@ -287,7 +294,7 @@ sequence = cfg.Sequence( [
   leadingPtMuonFinder,
   barrelSelector,
   endcapSelector,
-  muonLeadingPtDistribution,
+  simL1TMuonLeadingPtDistribution,
   muonSimL1TMuonTree,
   l1tMuonRate,
   muonRate,
