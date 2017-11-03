@@ -16,35 +16,7 @@ chiSquaredWarningThreshold = 1
 
 '''List of files containing the plots to compare'''
 
-if __name__ == "__main__":
 
-  cfg = lambda x: 1
-  cfg.plots = [
-    #Files here
-    # ["MinBiasDistribution_13TeV_DelphesCMS_CMSJets_GenJetPTDistribution/genJetPtDistribution_Normalised.root", "ptSimL1TMuonDistribution", "MinBias"],
-    #["_closureTest/l1tMuonGenMuonMatching_SingleMu_FlatPt_8to100_QualityCut_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtSimL1TMuonDistribution", "SimL1TMuon"],
-    ["_closureTest/l1tMuonGenMuonMatching_QCD_15_3000_NoPU_Phase1_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtSimL1TMuonDistribution", "SimL1TMuon"],
-    #["_closureTest/l1tMuonGenMuonMatching_SingleMu_FlatPt_8to100_QualityCut_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtL1TMuonDistribution", "Original L1TMuon"],
-    ["_closureTest/l1tMuonGenMuonMatching_QCD_15_3000_NoPU_Phase1_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtL1TMuonDistribution", "Original L1TMuon"],
-  ]
-  cfg.saveFileName = "comparisonResult.root"
-
-  plotDistributionComparisonPlot(filesAndDistributionNames)
-
-# Old conf. kept because handy for copypasting
-# filesAndDistributionNames = {
-#  #Files here
-#  #"_muonTriggerRates/cmsMatching_SingleNeutrinoPU140_L1TMuon/ratePlots.root": "triggerRate",
-#  #"_muonTriggerRates/NeutrinoGun_MuonTriggerRate_Binning_Set_3_PtCut_1.5GeV/ratePlot_Normalised.root": "muonTriggerRate",
-#  #"_muonTriggerRates/NeutrinoGun_MuonTriggerRate_Binning_Set_1/NeutrinoGunPU140_MuonTriggerRate_Normalised.root": "muonTriggerRate",
-#  #"_muonTriggerRates/NeutrinoGun_MuonTriggerRate_Binning_Set_2/NeutrinoGunPU140_MuonTriggerRate_Normalised.root": "muonTriggerRate",
-#  #"_muonTriggerRates/NeutrinoGun_MuonTriggerRate_Binning_Set_3/NeutrinoGunPU140_MuonTriggerRate_Normalised.root": "muonTriggerRate",
-#  #"_muonTriggerRates/NeutrinoGun_MuonTriggerRate_Binning_Wrong_Set/NeutrinoGunPU140_MuonTriggerRate_Normalised.root": "muonTriggerRate",
-#  #"_closureTest/GenMuonDistribution/histograms.root": "ptGenMuonDistribution",
-#  #"_closureTest/NeutrinoGun_13TeV_PU140_DelphesCMS_MuonPtDistribution/NeutrinoGun13TeV_PU140_MuonPtDistribution_Normalised.root": "ptDelphesMuonDistribution",
-#  "_closureTest/L1TMuonDistribution/histograms.root": "coarseBinnedPtL1TMuonDistribution",
-#  "_closureTest/SimL1TMuonDistribution_Binning_Set_3_HighStatistics_v2/histograms.root": "coarseBinnedPtSimL1TMuonDistribution",
-#}
 
 # From here on it works by magic, and I am the magician :P
 
@@ -189,3 +161,32 @@ def plotDistributionComparisonPlot(cfg):
   for tfile in tfiles:
     tfile.Close()
 
+if __name__ == "__main__":
+
+  cfg = lambda x: 1
+  cfg.plots = [
+    #Files here
+    # ["MinBiasDistribution_13TeV_DelphesCMS_CMSJets_GenJetPTDistribution/genJetPtDistribution_Normalised.root", "ptSimL1TMuonDistribution", "MinBias"],
+    #["_closureTest/l1tMuonGenMuonMatching_SingleMu_FlatPt_8to100_QualityCut_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtSimL1TMuonDistribution", "SimL1TMuon"],
+    ["_muonTriggerRate_BarrelCut5.5_EndcapCut1.5_Iteration2/rateClosureTestMinBias.root", "simL1TMuonTriggerRate", "MB rate"],
+    #["_closureTest/l1tMuonGenMuonMatching_SingleMu_FlatPt_8to100_QualityCut_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtL1TMuonDistribution", "Original L1TMuon"],
+    ["_muonTriggerRate_BarrelCut5.5_EndcapCut1.5_Iteration2/rateClosureTest.root", "simL1TMuonTriggerRate", "PU140"],
+  ]
+  cfg.saveFileName = "comparisonResult.root"
+
+  plotDistributionComparisonPlot(cfg)
+
+# Old conf. kept because handy for copypasting
+# filesAndDistributionNames = {
+#  #Files here
+#  #"_muonTriggerRates/cmsMatching_SingleNeutrinoPU140_L1TMuon/ratePlots.root": "triggerRate",
+#  #"_muonTriggerRates/NeutrinoGun_MuonTriggerRate_Binning_Set_3_PtCut_1.5GeV/ratePlot_Normalised.root": "muonTriggerRate",
+#  #"_muonTriggerRates/NeutrinoGun_MuonTriggerRate_Binning_Set_1/NeutrinoGunPU140_MuonTriggerRate_Normalised.root": "muonTriggerRate",
+#  #"_muonTriggerRates/NeutrinoGun_MuonTriggerRate_Binning_Set_2/NeutrinoGunPU140_MuonTriggerRate_Normalised.root": "muonTriggerRate",
+#  #"_muonTriggerRates/NeutrinoGun_MuonTriggerRate_Binning_Set_3/NeutrinoGunPU140_MuonTriggerRate_Normalised.root": "muonTriggerRate",
+#  #"_muonTriggerRates/NeutrinoGun_MuonTriggerRate_Binning_Wrong_Set/NeutrinoGunPU140_MuonTriggerRate_Normalised.root": "muonTriggerRate",
+#  #"_closureTest/GenMuonDistribution/histograms.root": "ptGenMuonDistribution",
+#  #"_closureTest/NeutrinoGun_13TeV_PU140_DelphesCMS_MuonPtDistribution/NeutrinoGun13TeV_PU140_MuonPtDistribution_Normalised.root": "ptDelphesMuonDistribution",
+#  "_closureTest/L1TMuonDistribution/histograms.root": "coarseBinnedPtL1TMuonDistribution",
+#  "_closureTest/SimL1TMuonDistribution_Binning_Set_3_HighStatistics_v2/histograms.root": "coarseBinnedPtSimL1TMuonDistribution",
+#}
