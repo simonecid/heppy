@@ -1,7 +1,7 @@
 import heppy.framework.config as cfg
 
 NeutrinoGun_13TeV_GenParticles_50kevents = cfg.Component(
-  'NeutrinoGun_NoTau_13TeV_DelphesCMS_JetPTMin_5_50kevents',
+  'NeutrinoGun_13TeV_GenParticles_50kevents',
   files = [
     "/hdfs/FCC-hh/NeutrinoGun_PU140_13TeV_OnlyGenParticleClassification_JetPTMin_3/events_NeutrinoGun_PU140_NoTau_100events_13TeV_DelphesCMS_OnlyGenParticleClassification_PU140_2985125.0.root",
     "/hdfs/FCC-hh/NeutrinoGun_PU140_13TeV_OnlyGenParticleClassification_JetPTMin_3/events_NeutrinoGun_PU140_NoTau_100events_13TeV_DelphesCMS_OnlyGenParticleClassification_PU140_2985125.100.root",
