@@ -3,7 +3,7 @@
 import os
 import copy
 import heppy.framework.config as cfg
-from heppy.test.mySamples import *
+from heppy.samples.mySamples import *
 import logging
 from heppy.analyzers.Selector import Selector
 from heppy.analyzers.fcc.Reader import Reader
@@ -30,11 +30,17 @@ logging.basicConfig(level=logging.WARNING)
 
 # Retrieving the sample to analyse
 
-sampleName = _heppyGlobalOptions["sample"]
-sample = globals()[sampleName]
+
+#sampleName = _heppyGlobalOptions["sample"]
+#sample = globals()[sampleName]
+
+test_classification = cfg.MCComponent(
+  'test_classification_1kevents',
+  files = ["../FCCSW/test_classification_1kevents.root"]
+)
 
 selectedComponents = [
-  sample
+  test_classification
 ]
 
 # Defining pdgids
@@ -50,23 +56,16 @@ source = cfg.Analyzer(
   Reader,
 
   gen_particles = 'skimmedGenParticles',
-  #gen_vertices = 'genVertices',
 
   gen_jets = 'genJets',
+  jets = 'genJets',
 
-  jets = 'jets',
-  #bTags = 'bTags',
-  #cTags = 'cTags',
-  #tauTags = 'tauTags',
+  electrons = 'genElectrons',
 
-  electrons = 'electrons',
-  electronITags = 'electronITags',
+  muons = 'genMuons',
 
-  muons = 'muons',
-  muonITags = 'muonITags',
-
-  photons = 'photons',
-  met = 'met',
+  photons = 'genPhotons',
+  met = 'genMET',
 )
 
 '''
@@ -102,8 +101,10 @@ def eta (ptc):
 
 # Restricting gen particles and jets in the abs(eta) < 6 region
 
+#def etaRestrictor(ptc):
+#  return abs(ptc.eta()) < 6
 def etaRestrictor(ptc):
-  return abs(ptc.eta()) < 6
+  return True
 
 etaGenParticleSelector = cfg.Analyzer(
     Selector,
@@ -136,7 +137,7 @@ electronRecoPtDistribution = cfg.Analyzer(
   histo_title = 'Electron transverse momentum distribution (reco level)',
   min = 0,
   max = 2000,
-  nbins = 400,
+  nbins = 4000,
   input_objects = 'electrons',
   value_func = pt,
   log_y = True
@@ -153,7 +154,7 @@ electronLeadingRecoPtDistribution = cfg.Analyzer(
   histo_title = 'Electron leading transverse momentum distribution (reco level)',
   min = 0,
   max = 2000,
-  nbins = 400,
+  nbins = 4000,
   input_objects = 'electrons',
   key_func = pt,
   value_func = pt,
@@ -187,7 +188,7 @@ electronSubLeadingRecoPtDistribution = cfg.Analyzer(
   histo_title = 'Electron sub-leading transverse momentum distribution (reco level)',
   min = 0,
   max = 2000,
-  nbins = 400,
+  nbins = 4000,
   input_objects = 'electrons',
   key_func = pt,
   value_func = pt,
@@ -245,7 +246,7 @@ electronGenPtDistribution = cfg.Analyzer(
   histo_title = 'Electron transverse momentum distribution (gen level)',
   min = 0,
   max = 2000,
-  nbins = 400,
+  nbins = 4000,
   input_objects = 'gen_electrons',
   value_func = pt,
   log_y = True
@@ -265,7 +266,7 @@ muonRecoPtDistribution = cfg.Analyzer(
   histo_title = 'Muon transverse momentum distribution (reco level)',
   min = 0,
   max = 2000,
-  nbins = 400,
+  nbins = 4000,
   input_objects = 'muons',
   value_func = pt,
   log_y = True
@@ -281,7 +282,7 @@ muonLeadingRecoPtDistribution = cfg.Analyzer(
   histo_title = 'Muon leading transverse momentum distribution (reco level)',
   min = 0,
   max = 2000,
-  nbins = 400,
+  nbins = 4000,
   input_objects = 'muons',
   key_func = pt,
   value_func = pt,
@@ -315,7 +316,7 @@ muonSubLeadingRecoPtDistribution = cfg.Analyzer(
   histo_title = 'Muon sub-leading transverse momentum distribution (reco level)',
   min = 0,
   max = 2000,
-  nbins = 400,
+  nbins = 4000,
   input_objects = 'muons',
   key_func = pt,
   value_func = pt,
@@ -373,7 +374,7 @@ muonGenPtDistribution = cfg.Analyzer(
   histo_title = 'Muon transverse momentum distribution (gen level)',
   min = 0,
   max = 2000,
-  nbins = 400,
+  nbins = 4000,
   input_objects = 'gen_muons',
   value_func = pt,
   log_y = True
@@ -399,7 +400,7 @@ tauGenPtDistribution = cfg.Analyzer(
   histo_title = 'Tau transverse momentum distribution (gen level)',
   min = 0,
   max = 2000,
-  nbins = 400,
+  nbins = 4000,
   input_objects = 'gen_taus',
   value_func = pt,
   log_y = True
@@ -419,7 +420,7 @@ photonRecoPtDistribution = cfg.Analyzer(
   histo_title = 'Photon transverse momentum distribution (reco level)',
   min = 0,
   max = 2000,
-  nbins = 400,
+  nbins = 4000,
   input_objects = 'photons',
   value_func = pt,
   log_y = True
@@ -435,7 +436,7 @@ photonLeadingRecoPtDistribution = cfg.Analyzer(
   histo_title = 'Photon leading transverse momentum distribution (reco level)',
   min = 0,
   max = 2000,
-  nbins = 400,
+  nbins = 4000,
   input_objects = 'photons',
   key_func = pt,
   value_func = pt,
@@ -469,7 +470,7 @@ photonSubLeadingRecoPtDistribution = cfg.Analyzer(
   histo_title = 'Photon sub-leading transverse momentum distribution (reco level)',
   min = 0,
   max = 2000,
-  nbins = 400,
+  nbins = 4000,
   input_objects = 'photons',
   key_func = pt,
   value_func = pt,
@@ -527,7 +528,7 @@ photonGenPtDistribution = cfg.Analyzer(
   histo_title = 'Photon transverse momentum distribution (gen level)',
   min = 0,
   max = 2000,
-  nbins = 400,
+  nbins = 4000,
   input_objects = 'gen_photons',
   value_func = pt,
   log_y = True
@@ -547,7 +548,7 @@ jetRecoPtDistribution = cfg.Analyzer(
   histo_title = 'Jet transverse momentum distribution (reco level)',
   min = 0,
   max = 2000,
-  nbins = 400,
+  nbins = 4000,
   input_objects = 'jets',
   value_func = pt,
   log_y = True
@@ -563,7 +564,7 @@ jetLeadingRecoPtDistribution = cfg.Analyzer(
   histo_title = 'Jet leading transverse momentum distribution (reco level)',
   min = 0,
   max = 2000,
-  nbins = 400,
+  nbins = 4000,
   input_objects = 'jets',
   key_func = pt,
   value_func = pt,
@@ -597,7 +598,7 @@ jetSubLeadingRecoPtDistribution = cfg.Analyzer(
   histo_title = 'Jet sub-leading transverse momentum distribution (reco level)',
   min = 0,
   max = 2000,
-  nbins = 400,
+  nbins = 4000,
   input_objects = 'jets',
   key_func = pt,
   value_func = pt,
@@ -647,7 +648,7 @@ jetGenPtDistribution = cfg.Analyzer(
   histo_title = 'Jet transverse momentum distribution (gen level)',
   min = 0,
   max = 2000,
-  nbins = 400,
+  nbins = 4000,
   input_objects = 'gen_jets_eta_restricted',
   value_func = pt,
   log_y = True
