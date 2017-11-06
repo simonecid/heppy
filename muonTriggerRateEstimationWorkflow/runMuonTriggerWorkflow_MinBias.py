@@ -31,8 +31,13 @@ sample_BinnedDistributions_lowPt = "l1tMuonGenMuonMatching_QCD_15_3000_NoPU_Phas
 sample_ClosureTest1 = "l1tMuonGenMuonMatching_QCD_15_3000_NoPU_Phase1_WQualityBranch"
 sample_ClosureTest2 = "l1tMuonGenMuonMatching_QCD_15_3000_NoPU_Phase1_WQualityBranch_GenMuons"
 sample_ClosureTest3 = "cmsMatching_SingleNeutrinoPU140_LeadingL1TMuon_QualityCut8"
-instantaneousLuminosity = 5e34 #cm^-2 s^-1
-minBiasCrossSection = 56.79 # mb, from Pythia
+averagePileUp = 140
+bunchCrossingFrequency = 31.6e6 # 2808 bunches
+
+#instantaneousLuminosity = 5e34 #cm^-2 s^-1
+#minBiasCrossSection = 56.79 # mb, from Pythia
+interactionFrequency = averagePileUp * bunchCrossingFrequency
+
 
 
 ###################################################################################################
@@ -148,55 +153,100 @@ minBiasCrossSection = 56.79 # mb, from Pythia
 #
 #efficiencyFactorsFile.Close()
 #
-print "--- APPLYING CONVOLUTION TO EVENT SAMPLE TO COMPUTE RATES ---"
+#print "--- APPLYING CONVOLUTION TO EVENT SAMPLE TO COMPUTE RATES ---"
+#
+#print "CREATING THE NON-NORMALISED PLOTS"
+#
+#parser = create_parser()
+#(options,args) = parser.parse_args()
+#folderAndScriptName = [saveFolder, "muonTriggerRateEstimationWorkflow/muonTriggerRateMinBias_cfg.py"]
+#convolutionFileName = "" + saveFolder + "/binnedDistributions.root"
+#options.extraOptions.append("sample=" + sampleRateEstimation)
+#options.extraOptions.append("convolutionFileName=" + convolutionFileName)
+#options.extraOptions.append("binning=" + binning)
+#options.extraOptions.append("probabilityFile=" + "" + saveFolder + "/efficiencyFactors.root")
+#options.extraOptions.append("probabilityHistogram=" + "efficiencyHistogram")
+#options.extraOptions.append("detectorEta=" + str(detectorEta))
+#options.extraOptions.append("minimumPtInBarrel=" + str(minimumPtToReachBarrelMuonChamber))
+#options.extraOptions.append("minimumPtInEndcap=" + str(minimumPtToReachEndcapMuonChamber))
+#options.extraOptions.append("barrelEta=" + str(barrelEta))
+##options.nevents=100
+#loop = main(options, folderAndScriptName, parser)
+##os.system("hadd -f " + saveFolder + "/" + sampleRateEstimation + "_RatePlots_NotNormalised.root " + saveFolder + "/" + sampleRateEstimation + "_Chunk*/ratePlots.root")
+#os.system("mv " + saveFolder + "/" + sampleRateEstimation + "/ratePlots.root " + saveFolder + "/" + sampleRateEstimation + "_RatePlots_NotNormalised.root")
+#
+#print "OBTAINING THE RATE IN THE LINEAR SCALING APPROXIMATION"
+#
+#nonNormalisedRatePlotFile = TFile("" + saveFolder + "/" + sampleRateEstimation + "_RatePlots_NotNormalised.root")
+#totalRateHist = nonNormalisedRatePlotFile.Get("simL1TMuonTriggerRate")
+#barrelRateHist = nonNormalisedRatePlotFile.Get("barrelMuonRate")
+#endcapRateHist = nonNormalisedRatePlotFile.Get("endcapMuonRate")
+#
+#totalRateHist.Scale(interactionFrequency/numberOfDelphesEvents)
+#barrelRateHist.Scale(interactionFrequency/numberOfDelphesEvents)
+#endcapRateHist.Scale(interactionFrequency/numberOfDelphesEvents)
+#
+#totalRateHist.GetXaxis().SetTitle("p_{t}")
+#totalRateHist.GetXaxis().SetRangeUser(5, 50)
+#totalRateHist.GetYaxis().SetTitle("Rate [Hz]")
+#barrelRateHist.GetXaxis().SetTitle("p_{t}")
+#barrelRateHist.GetXaxis().SetRangeUser(5, 50)
+#barrelRateHist.GetYaxis().SetTitle("Rate [Hz]")
+#endcapRateHist.GetXaxis().SetTitle("p_{t}")
+#endcapRateHist.GetXaxis().SetRangeUser(5, 50)
+#endcapRateHist.GetYaxis().SetTitle("Rate [Hz]")
+#
+#normalisedRatePlotFile = TFile("" + saveFolder + "/" + sampleRateEstimation + "_RatePlots_Normalised.root", "RECREATE")
+#normalisedRatePlotFile.cd()
+#totalRateHist.Write()
+#barrelRateHist.Write()
+#endcapRateHist.Write()
+#normalisedRatePlotFile.Close()
+#nonNormalisedRatePlotFile.Close()
 
-print "CREATING THE NON-NORMALISED PLOTS"
-
-parser = create_parser()
-(options,args) = parser.parse_args()
-folderAndScriptName = [saveFolder, "muonTriggerRateEstimationWorkflow/muonTriggerRateMinBias_cfg.py"]
-convolutionFileName = "" + saveFolder + "/binnedDistributions.root"
-options.extraOptions.append("sample=" + sampleRateEstimation)
-options.extraOptions.append("convolutionFileName=" + convolutionFileName)
-options.extraOptions.append("binning=" + binning)
-options.extraOptions.append("probabilityFile=" + "" + saveFolder + "/efficiencyFactors.root")
-options.extraOptions.append("probabilityHistogram=" + "efficiencyHistogram")
-options.extraOptions.append("detectorEta=" + str(detectorEta))
-options.extraOptions.append("minimumPtInBarrel=" + str(minimumPtToReachBarrelMuonChamber))
-options.extraOptions.append("minimumPtInEndcap=" + str(minimumPtToReachEndcapMuonChamber))
-options.extraOptions.append("barrelEta=" + str(barrelEta))
-#options.nevents=100
-loop = main(options, folderAndScriptName, parser)
-#os.system("hadd -f " + saveFolder + "/" + sampleRateEstimation + "_RatePlots_NotNormalised.root " + saveFolder + "/" + sampleRateEstimation + "_Chunk*/ratePlots.root")
-os.system("mv " + saveFolder + "/" + sampleRateEstimation + "/ratePlots.root " + saveFolder + "/" + sampleRateEstimation + "_RatePlots_NotNormalised.root")
-print "NORMALISING THE PLOTS"
+print "NORMALISING THE RATE PLOT TO OBTAIN THE TRIGGER PASS PROBABILITY FOR MINBIAS AND PU140 EVENTS"
 
 nonNormalisedRatePlotFile = TFile("" + saveFolder + "/" + sampleRateEstimation + "_RatePlots_NotNormalised.root")
+passProbabilityFile = TFile("" + saveFolder + "/" + sampleRateEstimation + "_RatePlots_TriggerPassProbability.root", "RECREATE")
 totalRateHist = nonNormalisedRatePlotFile.Get("simL1TMuonTriggerRate")
-barrelRateHist = nonNormalisedRatePlotFile.Get("barrelMuonRate")
-endcapRateHist = nonNormalisedRatePlotFile.Get("endcapMuonRate")
+ppPassProbabilityHistogram = totalRateHist.Clone("ppPassProbabilityHistogram")
+ppPassProbabilityHistogram.Scale(1/numberOfDelphesEvents)
+passProbabilityFile.cd()
+eventPassProbabilityHistogram = ppPassProbabilityHistogram.Clone("eventPassProbabilityHistogram")
 
-totalRateHist.Scale(instantaneousLuminosity * 1e-27 * minBiasCrossSection/numberOfDelphesEvents)
-barrelRateHist.Scale(instantaneousLuminosity * 1e-27 * minBiasCrossSection/numberOfDelphesEvents)
-endcapRateHist.Scale(instantaneousLuminosity * 1e-27 * minBiasCrossSection/numberOfDelphesEvents)
+for x in xrange(1, eventPassProbabilityHistogram.GetNbinsX()+1):
+  ppPassProbability = ppPassProbabilityHistogram.GetBinContent(x)
+  eventPassProbability = 1 - (1 - ppPassProbability)**averagePileUp
+  eventPassProbabilityHistogram.SetBinContent(x, eventPassProbability)
 
-totalRateHist.GetXaxis().SetTitle("p_{t}")
-totalRateHist.GetXaxis().SetRangeUser(5, 50)
-totalRateHist.GetYaxis().SetTitle("Rate [Hz]")
-barrelRateHist.GetXaxis().SetTitle("p_{t}")
-barrelRateHist.GetXaxis().SetRangeUser(5, 50)
-barrelRateHist.GetYaxis().SetTitle("Rate [Hz]")
-endcapRateHist.GetXaxis().SetTitle("p_{t}")
-endcapRateHist.GetXaxis().SetRangeUser(5, 50)
-endcapRateHist.GetYaxis().SetTitle("Rate [Hz]")
+probabilityRatioHistogram = eventPassProbabilityHistogram.Clone("probabilityRatioHistogram")
+probabilityRatioHistogram.Divide(ppPassProbabilityHistogram)
 
-normalisedRatePlotFile = TFile("" + saveFolder + "/" + sampleRateEstimation + "_RatePlots_Normalised.root", "RECREATE")
-normalisedRatePlotFile.cd()
-totalRateHist.Write()
-barrelRateHist.Write()
-endcapRateHist.Write()
-normalisedRatePlotFile.Close()
+probabilityRatioHistogram.Write()
+ppPassProbabilityHistogram.Write()
+eventPassProbabilityHistogram.Write()
+
 nonNormalisedRatePlotFile.Close()
+passProbabilityFile.Close()
+
+print "COMPUTING THE TRIGGER PASS PROBABIITY IN LINEAR SCALING APPROXIMATION AND WITH FULL FORMULA"
+
+passProbabilityFile = TFile("" + saveFolder + "/" + sampleRateEstimation + "_RatePlots_TriggerPassProbability.root")
+ppPassProbabilityHistogram = passProbabilityFile.Get("ppPassProbabilityHistogram")
+eventPassProbabilityHistogram = passProbabilityFile.Get("eventPassProbabilityHistogram")
+
+linearPURatePlot = ppPassProbabilityHistogram.Clone("linearPURatePlot")
+fullPURatePlot = ppPassProbabilityHistogram.Clone("fullPURatePlot")
+
+linearPURatePlot.Scale(interactionFrequency)
+fullPURatePlot.Scale(bunchCrossingFrequency)
+
+pileupRatePlotFile = TFile("" + saveFolder + "/" + sampleRateEstimation + "_RatePlots_PU" + str(averagePileUp) + "RatePlot.root", "RECREATE")
+pileupRatePlotFile.cd()
+linearPURatePlot.Write()
+fullPURatePlot.Write()
+
+pileupRatePlotFile.Close()
 
 #print "--- RUNNING THE CLOSURE TESTS ---"
 #
@@ -299,13 +349,13 @@ nonNormalisedRatePlotFile.Close()
 #endcapRateHist.Write()
 #cmsRatePlotFile.Close()
 #
-print "CREATING RATIO PLOT FOR CMS VS DELPHES RATE"
-
-cfg = lambda x: 1
-cfg.plots = [
-#  #Files here
-  ["" + saveFolder + "/" + sample_ClosureTest3 + "_CMSTriggerRate/ratePlots.root", "triggerRate", "CMS L1TMuon"],
-  ["" + saveFolder + "/" + sampleRateEstimation + "_RatePlots_Normalised.root", "simL1TMuonTriggerRate", "Sim L1TMuon"]
-]
-cfg.saveFileName = "" + saveFolder + "/rateClosureTestMinBias.root"
-plotDistributionComparisonPlot(cfg)
+#print "CREATING RATIO PLOT FOR CMS VS DELPHES RATE"
+#
+#cfg = lambda x: 1
+#cfg.plots = [
+##  #Files here
+#  ["" + saveFolder + "/" + sample_ClosureTest3 + "_CMSTriggerRate/ratePlots.root", "triggerRate", "CMS L1TMuon"],
+#  ["" + saveFolder + "/" + sampleRateEstimation + "_RatePlots_Normalised.root", "simL1TMuonTriggerRate", "Sim L1TMuon"]
+#]
+#cfg.saveFileName = "" + saveFolder + "/rateClosureTestMinBias.root"
+#plotDistributionComparisonPlot(cfg)
