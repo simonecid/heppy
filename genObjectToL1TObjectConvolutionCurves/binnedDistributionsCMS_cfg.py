@@ -24,14 +24,15 @@ from math import sqrt
 #logging.basicConfig(level=logging.WARNING)
 
 #Object name
-objectName = "L1T Muon"
-matchedObjectName = "Gen Muon"
+objectName = _heppyGlobalOptions["triggerObjectName"] #L1T Muon
+matchedObjectName = _heppyGlobalOptions["genObjectName"] #Gen Muon
 #sampleName = "l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_L11Obj_To_GenJet_Match_ClosestDR_L1TEGamma_GenJet"
 sampleName = "l1tMuonGenMuonMatching_SingleMu_FlatPt_8to100_QualityCut_WQualityBranch"
 ptBins = [0, 1.5, 3, 5, 8, 11, 15, 20, 30, 40, 50, 70, 100, 140, 200]
-muonMinimumPtInBarrel = float(_heppyGlobalOptions["minimumPtInBarrel"])
-muonMinimumPtInEndcap = float(_heppyGlobalOptions["minimumPtInEndcap"])
+minimumPtInBarrel = float(_heppyGlobalOptions["minimumPtInBarrel"])
+minimumPtInEndcap = float(_heppyGlobalOptions["minimumPtInEndcap"])
 barrelEta = float(_heppyGlobalOptions["barrelEta"])
+detectorEta = float(_heppyGlobalOptions["detectorEta"])
 
 if "binning" in _heppyGlobalOptions:
   import ast
@@ -104,24 +105,29 @@ def quality(ptc):
 def dr2Selection(ptc):
   return abs(ptc.deltaR2) < 0.25 #dr < 0.5
 
-def genMuInDetector(ptc):
+def genParticleInDetector(ptc):
+
+  #Reject every particle outside detectorEta
+  if (abs(ptc.match.eta()) > detectorEta):
+    return False
+
   if (abs(ptc.match.eta()) < barrelEta):
     #It is OK if the momentum is high enough to not start spiralling
-    return (ptc.match.pt() > muonMinimumPtInBarrel)
+    return (ptc.match.pt() > minimumPtInBarrel)
   else:
-    return (ptc.match.pt() > muonMinimumPtInEndcap)
+    return (ptc.match.pt() > minimumPtInEndcap)
 
 kinematicCutSelector = cfg.Analyzer(
   Selector,
   'kinematicCutSelector',
   output = 'trigger_objects_in_detector',
   input_objects = 'trigger_objects',
-  filter_func = genMuInDetector
+  filter_func = genParticleInDetector
 )
 
-muonQualityCut = cfg.Analyzer(
+qualityCutSelector = cfg.Analyzer(
   Selector,
-  'muonQualityCut',
+  'qualityCutSelector',
   output = 'good_trigger_objects',
   input_objects = 'trigger_objects_in_detector',
   filter_func = qualityCut
@@ -201,9 +207,9 @@ deltaPtDistributionBinnedInMatchedObject = cfg.Analyzer(
   histo_title = 'p_{t}^{' + objectName + '} - p_{t}^{' + matchedObjectName +'} distribution binned in p^{' + matchedObjectName +'}_{t}',
   matched_collection = 'matched_trigger_object',
   binning = ptBins,
-  nbins = 800,
-  min = -200,
-  max = 200,
+  nbins = 1600,
+  min = -400,
+  max = 400,
   file_label = "tfile1",
   plot_func = deltaPt,
   bin_func = pt,
@@ -334,7 +340,7 @@ matchedObjectPtDistribution = cfg.Analyzer(
 sequence = cfg.Sequence( [
   source,
   kinematicCutSelector,
-  muonQualityCut,
+  qualityCutSelector,
   tightRestrictionMatchSelector,
   objectPtDistributionBinnedInMatchedObject,
   objectMatchedObjectPtRatioDistributionBinnedInMatchedObject,
