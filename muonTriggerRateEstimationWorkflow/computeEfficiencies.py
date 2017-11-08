@@ -10,10 +10,10 @@ from bisect import bisect_right
 
 def computeEfficiencies(**kwargs):
   chainGenObj = TChain (kwargs["GenObjTree"])
-  chainGenObj.Add(kwargs["GenObjFileFolder"]+"/*")
+  chainGenObj.Add(kwargs["GenObjFileFolder"]+"/*.root")
 
   chainL1TObjGenObj = TChain(kwargs["MatchTree"])
-  chainL1TObjGenObj.Add(kwargs["MatchFileFolder"]+"/*")
+  chainL1TObjGenObj.Add(kwargs["MatchFileFolder"]+"/*.root")
 
   bins = ast.literal_eval(kwargs["binning"])
   detectorEta = float(kwargs["eta"])
@@ -30,8 +30,8 @@ def computeEfficiencies(**kwargs):
 
   nEntries = chainGenObj.GetEntries()
   for entryIndex in xrange(0, nEntries):
-    #if entryIndex % 1000 == 0:
-    #  print entryIndex, "/", nEntries
+    if entryIndex % 1000 == 0:
+      print entryIndex, "/", nEntries
     chainGenObj.GetEntry(entryIndex)
     genObj_pt = chainGenObj.genParticle_pt
     genObj_eta = chainGenObj.genParticle_eta
@@ -51,8 +51,8 @@ def computeEfficiencies(**kwargs):
   
   nEntries = chainL1TObjGenObj.GetEntries()
   for entryIndex in xrange(0, nEntries):
-    #if entryIndex % 1000 == 0:
-    #  print entryIndex, "/", nEntries
+    if entryIndex % 1000 == 0:
+      print entryIndex, "/", nEntries
     chainL1TObjGenObj.GetEntry(entryIndex)
     genObj_pt = chainL1TObjGenObj.genParticle_pt
     genObj_eta = chainL1TObjGenObj.genParticle_eta
