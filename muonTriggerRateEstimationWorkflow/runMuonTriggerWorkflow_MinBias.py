@@ -203,31 +203,31 @@ interactionFrequency = averagePileUp * bunchCrossingFrequency
 #endcapRateHist.Write()
 #normalisedRatePlotFile.Close()
 #nonNormalisedRatePlotFile.Close()
-
-print "NORMALISING THE RATE PLOT TO OBTAIN THE TRIGGER PASS PROBABILITY FOR MINBIAS AND PU140 EVENTS"
-
-nonNormalisedRatePlotFile = TFile("" + saveFolder + "/" + sampleRateEstimation + "_RatePlots_NotNormalised.root")
-passProbabilityFile = TFile("" + saveFolder + "/" + sampleRateEstimation + "_RatePlots_TriggerPassProbability.root", "RECREATE")
-totalRateHist = nonNormalisedRatePlotFile.Get("simL1TMuonTriggerRate")
-ppPassProbabilityHistogram = totalRateHist.Clone("ppPassProbabilityHistogram")
-ppPassProbabilityHistogram.Scale(1/numberOfDelphesEvents)
-passProbabilityFile.cd()
-eventPassProbabilityHistogram = ppPassProbabilityHistogram.Clone("eventPassProbabilityHistogram")
-
-for x in xrange(1, eventPassProbabilityHistogram.GetNbinsX()+1):
-  ppPassProbability = ppPassProbabilityHistogram.GetBinContent(x)
-  eventPassProbability = 1 - (1 - ppPassProbability)**averagePileUp
-  eventPassProbabilityHistogram.SetBinContent(x, eventPassProbability)
-
-probabilityRatioHistogram = eventPassProbabilityHistogram.Clone("probabilityRatioHistogram")
-probabilityRatioHistogram.Divide(ppPassProbabilityHistogram)
-
-probabilityRatioHistogram.Write()
-ppPassProbabilityHistogram.Write()
-eventPassProbabilityHistogram.Write()
-
-nonNormalisedRatePlotFile.Close()
-passProbabilityFile.Close()
+#
+#print "NORMALISING THE RATE PLOT TO OBTAIN THE TRIGGER PASS PROBABILITY FOR MINBIAS AND PU140 EVENTS"
+#
+#nonNormalisedRatePlotFile = TFile("" + saveFolder + "/" + sampleRateEstimation + "_RatePlots_NotNormalised.root")
+#passProbabilityFile = TFile("" + saveFolder + "/" + sampleRateEstimation + "_RatePlots_TriggerPassProbability.root", "RECREATE")
+#totalRateHist = nonNormalisedRatePlotFile.Get("simL1TMuonTriggerRate")
+#ppPassProbabilityHistogram = totalRateHist.Clone("ppPassProbabilityHistogram")
+#ppPassProbabilityHistogram.Scale(1/numberOfDelphesEvents)
+#passProbabilityFile.cd()
+#eventPassProbabilityHistogram = ppPassProbabilityHistogram.Clone("eventPassProbabilityHistogram")
+#
+#for x in xrange(1, eventPassProbabilityHistogram.GetNbinsX()+1):
+#  ppPassProbability = ppPassProbabilityHistogram.GetBinContent(x)
+#  eventPassProbability = 1 - (1 - ppPassProbability)**averagePileUp
+#  eventPassProbabilityHistogram.SetBinContent(x, eventPassProbability)
+#
+#probabilityRatioHistogram = eventPassProbabilityHistogram.Clone("probabilityRatioHistogram")
+#probabilityRatioHistogram.Divide(ppPassProbabilityHistogram)
+#
+#probabilityRatioHistogram.Write()
+#ppPassProbabilityHistogram.Write()
+#eventPassProbabilityHistogram.Write()
+#
+#nonNormalisedRatePlotFile.Close()
+#passProbabilityFile.Close()
 
 print "COMPUTING THE TRIGGER PASS PROBABIITY IN LINEAR SCALING APPROXIMATION AND WITH FULL FORMULA"
 
@@ -236,7 +236,7 @@ ppPassProbabilityHistogram = passProbabilityFile.Get("ppPassProbabilityHistogram
 eventPassProbabilityHistogram = passProbabilityFile.Get("eventPassProbabilityHistogram")
 
 linearPURatePlot = ppPassProbabilityHistogram.Clone("linearPURatePlot")
-fullPURatePlot = ppPassProbabilityHistogram.Clone("fullPURatePlot")
+fullPURatePlot = eventPassProbabilityHistogram.Clone("fullPURatePlot")
 
 linearPURatePlot.Scale(interactionFrequency)
 fullPURatePlot.Scale(bunchCrossingFrequency)
