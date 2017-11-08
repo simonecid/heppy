@@ -73,7 +73,7 @@ class CMSMatchingReader(Analyzer):
         trigger_object._tlv.SetPtEtaPhiE(trigger_object_pt, trigger_object_eta, trigger_object_phi, 0)
         trigger_object.match = gen_object
         trigger_object.deltaR2 = getattr(tree, "deltaR2", None)
-        trigger_object.quality = getattr(tree, "l1tMuon_qual", None)
+        trigger_object.quality = getattr(tree, "l1tMuon_qual", 0)
         if trigger_object.deltaR2 is None: trigger_object.deltaR2 = tree.dr**2
         event.trigger_objects = [trigger_object]
       else:
