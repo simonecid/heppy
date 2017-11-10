@@ -32,7 +32,9 @@ sampleName = "NeutrinoGun_NoTau_13TeV_DelphesCMS_JetPTMin_5"
 convolutionFileName = "_binnedDistributions/distributionWithQuality8/histograms.root"
 minimumPtInBarrel = float(_heppyGlobalOptions["minimumPtInBarrel"])
 minimumPtInEndcap = float(_heppyGlobalOptions["minimumPtInEndcap"])
+minimumPtInForward = float(_heppyGlobalOptions["minimumPtInForward"])
 barrelEta = float(_heppyGlobalOptions["barrelEta"])
+endcapEta = float(_heppyGlobalOptions["endcapEta"])
 detectorEta = float(_heppyGlobalOptions["detectorEta"])
 triggerObjectName = _heppyGlobalOptions["triggerObjectName"]
 
@@ -106,14 +108,17 @@ def jetInDetector(ptc):
   if (abs(ptc.eta()) < barrelEta):
     #It is OK if the momentum is high enough to not start spiralling
     return (ptc.pt() > minimumPtInBarrel)
-  elif (abs(ptc.eta()) < float(_heppyGlobalOptions["detectorEta"])):
   #Otherwise, check if is in endcap
+  elif (abs(ptc.eta()) < endcapEta):
     return (ptc.pt() > minimumPtInEndcap)
+  #then, is it in the forward?
+  elif (abs(ptc.eta()) < detectorEta):
+    return (ptc.pt() > minimumPtInForward)
   
 
-lowPtMuonSelector = cfg.Analyzer(
+goodJetSelector = cfg.Analyzer(
   Selector,
-  'lowPtMuonSelector',
+  'goodJetSelector',
   output = 'good_jets',
   input_objects = 'gen_jets',
   filter_func = jetInDetector 
@@ -183,7 +188,7 @@ simL1TObjectLeadingPtDistribution = cfg.Analyzer(
   instance_label = 'simL1TObjectLeadingPtDistribution',
   file_label = 'ratePlotFile',
   histo_name = 'simL1TObjectLeadingPtDistribution',
-  histo_title = 'Muon leading transverse momentum distribution',
+  histo_title = triggerObjectName + ' leading transverse momentum distribution',
   min = 0,
   max = 50,
   nbins = 100,
@@ -217,7 +222,10 @@ def barrelCut(ptc):
   return abs(ptc.eta()) < barrelEta
 
 def endcapCut(ptc):
-  return (abs(ptc.eta()) > barrelEta and abs(ptc.eta()) < detectorEta)
+  return (abs(ptc.eta()) >= barrelEta and abs(ptc.eta()) < endcapEta)
+
+def forwardCut(ptc):
+  return (abs(ptc.eta()) >= endcapEta and abs(ptc.eta()) < detectorEta)
 
 barrelSelector = cfg.Analyzer(
   Selector,
@@ -230,9 +238,17 @@ barrelSelector = cfg.Analyzer(
 endcapSelector = cfg.Analyzer(
   Selector,
   'endcapSelector',
-  output = 'leading_' + triggerObjectName + 'endcap',
+  output = 'leading_' + triggerObjectName + '_endcap',
   input_objects = 'leading_' + triggerObjectName,
   filter_func = endcapCut
+)
+
+forwardSelector = cfg.Analyzer(
+  Selector,
+  'forwardSelector',
+  output = 'leading_' + triggerObjectName + '_forward',
+  input_objects = 'leading_' + triggerObjectName,
+  filter_func = forwardCut
 )
 
 def isSmeared(ptc):
@@ -264,9 +280,23 @@ endcapSimL1TObjectRate = cfg.Analyzer(
   instance_label = 'endcapSimL1TObjectRate',
   file_label = 'ratePlotFile',
   plot_name = 'endcapSimL1TObjectRate',
-  plot_title = '1.1 < abs(#eta) < 2.4 trigger rate',
+  plot_title = '' + str(barrelEta) + ' < abs(#eta) < ' + str(endcapEta) + ' trigger rate',
   zerobias_rate = mySettings.bunchCrossingFrequency,
-  input_objects = 'leading_' + triggerObjectName + '_barrel',
+  input_objects = 'leading_' + triggerObjectName + '_endcap',
+  bins = steps,
+  pileup = 140,
+  yscale = mySettings.yScale,
+  normalise = False
+)
+
+forwardSimL1TObjectRate = cfg.Analyzer(
+  RatePlotProducer,
+  instance_label = 'forwardSimL1TObjectRate',
+  file_label = 'ratePlotFile',
+  plot_name = 'forwardSimL1TObjectRate',
+  plot_title = '' + str(endcapEta) + ' < abs(#eta) < ' + str(detectorEta) + ' trigger rate',
+  zerobias_rate = mySettings.bunchCrossingFrequency,
+  input_objects = 'leading_' + triggerObjectName + '_forward',
   bins = steps,
   pileup = 140,
   yscale = mySettings.yScale,
@@ -277,18 +307,20 @@ endcapSimL1TObjectRate = cfg.Analyzer(
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
   source,
-  lowPtMuonSelector,
+  goodJetSelector,
   smearJetToTriggerObject,
   smearedSelector,
   leadingPtSimL1TObjectFinder,
   barrelSelector,
   endcapSelector,
+  forwardSelector,
   simL1TObjectLeadingPtDistribution,
   genJetSimL1TObjectTree,
   simL1TObjectRate,
   genJetRate,
   barrelSimL1TObjectRate,
   endcapSimL1TObjectRate,
+  forwardSimL1TObjectRate,
 ] )
 
 

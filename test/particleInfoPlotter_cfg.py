@@ -14,6 +14,7 @@ from heppy.analyzers.triggerrates.Histogrammer import Histogrammer
 from heppy.analyzers.triggerrates.LeadingQuantityHistogrammer import LeadingQuantityHistogrammer
 from heppy.analyzers.triggerrates.SubLeadingQuantityHistogrammer import SubLeadingQuantityHistogrammer
 from heppy.analyzers.triggerrates.Histogrammer_2D import Histogrammer_2D
+from heppy.samples.sample_MinimumBias_NoTau_14TeV_GenParticles import *
 import sys
 from heppy.framework.looper import Looper
 from heppy.framework.heppy_loop import _heppyGlobalOptions
@@ -40,7 +41,7 @@ test_classification = cfg.MCComponent(
 )
 
 selectedComponents = [
-  test_classification
+  MinimumBias_14TeV_GenParticles_partial
 ]
 
 # Defining pdgids
@@ -55,17 +56,17 @@ pdgIds = {
 source = cfg.Analyzer(
   Reader,
 
-  gen_particles = 'skimmedGenParticles',
+  #gen_particles = 'skimmedGenParticles',
 
   gen_jets = 'genJets',
-  jets = 'genJets',
+  #jets = 'genJets',
 
-  electrons = 'genElectrons',
+  #electrons = 'genElectrons',
 
-  muons = 'genMuons',
+  #muons = 'genMuons',
 
-  photons = 'genPhotons',
-  met = 'genMET',
+  #photons = 'genPhotons',
+  #met = 'genMET',
 )
 
 '''
@@ -101,10 +102,10 @@ def eta (ptc):
 
 # Restricting gen particles and jets in the abs(eta) < 6 region
 
-#def etaRestrictor(ptc):
-#  return abs(ptc.eta()) < 6
 def etaRestrictor(ptc):
-  return True
+  return abs(ptc.eta()) < 5.1
+#def etaRestrictor(ptc):
+#  return True
 
 etaGenParticleSelector = cfg.Analyzer(
     Selector,
@@ -678,40 +679,40 @@ jetRecoPtEtaDistribution = cfg.Analyzer(
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
   source,
-  etaGenParticleSelector,
+  #etaGenParticleSelector,
   etaGenJetSelector,
-  electronSelector,
-  muonSelector,
-  tauSelector,
-  photonSelector,
-  electronRecoPtDistribution,
-  electronLeadingRecoPtDistribution,
-  electronLeadingRecoEtaDistribution,
-  electronSubLeadingRecoPtDistribution,
-  electronSubLeadingRecoEtaDistribution,
-  electronRecoEtaDistribution,
-  electronGenPtDistribution,
-  muonRecoPtDistribution,
-  muonLeadingRecoPtDistribution,
-  muonLeadingRecoEtaDistribution,
-  muonRecoEtaDistribution,
-  muonGenPtDistribution,
-  tauGenPtDistribution,
-  photonRecoPtDistribution,
-  photonLeadingRecoPtDistribution,
-  photonSubLeadingRecoPtDistribution,
-  photonLeadingRecoEtaDistribution,
-  photonSubLeadingRecoEtaDistribution,
-  photonRecoEtaDistribution,
-  photonGenPtDistribution,
-  jetRecoPtDistribution,
-  jetLeadingRecoPtDistribution,
-  jetSubLeadingRecoPtDistribution,
-  jetLeadingRecoEtaDistribution,
-  jetSubLeadingRecoEtaDistribution,
-  jetRecoEtaDistribution,
+  #electronSelector,
+  #muonSelector,
+  #tauSelector,
+  #photonSelector,
+  #electronRecoPtDistribution,
+  #electronLeadingRecoPtDistribution,
+  #electronLeadingRecoEtaDistribution,
+  #electronSubLeadingRecoPtDistribution,
+  #electronSubLeadingRecoEtaDistribution,
+  #electronRecoEtaDistribution,
+  #electronGenPtDistribution,
+  #muonRecoPtDistribution,
+  #muonLeadingRecoPtDistribution,
+  #muonLeadingRecoEtaDistribution,
+  #muonRecoEtaDistribution,
+  #muonGenPtDistribution,
+  #tauGenPtDistribution,
+  #photonRecoPtDistribution,
+  #photonLeadingRecoPtDistribution,
+  #photonSubLeadingRecoPtDistribution,
+  #photonLeadingRecoEtaDistribution,
+  #photonSubLeadingRecoEtaDistribution,
+  #photonRecoEtaDistribution,
+  #photonGenPtDistribution,
+  #jetRecoPtDistribution,
+  #jetLeadingRecoPtDistribution,
+  #jetSubLeadingRecoPtDistribution,
+  #jetLeadingRecoEtaDistribution,
+  #jetSubLeadingRecoEtaDistribution,
+  #jetRecoEtaDistribution,
   jetGenPtDistribution,
-  jetRecoPtEtaDistribution
+  #jetRecoPtEtaDistribution
 ] )
 
 

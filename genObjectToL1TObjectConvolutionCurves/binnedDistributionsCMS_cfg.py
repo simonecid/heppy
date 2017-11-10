@@ -31,7 +31,9 @@ sampleName = "l1tMuonGenMuonMatching_SingleMu_FlatPt_8to100_QualityCut_WQualityB
 ptBins = [0, 1.5, 3, 5, 8, 11, 15, 20, 30, 40, 50, 70, 100, 140, 200]
 minimumPtInBarrel = float(_heppyGlobalOptions["minimumPtInBarrel"])
 minimumPtInEndcap = float(_heppyGlobalOptions["minimumPtInEndcap"])
+minimumPtInForward = float(_heppyGlobalOptions["minimumPtInForward"])
 barrelEta = float(_heppyGlobalOptions["barrelEta"])
+endcapEta = float(_heppyGlobalOptions["endcapEta"])
 detectorEta = float(_heppyGlobalOptions["detectorEta"])
 
 if "binning" in _heppyGlobalOptions:
@@ -114,8 +116,11 @@ def genParticleInDetector(ptc):
   if (abs(ptc.match.eta()) < barrelEta):
     #It is OK if the momentum is high enough to not start spiralling
     return (ptc.match.pt() > minimumPtInBarrel)
-  else:
+    #Is it in endcap?
+  elif (abs(ptc.match.eta()) < endcapEta):
     return (ptc.match.pt() > minimumPtInEndcap)
+    #then it has to be in the forward
+  else: return (ptc.match.pt() > minimumPtInForward)
 
 kinematicCutSelector = cfg.Analyzer(
   Selector,

@@ -200,18 +200,18 @@ class RatePlotProducer(Analyzer):
     # p can also be interpreted as the fraction of jets in my distribution
     # (1 - p) * numberOfJets will tell me which jet represents the threshold
 
-    equation = lambda p : 1 - power(1 - p, self.cfg_ana.pileup) - self.cfg_ana.pileup * p * power(1 - p, self.cfg_ana.pileup - 1) - 0.05
-    p_solution = fsolve(equation, 1./self.cfg_ana.pileup)
-    thresholdIdx = int ( (1 - p_solution) * len(self.sortedPtArray))
-    threshold = self.sortedPtArray[thresholdIdx]
+    #equation = lambda p : 1 - power(1 - p, self.cfg_ana.pileup) - self.cfg_ana.pileup * p * power(1 - p, self.cfg_ana.pileup - 1) - 0.05
+    #p_solution = fsolve(equation, 1./self.cfg_ana.pileup)
+    #thresholdIdx = int ( (1 - p_solution) * len(self.sortedPtArray))
+    #threshold = self.sortedPtArray[thresholdIdx]
 
     #print "Threshold for", self.cfg_ana.plot_name, "is", threshold, "w/ p", p_solution, "thresholdIdx", thresholdIdx, "numPts", len(self.sortedPtArray)
 
     # Drawing the threshold line
 
-    pileupLine = TLine(threshold, yMin, threshold, yMax)
-    pileupLine.SetLineColor(6)
-    pileupLine.Draw()
+    #pileupLine = TLine(threshold, yMin, threshold, yMax)
+    #pileupLine.SetLineColor(6)
+    #pileupLine.Draw()
 
     c1.Update()
     c1.Write()

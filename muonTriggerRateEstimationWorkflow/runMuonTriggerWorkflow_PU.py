@@ -36,136 +36,136 @@ sample_ClosureTest3 = "cmsMatching_SingleNeutrinoPU140_LeadingL1TMuon_QualityCut
 ###################################################################################################
 #################################### DO NOT TOUCH FROM DOWN ON ####################################
 ###################################################################################################
-
-os.system("mkdir -p " + saveFolder)
-if os.listdir(saveFolder):
-  print "Save directory is not empty. It will be cleaned. Continue?"
-  if raw_input() == "y":
-    os.system("rm -r " + saveFolder + "/*")
-  else:
-    print "Stopping process."
-    exit()
-
-# Common options
-
-print "--- COMPUTING CONVOLUTION CURVES ---"
-
-
-print "PROCESSING FROM HIGH MOMENTUM MUONS"
-parser = create_parser()
-(options,args) = parser.parse_args()
-folderAndScriptName = [saveFolder, "muonTriggerRateEstimationWorkflow/binnedDistributionsCMS_L1TMuon_cfg.py"]
-options.extraOptions.append("sample=" + sample_BinnedDistributions_highPt)
-options.extraOptions.append("binning=" + binning)
-options.extraOptions.append("quality=" + str(qualityThreshold))
-options.extraOptions.append("minimumPtInBarrel=" + str(minimumPtToReachBarrelMuonChamber))
-options.extraOptions.append("minimumPtInEndcap=" + str(minimumPtToReachEndcapMuonChamber))
-options.extraOptions.append("barrelEta=" + str(barrelEta))
-#options.nevents=100
-loop = main(options, folderAndScriptName, parser)
-os.system("mv " + saveFolder + "/" + sample_BinnedDistributions_highPt + " " + saveFolder + "/highPt_ConvolutionCurves")
-
-print "PROCESSING FROM LOW MOMENTUM MUONS"
-parser = create_parser()
-(options,args) = parser.parse_args()
-folderAndScriptName = [saveFolder, "muonTriggerRateEstimationWorkflow/binnedDistributionsCMS_L1TMuon_cfg.py"]
-options.extraOptions.append("sample=" + sample_BinnedDistributions_lowPt)
-options.extraOptions.append("binning=" + binning)
-options.extraOptions.append("quality=" + str(qualityThreshold))
-options.extraOptions.append("minimumPtInBarrel=" + str(minimumPtToReachBarrelMuonChamber))
-options.extraOptions.append("minimumPtInEndcap=" + str(minimumPtToReachEndcapMuonChamber))
-options.extraOptions.append("barrelEta=" + str(barrelEta))
-#options.nevents=100
-loop = main(options, folderAndScriptName, parser)
-os.system("mv " + saveFolder + "/" + sample_BinnedDistributions_lowPt + " " + saveFolder + "/lowPt_ConvolutionCurves")
-
-print "MERGING RESULTS"
-os.system("hadd " + saveFolder + "/binnedDistributions.root " + saveFolder + "/highPt_ConvolutionCurves/histograms.root " + saveFolder + "/lowPt_ConvolutionCurves/histograms.root")
-print "--- COMPUTING THE CONVERSION FACTORS/EFFICIENCIES ---"
-
-highPtFolder = "/hdfs/FCC-hh/l1tMuonGenMuonMatching_SingleMu_FlatPt_8to100_QualityCut_WQualityBranch"
-highPtMatchTree = "MatchL1TMuonWithGenLevelMuons/matchedL1TMuonGenParticleTree"
-highPtGenTree = "MatchL1TMuonWithGenLevelMuons/genParticleTree"
-
-lowPtFolder = "/hdfs/FCC-hh/l1tMuonGenMuonMatching_QCD_15_3000_NoPU_Phase1_WQualityBranch"
-lowPtMatchTree = "MatchL1TMuonWithGenLevelMuons/matchedL1TMuonGenParticleTree"
-lowPtGenTree = "MatchL1TMuonWithGenLevelMuons/genParticleTree"
-
-
-print "PROCESSING FROM LOW MOMENTUM MUONS"
-numberOfMatchedObjects_lowPt, numberOfGenObjects_lowPt = computeEfficiencies(
-                                                           GenObjTree = lowPtGenTree,
-                                                           GenObjFileFolder = lowPtFolder,
-                                                           MatchTree = lowPtMatchTree,
-                                                           MatchFileFolder = lowPtFolder,
-                                                           binning = binning,
-                                                           eta = detectorEta,
-                                                           quality = qualityThreshold,
-                                                           barrelEta = barrelEta,
-                                                           minPtInBarrel = minimumPtToReachBarrelMuonChamber,
-                                                           minPtInEndcap = minimumPtToReachEndcapMuonChamber,
-                                                         )
-
-print "PROCESSING FROM HIGH MOMENTUM MUONS"
-numberOfMatchedObjects_highPt, numberOfGenObjects_highPt = computeEfficiencies(
-                                                           GenObjTree = highPtGenTree,
-                                                           GenObjFileFolder = highPtFolder,
-                                                           MatchTree = highPtMatchTree,
-                                                           MatchFileFolder = highPtFolder,
-                                                           binning = binning,
-                                                           eta = detectorEta,
-                                                           quality = qualityThreshold,
-                                                           barrelEta = barrelEta,
-                                                           minPtInBarrel = minimumPtToReachBarrelMuonChamber,
-                                                           minPtInEndcap = minimumPtToReachEndcapMuonChamber,
-                                                         )
-
-
-print "MERGING RESULTS"
-
-numberOfMatchedObjects = numberOfMatchedObjects_lowPt + numberOfMatchedObjects_highPt 
-numberOfGenObjects = numberOfGenObjects_lowPt + numberOfGenObjects_highPt 
-
-efficiencyFactors = numberOfMatchedObjects/numberOfGenObjects
-for binIdx in xrange(0, len(efficiencyFactors)): 
-  efficiencyFactors[binIdx] = 0 if isnan(efficiencyFactors[binIdx]) else efficiencyFactors[binIdx]
-  if efficiencyFactors[binIdx] > 1:
-    efficiencyFactors[binIdx] = 1
-print efficiencyFactors
-
-efficiencyFactorsFile = TFile("" + saveFolder + "/efficiencyFactors.root", "RECREATE")
-efficiencyFactorsFile.cd()
-efficiencyHistogram = TH1F("efficiencyHistogram", "Muon trigger efficiency", len(binningArray)-1, binningArray)
-
-for x in xrange(0, len(efficiencyFactors)): 
-  #Excluding overflow bin
-  if x != len(efficiencyFactors) - 1:
-    efficiencyHistogram.SetBinContent(x + 1, efficiencyFactors[x])
-  
-efficiencyHistogram.Write()
-
-efficiencyFactorsFile.Close()
-
-print "--- APPLYING CONVOLUTION TO EVENT SAMPLE TO COMPUTE RATES ---"
-
-print "CREATING THE NON-NORMALISED PLOTS"
-
-parser = create_parser()
-(options,args) = parser.parse_args()
-folderAndScriptName = [saveFolder, "muonTriggerRateEstimationWorkflow/muonFCCTriggerRates_cfg.py"]
-convolutionFileName = "" + saveFolder + "/binnedDistributions.root"
-options.extraOptions.append("sample=" + sampleRateEstimation)
-options.extraOptions.append("sampleModule=" + moduleSampleRateEstimation)
-options.extraOptions.append("convolutionFileName=" + convolutionFileName)
-options.extraOptions.append("binning=" + binning)
-options.extraOptions.append("probabilityFile=" + "" + saveFolder + "/efficiencyFactors.root")
-options.extraOptions.append("probabilityHistogram=" + "efficiencyHistogram")
-options.extraOptions.append("detectorEta=" + str(detectorEta))
-options.extraOptions.append("minimumPtInBarrel=" + str(minimumPtToReachBarrelMuonChamber))
-options.extraOptions.append("minimumPtInEndcap=" + str(minimumPtToReachEndcapMuonChamber))
-options.extraOptions.append("barrelEta=" + str(barrelEta))
-#options.nevents=100
-loop = main(options, folderAndScriptName, parser)
+#
+#os.system("mkdir -p " + saveFolder)
+#if os.listdir(saveFolder):
+#  print "Save directory is not empty. It will be cleaned. Continue?"
+#  if raw_input() == "y":
+#    os.system("rm -r " + saveFolder + "/*")
+#  else:
+#    print "Stopping process."
+#    exit()
+#
+## Common options
+#
+#print "--- COMPUTING CONVOLUTION CURVES ---"
+#
+#
+#print "PROCESSING FROM HIGH MOMENTUM MUONS"
+#parser = create_parser()
+#(options,args) = parser.parse_args()
+#folderAndScriptName = [saveFolder, "muonTriggerRateEstimationWorkflow/binnedDistributionsCMS_L1TMuon_cfg.py"]
+#options.extraOptions.append("sample=" + sample_BinnedDistributions_highPt)
+#options.extraOptions.append("binning=" + binning)
+#options.extraOptions.append("quality=" + str(qualityThreshold))
+#options.extraOptions.append("minimumPtInBarrel=" + str(minimumPtToReachBarrelMuonChamber))
+#options.extraOptions.append("minimumPtInEndcap=" + str(minimumPtToReachEndcapMuonChamber))
+#options.extraOptions.append("barrelEta=" + str(barrelEta))
+##options.nevents=100
+#loop = main(options, folderAndScriptName, parser)
+#os.system("mv " + saveFolder + "/" + sample_BinnedDistributions_highPt + " " + saveFolder + "/highPt_ConvolutionCurves")
+#
+#print "PROCESSING FROM LOW MOMENTUM MUONS"
+#parser = create_parser()
+#(options,args) = parser.parse_args()
+#folderAndScriptName = [saveFolder, "muonTriggerRateEstimationWorkflow/binnedDistributionsCMS_L1TMuon_cfg.py"]
+#options.extraOptions.append("sample=" + sample_BinnedDistributions_lowPt)
+#options.extraOptions.append("binning=" + binning)
+#options.extraOptions.append("quality=" + str(qualityThreshold))
+#options.extraOptions.append("minimumPtInBarrel=" + str(minimumPtToReachBarrelMuonChamber))
+#options.extraOptions.append("minimumPtInEndcap=" + str(minimumPtToReachEndcapMuonChamber))
+#options.extraOptions.append("barrelEta=" + str(barrelEta))
+##options.nevents=100
+#loop = main(options, folderAndScriptName, parser)
+#os.system("mv " + saveFolder + "/" + sample_BinnedDistributions_lowPt + " " + saveFolder + "/lowPt_ConvolutionCurves")
+#
+#print "MERGING RESULTS"
+#os.system("hadd " + saveFolder + "/binnedDistributions.root " + saveFolder + "/highPt_ConvolutionCurves/histograms.root " + saveFolder + "/lowPt_ConvolutionCurves/histograms.root")
+#print "--- COMPUTING THE CONVERSION FACTORS/EFFICIENCIES ---"
+#
+#highPtFolder = "/hdfs/FCC-hh/l1tMuonGenMuonMatching_SingleMu_FlatPt_8to100_QualityCut_WQualityBranch"
+#highPtMatchTree = "MatchL1TMuonWithGenLevelMuons/matchedL1TMuonGenParticleTree"
+#highPtGenTree = "MatchL1TMuonWithGenLevelMuons/genParticleTree"
+#
+#lowPtFolder = "/hdfs/FCC-hh/l1tMuonGenMuonMatching_QCD_15_3000_NoPU_Phase1_WQualityBranch"
+#lowPtMatchTree = "MatchL1TMuonWithGenLevelMuons/matchedL1TMuonGenParticleTree"
+#lowPtGenTree = "MatchL1TMuonWithGenLevelMuons/genParticleTree"
+#
+#
+#print "PROCESSING FROM LOW MOMENTUM MUONS"
+#numberOfMatchedObjects_lowPt, numberOfGenObjects_lowPt = computeEfficiencies(
+#                                                           GenObjTree = lowPtGenTree,
+#                                                           GenObjFileFolder = lowPtFolder,
+#                                                           MatchTree = lowPtMatchTree,
+#                                                           MatchFileFolder = lowPtFolder,
+#                                                           binning = binning,
+#                                                           eta = detectorEta,
+#                                                           quality = qualityThreshold,
+#                                                           barrelEta = barrelEta,
+#                                                           minPtInBarrel = minimumPtToReachBarrelMuonChamber,
+#                                                           minPtInEndcap = minimumPtToReachEndcapMuonChamber,
+#                                                         )
+#
+#print "PROCESSING FROM HIGH MOMENTUM MUONS"
+#numberOfMatchedObjects_highPt, numberOfGenObjects_highPt = computeEfficiencies(
+#                                                           GenObjTree = highPtGenTree,
+#                                                           GenObjFileFolder = highPtFolder,
+#                                                           MatchTree = highPtMatchTree,
+#                                                           MatchFileFolder = highPtFolder,
+#                                                           binning = binning,
+#                                                           eta = detectorEta,
+#                                                           quality = qualityThreshold,
+#                                                           barrelEta = barrelEta,
+#                                                           minPtInBarrel = minimumPtToReachBarrelMuonChamber,
+#                                                           minPtInEndcap = minimumPtToReachEndcapMuonChamber,
+#                                                         )
+#
+#
+#print "MERGING RESULTS"
+#
+#numberOfMatchedObjects = numberOfMatchedObjects_lowPt + numberOfMatchedObjects_highPt 
+#numberOfGenObjects = numberOfGenObjects_lowPt + numberOfGenObjects_highPt 
+#
+#efficiencyFactors = numberOfMatchedObjects/numberOfGenObjects
+#for binIdx in xrange(0, len(efficiencyFactors)): 
+#  efficiencyFactors[binIdx] = 0 if isnan(efficiencyFactors[binIdx]) else efficiencyFactors[binIdx]
+#  if efficiencyFactors[binIdx] > 1:
+#    efficiencyFactors[binIdx] = 1
+#print efficiencyFactors
+#
+#efficiencyFactorsFile = TFile("" + saveFolder + "/efficiencyFactors.root", "RECREATE")
+#efficiencyFactorsFile.cd()
+#efficiencyHistogram = TH1F("efficiencyHistogram", "Muon trigger efficiency", len(binningArray)-1, binningArray)
+#
+#for x in xrange(0, len(efficiencyFactors)): 
+#  #Excluding overflow bin
+#  if x != len(efficiencyFactors) - 1:
+#    efficiencyHistogram.SetBinContent(x + 1, efficiencyFactors[x])
+#  
+#efficiencyHistogram.Write()
+#
+#efficiencyFactorsFile.Close()
+#
+#print "--- APPLYING CONVOLUTION TO EVENT SAMPLE TO COMPUTE RATES ---"
+#
+#print "CREATING THE NON-NORMALISED PLOTS"
+#
+#parser = create_parser()
+#(options,args) = parser.parse_args()
+#folderAndScriptName = [saveFolder, "muonTriggerRateEstimationWorkflow/muonFCCTriggerRates_cfg.py"]
+#convolutionFileName = "" + saveFolder + "/binnedDistributions.root"
+#options.extraOptions.append("sample=" + sampleRateEstimation)
+#options.extraOptions.append("sampleModule=" + moduleSampleRateEstimation)
+#options.extraOptions.append("convolutionFileName=" + convolutionFileName)
+#options.extraOptions.append("binning=" + binning)
+#options.extraOptions.append("probabilityFile=" + "" + saveFolder + "/efficiencyFactors.root")
+#options.extraOptions.append("probabilityHistogram=" + "efficiencyHistogram")
+#options.extraOptions.append("detectorEta=" + str(detectorEta))
+#options.extraOptions.append("minimumPtInBarrel=" + str(minimumPtToReachBarrelMuonChamber))
+#options.extraOptions.append("minimumPtInEndcap=" + str(minimumPtToReachEndcapMuonChamber))
+#options.extraOptions.append("barrelEta=" + str(barrelEta))
+##options.nevents=100
+#loop = main(options, folderAndScriptName, parser)
 #os.system("hadd -f " + saveFolder + "/" + sampleRateEstimation + "_RatePlots_NotNormalised.root " + saveFolder + "/" + sampleRateEstimation + "_Chunk*/ratePlots.root")
 os.system("mv " + saveFolder + "/" + sampleRateEstimation + "/ratePlots.root " + saveFolder + "/" + sampleRateEstimation + "_RatePlots_NotNormalised.root")
 print "NORMALISING THE PLOTS"
