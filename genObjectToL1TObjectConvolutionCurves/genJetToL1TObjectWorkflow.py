@@ -10,7 +10,7 @@ import ast
 from heppy.myScripts.plotDistributionComparisonPlot import plotDistributionComparisonPlot
 from math import isnan
 
-saveFolder = "_jetTriggerRate_NoEndcap_HardPtCut10GeV"
+saveFolder = "_jetTriggerRate_BarrelOnly_HardPtCut10GeV"
 binning = "[10, 15, 20, 25, 30, 35, 40, 50, 60, 70, 80, 100, 125, 150, 175, 200, 250, 300]"
 ##binning = "[0, 1.5, 3, 5, 8, 11, 15, 20, 30, 40, 50, 70, 100, 140, 200]"
 qualityThreshold = 0
@@ -23,7 +23,7 @@ magneticField = 3.8 # Tesla
 #minimumPtToReachBarrel = barrelRadius * magneticField/6.6
 minimumPtToReachBarrel = 10 # Some cut
 minimumPtToReachEndcap = 1000000 # disabling endcap with high pt threshold
-minimumPtToReachForward = 10 # killing forward
+minimumPtToReachForward = 1000000 # killing forward
 sample_BinnedDistributions = "cmsMatching_QCD_15_3000_L1TJet_GenJet"
 genObject = "genJet"
 triggerObject = "l1tJet"
@@ -34,7 +34,7 @@ efficiencyGenTree = "MatchGenJetWithL1Objects/genJetTree"
 
 sample_ClosureTest1 = "cmsMatching_QCD_15_3000_L1TJet_GenJet"
 sample_ClosureTest2 = "cmsMatching_QCD_15_3000_GenJet"
-sample_ClosureTest3 = "cmsMatching_SingleNeutrinoPU140_LeadingL1TJet"
+sample_ClosureTest3 = "cmsMatching_SingleNeutrinoPU140_BarrelOnly_LeadingL1TJet"
 
 sampleRateEstimation = "MinimumBias_14TeV_GenParticles_partial"
 numberOfDelphesEvents = 200000
@@ -48,81 +48,81 @@ interactionFrequency = averagePileUp * bunchCrossingFrequency
 #################################### DO NOT TOUCH FROM DOWN ON ####################################
 ###################################################################################################
 os.system("mkdir -p " + saveFolder)
-#
-#if os.listdir(saveFolder):
-#  print "Save directory is not empty. It will be cleaned. Continue?"
-#  if raw_input() == "y":
-#    os.system("rm -r " + saveFolder + "/*")
-#  else:
-#    print "Stopping process."
-#    exit()
-#
-# Common options
-#
-#print "--- COMPUTING CONVOLUTION CURVES ---"
-#
-#parser = create_parser()
-#(options,args) = parser.parse_args()
-#folderAndScriptName = [saveFolder, "genObjectToL1TObjectConvolutionCurves/binnedDistributionsCMS_cfg.py"]
-#options.extraOptions.append("sample=" + sample_BinnedDistributions)
-#options.extraOptions.append("binning=" + binning)
-#options.extraOptions.append("quality=" + str(qualityThreshold))
-#options.extraOptions.append("minimumPtInBarrel=" + str(minimumPtToReachBarrel))
-##options.extraOptions.append("minimumPtInEndcap=" + str(minimumPtToReachEndcap))
-#options.extraOptions.append("minimumPtInForward=" + str(minimumPtToReachForward))
-#options.extraOptions.append("barrelEta=" + str(barrelEta))
-#options.extraOptions.append("endcapEta=" + str(endcapEta))
-#options.extraOptions.append("detectorEta=" + str(detectorEta))
-#options.extraOptions.append("triggerObjectName=" + triggerObject)
-#options.extraOptions.append("genObjectName=" + genObject)
-#options.nevents=500000
-#loop = main(options, folderAndScriptName, parser)
-#os.system("mv " + saveFolder + "/" + sample_BinnedDistributions + " " + saveFolder + "/" + genObject + "_" +  triggerObject + "_" + "convolutionCurves")
-#
-#print "--- COMPUTING THE CONVERSION FACTORS/EFFICIENCIES ---"
-#
-#numberOfMatchedObjects, numberOfGenObjects = computeEfficiencies(
-#                                                                  GenObjTree = efficiencyGenTree,
-#                                                                  GenObjFileFolder = efficiencySourceFolder,
-#                                                                  MatchTree = efficiencyMatchTree,
-#                                                                  MatchFileFolder = efficiencySourceFolder,
-#                                                                  binning = binning,
-#                                                                  eta = detectorEta,
-#                                                                  quality = qualityThreshold,
-#                                                                  barrelEta = barrelEta,
-#                                                                  endcapEta = endcapEta,
-#                                                                  minPtInBarrel = minimumPtToReachBarrel,
-##                                                                 minPtInEndcap = minimumPtToReachEndcap,
-#                                                                  minPtInForward = minimumPtToReachForward,
-#                                                                )
-#
-#numberOfMatchedObjects = numberOfMatchedObjects
-#numberOfGenObjects = numberOfGenObjects
-#
-#efficiencyFactors = numberOfMatchedObjects/numberOfGenObjects
-#for binIdx in xrange(0, len(efficiencyFactors)): 
-#  efficiencyFactors[binIdx] = 0 if isnan(efficiencyFactors[binIdx]) else efficiencyFactors[binIdx]
-#  if efficiencyFactors[binIdx] > 1:
-#    efficiencyFactors[binIdx] = 1
-#print efficiencyFactors
-#
-#efficiencyFactorsFile = TFile("" + saveFolder + "/efficiencyFactors.root", "RECREATE")
-#efficiencyFactorsFile.cd()
-#efficiencyHistogram = TH1F("efficiencyHistogram", "Trigger efficiency", len(binningArray)-1, binningArray)
-#numberOfMatchedObjectsHistogram = TH1F("numberOfMatchedObjectsHistogram", "numberOfMatchedObjectsHistogram", len(binningArray)-1, binningArray)
-#numberOfGenObjectsHistogram = TH1F("numberOfGenObjectsHistogram", "numberOfGenObjectsHistogram", len(binningArray)-1, binningArray)
-#
-#for x in xrange(0, len(efficiencyFactors)): 
-#  #Excluding overflow bin
-#  if x != len(efficiencyFactors) - 1:
-#    efficiencyHistogram.SetBinContent(x + 1, efficiencyFactors[x])
-#    numberOfMatchedObjectsHistogram.SetBinContent(x + 1, numberOfMatchedObjects[x])
-#    numberOfGenObjectsHistogram.SetBinContent(x + 1, numberOfGenObjects[x])
-#  
-#efficiencyHistogram.Write()
-#numberOfMatchedObjectsHistogram.Write()
-#numberOfGenObjectsHistogram.Write()
-#efficiencyFactorsFile.Close()
+
+if os.listdir(saveFolder):
+  print "Save directory is not empty. It will be cleaned. Continue?"
+  if raw_input() == "y":
+    os.system("rm -r " + saveFolder + "/*")
+  else:
+    print "Stopping process."
+    exit()
+
+ Common options
+
+print "--- COMPUTING CONVOLUTION CURVES ---"
+
+parser = create_parser()
+(options,args) = parser.parse_args()
+folderAndScriptName = [saveFolder, "genObjectToL1TObjectConvolutionCurves/binnedDistributionsCMS_cfg.py"]
+options.extraOptions.append("sample=" + sample_BinnedDistributions)
+options.extraOptions.append("binning=" + binning)
+options.extraOptions.append("quality=" + str(qualityThreshold))
+options.extraOptions.append("minimumPtInBarrel=" + str(minimumPtToReachBarrel))
+options.extraOptions.append("minimumPtInEndcap=" + str(minimumPtToReachEndcap))
+options.extraOptions.append("minimumPtInForward=" + str(minimumPtToReachForward))
+options.extraOptions.append("barrelEta=" + str(barrelEta))
+options.extraOptions.append("endcapEta=" + str(endcapEta))
+options.extraOptions.append("detectorEta=" + str(detectorEta))
+options.extraOptions.append("triggerObjectName=" + triggerObject)
+options.extraOptions.append("genObjectName=" + genObject)
+options.nevents=500000
+loop = main(options, folderAndScriptName, parser)
+os.system("mv " + saveFolder + "/" + sample_BinnedDistributions + " " + saveFolder + "/" + genObject + "_" +  triggerObject + "_" + "convolutionCurves")
+
+print "--- COMPUTING THE CONVERSION FACTORS/EFFICIENCIES ---"
+
+numberOfMatchedObjects, numberOfGenObjects = computeEfficiencies(
+                                                                  GenObjTree = efficiencyGenTree,
+                                                                  GenObjFileFolder = efficiencySourceFolder,
+                                                                  MatchTree = efficiencyMatchTree,
+                                                                  MatchFileFolder = efficiencySourceFolder,
+                                                                  binning = binning,
+                                                                  eta = detectorEta,
+                                                                  quality = qualityThreshold,
+                                                                  barrelEta = barrelEta,
+                                                                  endcapEta = endcapEta,
+                                                                  minPtInBarrel = minimumPtToReachBarrel,
+                                                                  minPtInEndcap = minimumPtToReachEndcap,
+                                                                  minPtInForward = minimumPtToReachForward,
+                                                                )
+
+numberOfMatchedObjects = numberOfMatchedObjects
+numberOfGenObjects = numberOfGenObjects
+
+efficiencyFactors = numberOfMatchedObjects/numberOfGenObjects
+for binIdx in xrange(0, len(efficiencyFactors)): 
+  efficiencyFactors[binIdx] = 0 if isnan(efficiencyFactors[binIdx]) else efficiencyFactors[binIdx]
+  if efficiencyFactors[binIdx] > 1:
+    efficiencyFactors[binIdx] = 1
+print efficiencyFactors
+
+efficiencyFactorsFile = TFile("" + saveFolder + "/efficiencyFactors.root", "RECREATE")
+efficiencyFactorsFile.cd()
+efficiencyHistogram = TH1F("efficiencyHistogram", "Trigger efficiency", len(binningArray)-1, binningArray)
+numberOfMatchedObjectsHistogram = TH1F("numberOfMatchedObjectsHistogram", "numberOfMatchedObjectsHistogram", len(binningArray)-1, binningArray)
+numberOfGenObjectsHistogram = TH1F("numberOfGenObjectsHistogram", "numberOfGenObjectsHistogram", len(binningArray)-1, binningArray)
+
+for x in xrange(0, len(efficiencyFactors)): 
+  #Excluding overflow bin
+  if x != len(efficiencyFactors) - 1:
+    efficiencyHistogram.SetBinContent(x + 1, efficiencyFactors[x])
+    numberOfMatchedObjectsHistogram.SetBinContent(x + 1, numberOfMatchedObjects[x])
+    numberOfGenObjectsHistogram.SetBinContent(x + 1, numberOfGenObjects[x])
+  
+efficiencyHistogram.Write()
+numberOfMatchedObjectsHistogram.Write()
+numberOfGenObjectsHistogram.Write()
+efficiencyFactorsFile.Close()
 
 print "--- APPLYING CONVOLUTION TO EVENT SAMPLE TO COMPUTE RATES ---"
 
@@ -138,7 +138,7 @@ options.extraOptions.append("binning=" + binning)
 options.extraOptions.append("probabilityFile=" + "" + saveFolder + "/efficiencyFactors.root")
 options.extraOptions.append("probabilityHistogram=" + "efficiencyHistogram")
 options.extraOptions.append("minimumPtInBarrel=" + str(minimumPtToReachBarrel))
-#options.extraOptions.append("minimumPtInEndcap=" + str(minimumPtToReachEndcap))
+options.extraOptions.append("minimumPtInEndcap=" + str(minimumPtToReachEndcap))
 options.extraOptions.append("minimumPtInForward=" + str(minimumPtToReachForward))
 options.extraOptions.append("barrelEta=" + str(barrelEta))
 options.extraOptions.append("endcapEta=" + str(endcapEta))
@@ -153,11 +153,11 @@ print "OBTAINING THE RATE IN THE LINEAR SCALING APPROXIMATION"
 nonNormalisedRatePlotFile = TFile("" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + sampleRateEstimation + "_RatePlots_NotNormalised.root")
 totalRateHist = nonNormalisedRatePlotFile.Get("simL1TObjectTriggerRate")
 barrelRateHist = nonNormalisedRatePlotFile.Get("barrelSimL1TObjectRate")
-#endcapRateHist = nonNormalisedRatePlotFile.Get("endcapSimL1TObjectRate")
+endcapRateHist = nonNormalisedRatePlotFile.Get("endcapSimL1TObjectRate")
 
 totalRateHist.Scale(interactionFrequency/numberOfDelphesEvents)
 barrelRateHist.Scale(interactionFrequency/numberOfDelphesEvents)
-#endcapRateHist.Scale(interactionFrequency/numberOfDelphesEvents)
+endcapRateHist.Scale(interactionFrequency/numberOfDelphesEvents)
 
 totalRateHist.GetXaxis().SetTitle("p_{t}")
 totalRateHist.GetXaxis().SetRangeUser(5, 200)
@@ -165,15 +165,15 @@ totalRateHist.GetYaxis().SetTitle("Rate [Hz]")
 barrelRateHist.GetXaxis().SetTitle("p_{t}")
 barrelRateHist.GetXaxis().SetRangeUser(5, 200)
 barrelRateHist.GetYaxis().SetTitle("Rate [Hz]")
-#endcapRateHist.GetXaxis().SetTitle("p_{t}")
-#endcapRateHist.GetXaxis().SetRangeUser(5, 200)
-#endcapRateHist.GetYaxis().SetTitle("Rate [Hz]")
+endcapRateHist.GetXaxis().SetTitle("p_{t}")
+endcapRateHist.GetXaxis().SetRangeUser(5, 200)
+endcapRateHist.GetYaxis().SetTitle("Rate [Hz]")
 
 normalisedRatePlotFile = TFile("" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + sampleRateEstimation + "_RatePlots_Normalised.root", "RECREATE")
 normalisedRatePlotFile.cd()
 totalRateHist.Write()
 barrelRateHist.Write()
-#endcapRateHist.Write()
+endcapRateHist.Write()
 normalisedRatePlotFile.Close()
 nonNormalisedRatePlotFile.Close()
 
@@ -183,48 +183,48 @@ nonNormalisedRatePlotFile = TFile("" + saveFolder + "/" + genObject + "_" + trig
 passProbabilityFile = TFile("" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + sampleRateEstimation + "_RatePlots_TriggerPassProbability.root", "RECREATE")
 totalRateHist = nonNormalisedRatePlotFile.Get("simL1TObjectTriggerRate")
 barrelRateHist = nonNormalisedRatePlotFile.Get("barrelSimL1TObjectRate")
-#endcapRateHist = nonNormalisedRatePlotFile.Get("endcapSimL1TObjectRate")
+endcapRateHist = nonNormalisedRatePlotFile.Get("endcapSimL1TObjectRate")
 forwardRateHist = nonNormalisedRatePlotFile.Get("forwardSimL1TObjectRate")
 ppPassProbabilityHistogram = totalRateHist.Clone("ppPassProbabilityHistogram")
 ppPassProbabilityHistogramInBarrel = totalRateHist.Clone("ppPassProbabilityHistogramInBarrel")
-#ppPassProbabilityHistogramInEndcap = totalRateHist.Clone("ppPassProbabilityHistogramInEndcap")
+ppPassProbabilityHistogramInEndcap = totalRateHist.Clone("ppPassProbabilityHistogramInEndcap")
 ppPassProbabilityHistogramInForward = totalRateHist.Clone("ppPassProbabilityHistogramInForward")
 ppPassProbabilityHistogram.Scale(1./numberOfDelphesEvents)
 ppPassProbabilityHistogramInBarrel.Scale(1./numberOfDelphesEvents)
-#ppPassProbabilityHistogramInEndcap.Scale(1./numberOfDelphesEvents)
+ppPassProbabilityHistogramInEndcap.Scale(1./numberOfDelphesEvents)
 ppPassProbabilityHistogramInForward.Scale(1./numberOfDelphesEvents)
 passProbabilityFile.cd()
 eventPassProbabilityHistogram = ppPassProbabilityHistogram.Clone("eventPassProbabilityHistogram")
 eventPassProbabilityHistogramInBarrel = ppPassProbabilityHistogramInBarrel.Clone("eventPassProbabilityHistogramInBarrel")
-#eventPassProbabilityHistogramInEndcap = ppPassProbabilityHistogramInEndcap.Clone("eventPassProbabilityHistogramInEndcap")
+eventPassProbabilityHistogramInEndcap = ppPassProbabilityHistogramInEndcap.Clone("eventPassProbabilityHistogramInEndcap")
 eventPassProbabilityHistogramInForward = ppPassProbabilityHistogramInForward.Clone("eventPassProbabilityHistogramInForward")
 
 for x in xrange(1, eventPassProbabilityHistogram.GetNbinsX()+1):
   ppPassProbability = ppPassProbabilityHistogram.GetBinContent(x)
   ppPassProbabilityInBarrel = ppPassProbabilityHistogramInBarrel.GetBinContent(x)
-#  ppPassProbabilityInEndcap = ppPassProbabilityHistogramInEndcap.GetBinContent(x)
+  ppPassProbabilityInEndcap = ppPassProbabilityHistogramInEndcap.GetBinContent(x)
   ppPassProbabilityInForward = ppPassProbabilityHistogramInForward.GetBinContent(x)
   eventPassProbability = 1. - (1. - ppPassProbability)**averagePileUp
   eventPassProbabilityInBarrel = 1. - (1. - ppPassProbabilityInBarrel)**averagePileUp
-#  eventPassProbabilityInEndcap = 1. - (1. - ppPassProbabilityInEndcap)**averagePileUp
+  eventPassProbabilityInEndcap = 1. - (1. - ppPassProbabilityInEndcap)**averagePileUp
   eventPassProbabilityInForward = 1. - (1. - ppPassProbabilityInForward)**averagePileUp
   eventPassProbabilityHistogram.SetBinContent(x, eventPassProbability)
   eventPassProbabilityHistogramInBarrel.SetBinContent(x, eventPassProbabilityInBarrel)
-#  eventPassProbabilityHistogramInEndcap.SetBinContent(x, eventPassProbabilityInEndcap)
+  eventPassProbabilityHistogramInEndcap.SetBinContent(x, eventPassProbabilityInEndcap)
   eventPassProbabilityHistogramInForward.SetBinContent(x, eventPassProbabilityInForward)
 
 probabilityRatioHistogram = eventPassProbabilityHistogram.Clone("probabilityRatioHistogram")
 probabilityRatioHistogram.Divide(ppPassProbabilityHistogram)
 probabilityRatioHistogramInBarrel = eventPassProbabilityHistogramInBarrel.Clone("probabilityRatioHistogramInBarrel")
 probabilityRatioHistogramInBarrel.Divide(ppPassProbabilityHistogramInBarrel)
-#probabilityRatioHistogramInEndcap = eventPassProbabilityHistogramInEndcap.Clone("probabilityRatioHistogramInEndcap")
-#probabilityRatioHistogramInEndcap.Divide(ppPassProbabilityHistogramInEndcap)
+probabilityRatioHistogramInEndcap = eventPassProbabilityHistogramInEndcap.Clone("probabilityRatioHistogramInEndcap")
+probabilityRatioHistogramInEndcap.Divide(ppPassProbabilityHistogramInEndcap)
 probabilityRatioHistogramInForward = eventPassProbabilityHistogramInForward.Clone("probabilityRatioHistogramInForward")
 probabilityRatioHistogramInForward.Divide(ppPassProbabilityHistogramInForward)
 
 probabilityRatioHistogram.Write()
 probabilityRatioHistogramInBarrel.Write()
-#probabilityRatioHistogramInEndcap.Write()
+probabilityRatioHistogramInEndcap.Write()
 probabilityRatioHistogramInForward.Write()
 ppPassProbabilityHistogram.Write()
 ppPassProbabilityHistogramInBarrel.Write()
@@ -334,7 +334,7 @@ options.extraOptions.append("probabilityHistogram=" + "efficiencyHistogram")
 options.extraOptions.append("quality=" + str(qualityThreshold))
 options.extraOptions.append("triggerObjectName=" + triggerObject)
 options.extraOptions.append("genObjectName=" + genObject)
-options.nevents=300000
+#options.nevents=300000
 loop = main(options, folderAndScriptName, parser)
 os.system("mv " + saveFolder + "/" + sample_ClosureTest2 + " " + saveFolder + "/" + sample_ClosureTest2 + "_ClosureTestPlots_AllGenObjects")
 
