@@ -56,7 +56,7 @@ if "sample" in _heppyGlobalOptions:
 if sampleName == "delphesSample":
   delphesSample = cfg.MCComponent(
     'delphesSample',
-    tree_name = _heppyGlobalOptions["treeName"]
+    tree_name = _heppyGlobalOptions["treeName"],
     files = [_heppyGlobalOptions["sampleFileName"]],
     gen_object = genObjectName,
     trigger_object = triggerObjectName,
