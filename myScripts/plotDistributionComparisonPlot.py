@@ -80,7 +80,7 @@ def plotDistributionComparisonPlot(cfg):
   # Adding a small text with the chi-squared
 
   chiSquared = 0
-  numberOfBins = 13
+  numberOfBins = histograms[0].GetNbinsx()
   numberOfDegreesOfFreedom = numberOfBins
 
   for x in xrange(1, numberOfBins+1): # numberOfBins contains last bin, numberOfBins+1 contains the overflow (latter excluded), underflow also excluded
@@ -168,8 +168,8 @@ if __name__ == "__main__":
     #Files here
     # ["MinBiasDistribution_13TeV_DelphesCMS_CMSJets_GenJetPTDistribution/genJetPtDistribution_Normalised.root", "ptSimL1TMuonDistribution", "MinBias"],
     #["_closureTest/l1tMuonGenMuonMatching_SingleMu_FlatPt_8to100_QualityCut_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtSimL1TMuonDistribution", "SimL1TMuon"],
-    ["_muonTriggerRate_BarrelCut5.5_EndcapCut1.5_Iteration2/MinBiasDistribution_13TeV_DelphesCMS_CMSJets_RatePlots_PU140RatePlot.root", "fullPURatePlot", "Rescaling to PU140"],
-    ["_muonTriggerRate_BarrelCut5.5_EndcapCut1.5_Iteration2/NeutrinoGun_NoTau_13TeV_DelphesCMS_JetPTMin_5_50kevents_RatePlots_Normalised.root", "simL1TMuonTriggerRate", "Real PU140"],
+    ["_jetTriggerRate_BarrelOnly_HardPtCut10GeV/HardPtCut30/genJet_l1tJet_MinimumBias_14TeV_GenParticles_500kevents_RatePlots_PU140RatePlot.root", "fullPURatePlot", "Sim-L1TJets PU140 and hard pt cut of 30"],
+    ["_jetTriggerRate_BarrelOnly_HardPtCut10GeV/cmsMatching_SingleNeutrinoPU140_BarrelOnly_LeadingL1TJet_CMSTriggerRate/ratePlots.root", "triggerRate", "CMS"],
     #["_closureTest/l1tMuonGenMuonMatching_SingleMu_FlatPt_8to100_QualityCut_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtL1TMuonDistribution", "Original L1TMuon"],
   ]
   cfg.saveFileName = "comparisonResult.root"

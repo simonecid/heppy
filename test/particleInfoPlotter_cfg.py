@@ -41,7 +41,7 @@ test_classification = cfg.MCComponent(
 )
 
 selectedComponents = [
-  MinimumBias_14TeV_GenParticles_partial
+  MinimumBias_14TeV_GenParticles_500kevents
 ]
 
 # Defining pdgids
