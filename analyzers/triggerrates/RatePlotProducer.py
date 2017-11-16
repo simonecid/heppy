@@ -213,10 +213,10 @@ class RatePlotProducer(Analyzer):
     #pileupLine.SetLineColor(6)
     #pileupLine.Draw()
 
+    self.histogram.Write()
     c1.Update()
     c1.Write()
     c1.Print(self.cfg_ana.plot_name + ".svg", "svg")
 
-    self.histogram.Write()
 
     #self.rootfile.Close()
