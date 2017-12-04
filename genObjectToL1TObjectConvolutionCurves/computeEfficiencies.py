@@ -9,12 +9,21 @@ import ast
 from bisect import bisect_right
 from array import array
 
-def computeEfficiencies(numberOfEvents=-1, **kwargs):
+def computeEfficiencies(numberOfFiles=-1, **kwargs):
   chainGenObj = TChain (kwargs["GenObjTree"])
-  chainGenObj.Add(kwargs["GenObjFileFolder"]+"/*")
-
   chainL1TObjGenObj = TChain(kwargs["MatchTree"])
-  chainL1TObjGenObj.Add(kwargs["MatchFileFolder"]+"/*")
+  if numberOfFiles < 0:
+    chainGenObj.Add(kwargs["GenObjFileFolder"]+"/*")
+    chainL1TObjGenObj.Add(kwargs["MatchFileFolder"]+"/*")
+  if numberOfFiles >= 0:
+    genObjFiles = os.listdir(kwargs["GenObjFileFolder"])
+    matchFiles = os.listdir(kwargs["MatchFileFolder"])
+    if numberOfFiles > len(matchFiles):
+      numberOfFiles = len(matchFiles)
+    
+    for x in xrange(0, numberOfFiles):
+      chainGenObj.Add(kwargs["GenObjFileFolder"] + " /" + genObjFiles[x])
+      chainL1TObjGenObj.Add(kwargs["MatchFileFolder"] + "/" + matchFiles[x])
 
   bins = ast.literal_eval(kwargs["binning"])
   detectorEta = float(kwargs["eta"])
@@ -24,6 +33,7 @@ def computeEfficiencies(numberOfEvents=-1, **kwargs):
   minPtInBarrel = float(kwargs["minPtInBarrel"])
   minPtInEndcap = float(kwargs["minPtInEndcap"])
   minPtInForward = float(kwargs["minPtInForward"])
+  deltaR2Matching = float(kwargs["deltaR2Matching"])
   
   conversion_factors = []
 
@@ -63,8 +73,13 @@ def computeEfficiencies(numberOfEvents=-1, **kwargs):
     chainL1TObjGenObj.GetEntry(entryIndex)
     genObj_pt = chainL1TObjGenObj.genJet_pt
     genObj_eta = chainL1TObjGenObj.genJet_eta
+    deltaR2 = chainL1TObjGenObj.deltaR2
+
+    #Checking if the gen and l1t objects are enough close
+    if (deltaR2 > deltaR2Matching): continue
     # There are two different pt threshold based on the muon eta
     # If in barrel and the momentum is higher than the threshold, muon is good
+
     isGoodMuon = False
     if ((abs(genObj_eta) < barrelEta) and (genObj_pt > minPtInBarrel)):
       isGoodMuon = True
@@ -105,6 +120,7 @@ if __name__ == "__main__":
   parser.add_argument('--minPtInBarrel', type=float)
   parser.add_argument('--minPtInEndcap', type=float)
   parser.add_argument('--minPtInForward', type=float)
+  parser.add_argument('--deltaR2Matching', type=float)
 
   args = parser.parse_args()
 
@@ -121,6 +137,7 @@ if __name__ == "__main__":
     minPtInBarrel = args.minPtInBarrel,
     minPtInEndcap = args.minPtInEndcap,
     minPtInForward = args.minPtInForward,
+    deltaR2Matching = args.deltaR2Matching,
   )
   factors = accepted/total
   print "Conversion factors are", factors
