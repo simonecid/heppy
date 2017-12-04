@@ -35,6 +35,7 @@ minimumPtInForward = float(_heppyGlobalOptions["minimumPtInForward"])
 barrelEta = float(_heppyGlobalOptions["barrelEta"])
 endcapEta = float(_heppyGlobalOptions["endcapEta"])
 detectorEta = float(_heppyGlobalOptions["detectorEta"])
+deltaR2Matching = float(_heppyGlobalOptions["deltaR2Matching"])
 
 if "binning" in _heppyGlobalOptions:
   import ast
@@ -105,7 +106,7 @@ def quality(ptc):
   return ptc.quality
 
 def dr2Selection(ptc):
-  return abs(ptc.deltaR2) < 0.25 #dr < 0.5
+  return abs(ptc.deltaR2) < deltaR2Matching #dr < 0.5
 
 def genParticleInDetector(ptc):
 
@@ -157,9 +158,9 @@ objectPtDistributionBinnedInMatchedObject = cfg.Analyzer(
   histo_title = 'p_{t}^{' + objectName + '} distribution binned in p^{' + matchedObjectName +'}_{t}',
   matched_collection = 'matched_trigger_object',
   binning = ptBins,
-  nbins = 200,
+  nbins = 2000,
   min = 0,
-  max = 100,
+  max = 1000,
   file_label = "tfile1",
   plot_func = pt,
   bin_func = pt,
@@ -175,9 +176,9 @@ objectPtCumulativeDistributionBinnedInMatchedObject = cfg.Analyzer(
   histo_title = 'p_{t}^{' + objectName + '} cumulative distribution binned in p^{' + matchedObjectName +'}_{t}',
   matched_collection = 'matched_trigger_object',
   binning = ptBins,
-  nbins = 200,
+  nbins = 2000,
   min = 0,
-  max = 100,
+  max = 1000,
   file_label = "tfile1",
   plot_func = pt,
   bin_func = pt,
@@ -194,9 +195,9 @@ matchedObjectPtDistributionBinnedInMatchedObject = cfg.Analyzer(
   histo_title = 'p_{t}^{' + matchedObjectName + '} distribution binned in p^{' + matchedObjectName +'}_{t}',
   matched_collection = 'matched_trigger_object',
   binning = ptBins,
-  nbins = 200,
+  nbins = 2000,
   min = 0,
-  max = 200,
+  max = 1000,
   file_label = "tfile1",
   plot_func = matchedParticlePt,
   bin_func = pt,
@@ -302,8 +303,8 @@ objectPtDistribution = cfg.Analyzer(
   histo_name = 'objectPtDistribution',
   histo_title = 'p_{t}^{' + objectName + '} distribution',
   min = 0,
-  max = 100,
-  nbins = 200,
+  max = 1000,
+  nbins = 2000,
   input_objects = 'matched_trigger_object',
   value_func = pt,
   x_label = "p_{t}^{" + objectName + "}",
@@ -338,6 +339,17 @@ matchedObjectPtDistribution = cfg.Analyzer(
   value_func = matchedParticlePt,
   x_label = "p_{t}^{" + objectName + "}",
   y_label = "\# events"
+)
+
+genJetL1TObjectTree = cfg.Analyzer(
+  MatchedParticlesTreeProducer,
+  'genJetL1TObjectTree',
+  file_label = "ratePlotFile",
+  tree_name = 'genJetL1TObjectTree',
+  tree_title = 'Tree containing info about matched gen and ' + objectName,
+  particle_collection = 'matched_trigger_object',
+  matched_particle_name = objectName,
+  particle_name = "genJet"
 )
 
 # definition of a sequence of analyzers,
