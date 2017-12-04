@@ -71,11 +71,13 @@ class Smearer  (Analyzer):
       
       factorIndex = bisect_right(self.cfg_ana.bins, jetPt) - 1
       if factorIndex >= len(self.cfg_ana.bins) - 1:
+        jet.match = None
         #factorIndex = len(self.cfg_ana.bins) - 2
         continue
       
       factorIndex = bisect_right(self.cfg_ana.bins, jetPt) - 1
       if factorIndex >= len(self.cfg_ana.bins) - 1:
+        jet.match = None
         continue
 
       rndNumber = self.rng.uniform(0, 1)
@@ -92,35 +94,16 @@ class Smearer  (Analyzer):
       #Creating a new object with the same properties
       trgObject = deepcopy(jet)
       # Getting the quantity to add in order to smear
-      # I will use a hit-miss mc on the corresponding TH1F object
+      # I will use the root method which uses the cumulative probability function
+      # Reference https://root.cern.ch/doc/master/TH1_8cxx_source.html#l04710
       convolutionHistogram = self.convolutionHistograms[factorIndex]
-
-      convolutionHistogramMaximum = convolutionHistogram.GetMaximum()
-
-      xRange = getattr(self.cfg_ana, "object_x_range", (convolutionHistogram.GetXaxis().GetXmin(), convolutionHistogram.GetXaxis().GetXmax()))
-      yRange = (convolutionHistogram.GetMinimum(), convolutionHistogram.GetMaximum())
-
-      isHit = False
-
-      while not isHit:
-        
-        lowX = xRange[0] if trgObject.pt() + xRange[0] > 0 else -trgObject.pt()
-        rndX = self.rng.uniform(lowX, xRange[1])
-        rndY = self.rng.uniform(yRange[0], yRange[1])
-
-        # Retrieving the prob of having that pt
-        ptProb = convolutionHistogram.GetBinContent(convolutionHistogram.FindBin(rndX))
-        # Hit?
-
-        #print "Try ", rndX, rndY, "<", rndX, ptProb
-        if rndY < ptProb:
-          # Hit! Summing the smearing effect
-          trgObject._tlv.SetPtEtaPhiE(jetPt + rndX, jetEta, jetPhi, jetE)
-          isHit = True
-      
+      rndX = convolutionHistogram.GetRandom()
+      trgObject._tlv.SetPtEtaPhiE(jetPt + rndX, jetEta, jetPhi, jetE)
       jet.match = trgObject
+      jet.matches = [trgObject]
       jet.dr = 0
       trgObject.matches = [jet]
+      trgObject.match = jet
       output_collection.append(trgObject)
 
     setattr(event, self.cfg_ana.output_collection, output_collection)
