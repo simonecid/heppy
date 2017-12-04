@@ -85,29 +85,8 @@ class Transformer  (Analyzer):
         # Generating the momentum according to the conv functions
         # I will use a hit-miss mc on the corresponding TH1F object
         convolutionHistogram = self.convolutionHistograms[factorIndex]
-
-        convolutionHistogramMaximum = convolutionHistogram.GetMaximum()
-
-        xRange = getattr(self.cfg_ana, "object_x_range", (convolutionHistogram.GetXaxis().GetXmin(), convolutionHistogram.GetXaxis().GetXmax()))
-        yRange = (convolutionHistogram.GetMinimum(), convolutionHistogram.GetMaximum())
-
-        isHit = False
-
-        while not isHit:
-        
-          rndX = self.rng.uniform(xRange[0], xRange[1])
-          rndY = self.rng.uniform(yRange[0], yRange[1])
-
-          # Retrieving the prob of having that pt
-          ptProb = convolutionHistogram.GetBinContent(convolutionHistogram.FindBin(rndX))
-          # Hit?
-
-          #print "Try ", rndX, rndY, "<", rndX, ptProb
-          if rndY < ptProb:
-            # Hit!
-            trgObject._pt = rndX
-            isHit = True
-        
+        rndX = convolutionHistogram.GetRandom()
+        trgObject._pt = rndY
         output_collection.append(trgObject)
 
     setattr(event, self.cfg_ana.output_collection, output_collection)
