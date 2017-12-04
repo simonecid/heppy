@@ -31,6 +31,7 @@ barrelEta= float(_heppyGlobalOptions["barrelEta"])
 endcapEta= float(_heppyGlobalOptions["endcapEta"])
 triggerObjectName = _heppyGlobalOptions["triggerObjectName"]
 genObjectName = _heppyGlobalOptions["genObjectName"]
+deltaR2Matching = _heppyGlobalOptions["deltaR2Matching"]
 
 sampleName = "l1tMuonGenMuonMatching_QCD_15_3000_NoPU_Phase1_WQualityBranch"
 convolutionFileName = "_binnedDistributions/distributionWithQuality8/histograms.root"
@@ -94,7 +95,7 @@ def goodGenObjectSelection(event):
   # But we want to check that the gen mu falls into the detector
   if not event.trigger_objects:
     return isGenObjectWithinDetectorAcceptance(event.gen_objects[0])
-  return (isGenObjectWithinDetectorAcceptance(event.gen_objects[0]) and (abs(event.trigger_objects[0].deltaR2) < 0.25)) #dr < 0.5
+  return (isGenObjectWithinDetectorAcceptance(event.gen_objects[0]) and (abs(event.trigger_objects[0].deltaR2) < deltaR2Matching)) #dr < 0.5
 
 def qualityCut(event):
   if not event.trigger_objects:
@@ -218,7 +219,7 @@ coarseBinnedPtDistribution = cfg.Analyzer(
   histo_name = 'coarseBinnedPt' + triggerObjectName + 'Distribution',
   histo_title = triggerObjectName + ' transverse momentum distribution',
   bins = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 220, 240, 260, 280, 300, 340, 400],
-  input_objects = 'trigger_objects',
+  input_objects = 'good_trigger_objects',
   value_func = pt,
   log_y = True
 )
@@ -278,6 +279,76 @@ smearJetToTriggerObject = cfg.Analyzer(
   probability_histogram = probabilityHistogram
 )
 
+def isSmeared(ptc):
+  return ptc.match is not None
+
+smearedSelector = cfg.Analyzer(
+  Selector,
+  'smearedSelector',
+  output = 'smeared_gen_objects',
+  input_objects = 'gen_objects',
+  filter_func = isSmeared
+)
+
+def isMatchSmeared(ptc):
+  return ptc.match.match is not None
+
+matchSmearedSelector = cfg.Analyzer(
+  Selector,
+  'matchSmearedSelector',
+  output = 'good_trigger_objects',
+  input_objects = 'trigger_objects',
+  filter_func = isMatchSmeared
+)
+
+genJetSimL1TObjectTree = cfg.Analyzer(
+  MatchedParticlesTreeProducer,
+  'genJetSimL1TObjectTree',
+  file_label = "tfile1",
+  tree_name = 'genJetSimL1TObjectTree',
+  tree_title = 'Tree containing info about matched gen and Sim' + triggerObjectName,
+  particle_collection = 'smeared_gen_objects',
+  matched_particle_name = "Sim" + triggerObjectName,
+  particle_name = "genJet"
+)
+
+
+smearedObjectPtDistributionBinnedInMatchedObject = cfg.Analyzer(
+  MatchedObjectBinnedDistributions,
+  instance_label = 'smearedPtDistributionBinnedInMatchedObject',
+  histo_name = 'smearedPtDistributionBinnedInMatchedObject',
+  histo_title = 'p_{t}^{Sim' + triggerObjectName + '} distribution binned in p^{' + genObjectName +'}_{t}',
+  matched_collection = triggerObjectName,
+  binning = ptBins,
+  nbins = 100,
+  min = 0,
+  max = 1000,
+  file_label = "tfile1",
+  plot_func = pt,
+  bin_func = pt,
+  log_y = False,
+  x_label = "p_{t}^{Sim" + triggerObjectName + "} [GeV]",
+  y_label = "# events",
+)
+
+l1tObjectPtDistributionBinnedInMatchedObject = cfg.Analyzer(
+  MatchedObjectBinnedDistributions,
+  instance_label = 'l1tPtDistributionBinnedInMatchedObject',
+  histo_name = 'l1tPtDistributionBinnedInMatchedObject',
+  histo_title = 'p_{t}^{' + triggerObjectName + '} distribution binned in p^{' + genObjectName +'}_{t}',
+  matched_collection = 'good_trigger_objects',
+  binning = ptBins,
+  nbins = 100,
+  min = 0,
+  max = 1000,
+  file_label = "tfile1",
+  plot_func = pt,
+  bin_func = pt,
+  log_y = False,
+  x_label = "p_{t}^{" + triggerObjectName + "} [GeV]",
+  y_label = "# events",
+)
+
 def barrelCut(ptc):
   return abs(ptc.eta()) < barrelEta
 
@@ -335,12 +406,17 @@ sequence = cfg.Sequence( [
   qualityFilter,
   smearJetToTriggerObject,
   ptDistribution,
+  smearedSelector,
+  matchSmearedSelector,
   coarseBinnedPtDistribution,
+  genJetSimL1TObjectTree,
   smearedPtDistribution,
   coarseBinnedSmearedPtDistribution,
   coarseBinnedPtBarrelDistribution,
   coarseBinnedPtEndcapDistribution,
   coarseBinnedPtForwardDistribution,
+  smearedObjectPtDistributionBinnedInMatchedObject,
+  l1tObjectPtDistributionBinnedInMatchedObject
 ] )
 
 config = cfg.Config(
