@@ -200,15 +200,15 @@ simL1TObjectLeadingPtDistribution = cfg.Analyzer(
 )
 
 genJetSimL1TObjectTree = cfg.Analyzer(
-    MatchedParticlesTreeProducer,
-    'genJetSimL1TObjectTree',
-    file_label = "ratePlotFile",
-    tree_name = 'genJetSimL1TObjectTree',
-    tree_title = 'Tree containing info about matched gen and Sim' + triggerObjectName,
-    particle_collection = 'smeared_good_jets',
-    matched_particle_name = "Sim" + triggerObjectName,
-    particle_name = "genJet"
-  )
+  MatchedParticlesTreeProducer,
+  'genJetSimL1TObjectTree',
+  file_label = "ratePlotFile",
+  tree_name = 'genJetSimL1TObjectTree',
+  tree_title = 'Tree containing info about matched gen and Sim' + triggerObjectName,
+  particle_collection = 'smeared_good_jets',
+  matched_particle_name = "Sim" + triggerObjectName,
+  particle_name = "genJet"
+)
 
 leadingPtSimL1TObjectFinder = cfg.Analyzer(
   LeadingObjectFinder ,
