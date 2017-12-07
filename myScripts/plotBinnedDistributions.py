@@ -7,17 +7,17 @@ from ROOT import TCanvas
 from ROOT import TLegend
 
 #convolutionFile = TFile("_muonTriggerRate_BarrelCut5.5_EndcapCut1.5_Iteration2/binnedDistributions.root")
-convolutionFile = TFile("_jetTriggerRate_BarrelOnly_HardPtCut10GeV/genJet_l1tJet_convolutionCurves/histograms.root")
+convolutionFile = TFile("_jetTriggerRate_BarrelOnly_HardPtCut25GeV_NoPUConvolutionCurves_0.025RSquared/genJet_l1tJet_convolutionCurves/histograms.root")
 
 '''List of every distribution to plot'''
 distributionNames = [
-  "objectPtDistributionBinnedInMatchedObject",
-  "objectMatchedObjectPtRatioDistributionBinnedInMatchedObject",
-  "matchedObjectEtaDistributionBinnedInMatchedObject",
-  "objectEtaDistributionBinnedInMatchedObject",
-  "deltaRDistributionBinnedInMatchedObject",
+  #"objectPtDistributionBinnedInMatchedObject",
+  #"objectMatchedObjectPtRatioDistributionBinnedInMatchedObject",
+  #"matchedObjectEtaDistributionBinnedInMatchedObject",
+  #"objectEtaDistributionBinnedInMatchedObject",
+  #"deltaRDistributionBinnedInMatchedObject",
   "deltaPtDistributionBinnedInMatchedObject",
-  "matchedObjectPtDistributionBinnedInMatchedObject"
+  #"matchedObjectPtDistributionBinnedInMatchedObject"
 ]
 
 '''Bins of binned distributions'''
@@ -28,7 +28,10 @@ distributionNames = [
 
 # JET BINNING
 #ptBins = [3, 5, 10, 15, 20, 25, 30, 35, 40, 50, 60, 70, 80, 100, 125, 150, 175, 200, 250, 300]
-ptBins = [10, 15, 20, 25, 30, 35, 40, 50, 60, 70, 80, 100, 125, 150, 175, 200, 250, 300]
+#ptBins = [10, 15, 20, 25, 30, 35, 40, 50, 60, 70, 80, 100]
+#ptBins = [25, 30, 35, 40, 50, 60, 70, 80]
+ptBins = [3, 4, 5, 7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 110, 125, 150, 175, 200, 250, 300, 350, 400, 450, 500]
+#ptBins = [3, 4, 5, 7, 10, 15, 20, 25]
 
 # MUON BINNING
 #ptBins = [0, 1.5, 2.3, 3, 4, 5, 5.5, 6, 7, 8, 11, 15, 20, 30, 40, 50, 70, 100, 140, 200]
