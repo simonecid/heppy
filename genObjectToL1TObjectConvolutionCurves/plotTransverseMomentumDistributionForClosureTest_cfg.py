@@ -22,16 +22,16 @@ from heppy.framework.heppy_loop import _heppyGlobalOptions
 from heppy.analyzers.Filter import Filter
 import ast
 
+triggerObjectName = _heppyGlobalOptions["triggerObjectName"]
+genObjectName = _heppyGlobalOptions["genObjectName"]
 quality = int(_heppyGlobalOptions["quality"])
-detectorEta= float(_heppyGlobalOptions["detectorEta"])
 minimumPtInBarrel= float(_heppyGlobalOptions["minimumPtInBarrel"])
 minimumPtInEndcap= float(_heppyGlobalOptions["minimumPtInEndcap"])
 minimumPtInForward= float(_heppyGlobalOptions["minimumPtInForward"])
 barrelEta= float(_heppyGlobalOptions["barrelEta"])
 endcapEta= float(_heppyGlobalOptions["endcapEta"])
-triggerObjectName = _heppyGlobalOptions["triggerObjectName"]
-genObjectName = _heppyGlobalOptions["genObjectName"]
-deltaR2Matching = _heppyGlobalOptions["deltaR2Matching"]
+detectorEta= float(_heppyGlobalOptions["detectorEta"])
+deltaR2Matching = float(_heppyGlobalOptions["deltaR2Matching"])
 
 sampleName = "l1tMuonGenMuonMatching_QCD_15_3000_NoPU_Phase1_WQualityBranch"
 convolutionFileName = "_binnedDistributions/distributionWithQuality8/histograms.root"
@@ -127,6 +127,9 @@ tfile_service_1 = cfg.Service(
 
 def pt (ptc):
   return ptc.pt()
+
+def deltaPt (ptc):
+  return ptc.pt() - ptc.match.pt()
 
 def matchedObjectPt (ptc):
   return ptc.match.pt()
@@ -312,37 +315,36 @@ genJetSimL1TObjectTree = cfg.Analyzer(
   particle_name = "genJet"
 )
 
-
-smearedObjectPtDistributionBinnedInMatchedObject = cfg.Analyzer(
+smearedObjectDeltaPtDistributionBinnedInMatchedObject = cfg.Analyzer(
   MatchedObjectBinnedDistributions,
-  instance_label = 'smearedPtDistributionBinnedInMatchedObject',
-  histo_name = 'smearedPtDistributionBinnedInMatchedObject',
+  instance_label = 'smearedObjectDeltaPtDistributionBinnedInMatchedObject',
+  histo_name = 'smearedObjectDeltaPtDistributionBinnedInMatchedObject',
   histo_title = 'p_{t}^{Sim' + triggerObjectName + '} distribution binned in p^{' + genObjectName +'}_{t}',
   matched_collection = triggerObjectName,
   binning = ptBins,
-  nbins = 100,
-  min = 0,
-  max = 1000,
+  nbins = 1600,
+  min = -400,
+  max = 400,
   file_label = "tfile1",
-  plot_func = pt,
+  plot_func = deltaPt,
   bin_func = pt,
   log_y = False,
   x_label = "p_{t}^{Sim" + triggerObjectName + "} [GeV]",
   y_label = "# events",
 )
 
-l1tObjectPtDistributionBinnedInMatchedObject = cfg.Analyzer(
+l1tObjectDeltaPtDistributionBinnedInMatchedObject = cfg.Analyzer(
   MatchedObjectBinnedDistributions,
-  instance_label = 'l1tPtDistributionBinnedInMatchedObject',
-  histo_name = 'l1tPtDistributionBinnedInMatchedObject',
+  instance_label = 'l1tObjectDeltaPtDistributionBinnedInMatchedObject',
+  histo_name = 'l1tObjectDeltaPtDistributionBinnedInMatchedObject',
   histo_title = 'p_{t}^{' + triggerObjectName + '} distribution binned in p^{' + genObjectName +'}_{t}',
-  matched_collection = 'good_trigger_objects',
+  matched_collection = 'trigger_objects',
   binning = ptBins,
-  nbins = 100,
-  min = 0,
-  max = 1000,
+  nbins = 1600,
+  min = -400,
+  max = 400,
   file_label = "tfile1",
-  plot_func = pt,
+  plot_func = deltaPt,
   bin_func = pt,
   log_y = False,
   x_label = "p_{t}^{" + triggerObjectName + "} [GeV]",
@@ -401,9 +403,9 @@ sequence = cfg.Sequence( [
   endcapSelector,
   forwardSelector,
   detectorSelector,
-  genPtDistribution,
   goodGenObjectFilter,
   qualityFilter,
+  genPtDistribution,
   smearJetToTriggerObject,
   ptDistribution,
   smearedSelector,
@@ -415,8 +417,8 @@ sequence = cfg.Sequence( [
   coarseBinnedPtBarrelDistribution,
   coarseBinnedPtEndcapDistribution,
   coarseBinnedPtForwardDistribution,
-  smearedObjectPtDistributionBinnedInMatchedObject,
-  l1tObjectPtDistributionBinnedInMatchedObject
+  smearedObjectDeltaPtDistributionBinnedInMatchedObject,
+  l1tObjectDeltaPtDistributionBinnedInMatchedObject
 ] )
 
 config = cfg.Config(
