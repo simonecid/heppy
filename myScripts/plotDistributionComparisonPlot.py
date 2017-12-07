@@ -80,7 +80,7 @@ def plotDistributionComparisonPlot(cfg):
   # Adding a small text with the chi-squared
 
   chiSquared = 0
-  numberOfBins = histograms[0].GetNbinsx()
+  numberOfBins = histograms[0].GetNbinsX()
   numberOfDegreesOfFreedom = numberOfBins
 
   for x in xrange(1, numberOfBins+1): # numberOfBins contains last bin, numberOfBins+1 contains the overflow (latter excluded), underflow also excluded
@@ -101,7 +101,7 @@ def plotDistributionComparisonPlot(cfg):
   #chiSquareLabel = TPaveText(0.7, 0.6, 0.9, 0.4)
   #chiSquareLabel.AddText("#chi^{2}/ndf = " + str(chiSquared) + "/" + str(numberOfDegreesOfFreedom) + " = " + str(chiSquared/numberOfDegreesOfFreedom))
   #chiSquareLabel.Draw()
-
+  print "FINAL CS IS", format(chiSquared, ".2f") + "/" + str(numberOfDegreesOfFreedom) + " = " + format(chiSquared/numberOfDegreesOfFreedom, ".2f")
   legend.SetHeader("#chi^{2}/ndf = " + format(chiSquared, ".2f") + "/" + str(numberOfDegreesOfFreedom) + " = " + format(chiSquared/numberOfDegreesOfFreedom, ".2f"), "C")
   legend.Draw()
   # lower plot will be in pad
@@ -151,6 +151,9 @@ def plotDistributionComparisonPlot(cfg):
   ratioPlot.GetXaxis().SetLabelFont(43) # Absolute font size in pixel (precision 3)
   ratioPlot.GetXaxis().SetLabelSize(15)
 
+  if getattr(cfg, "draw", False):
+    import pdb; pdb.set_trace()
+
   saveFile = TFile(cfg.saveFileName, "RECREATE")
   saveFile.cd()
   canvas.Write()
@@ -168,11 +171,12 @@ if __name__ == "__main__":
     #Files here
     # ["MinBiasDistribution_13TeV_DelphesCMS_CMSJets_GenJetPTDistribution/genJetPtDistribution_Normalised.root", "ptSimL1TMuonDistribution", "MinBias"],
     #["_closureTest/l1tMuonGenMuonMatching_SingleMu_FlatPt_8to100_QualityCut_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtSimL1TMuonDistribution", "SimL1TMuon"],
-    ["_jetTriggerRate_BarrelOnly_HardPtCut10GeV/HardPtCut30/genJet_l1tJet_MinimumBias_14TeV_GenParticles_500kevents_RatePlots_PU140RatePlot.root", "fullPURatePlot", "Sim-L1TJets PU140 and hard pt cut of 30"],
-    ["_jetTriggerRate_BarrelOnly_HardPtCut10GeV/cmsMatching_SingleNeutrinoPU140_BarrelOnly_LeadingL1TJet_CMSTriggerRate/ratePlots.root", "triggerRate", "CMS"],
+    ["_jetTriggerRate_Test/cmsMatching_QCD_15_3000_L1TJet_GenJet_ClosureTestPlots_QualityCutOnGenObject/histograms.root", "smearedObjectDeltaPtDistributionBinnedInMatchedObject_425_450", "Sim-L1TJets PU140 and hard pt cut of 30"],
+    ["_jetTriggerRate_Test/cmsMatching_QCD_15_3000_L1TJet_GenJet_ClosureTestPlots_QualityCutOnGenObject/histograms.root", "l1tObjectDeltaPtDistributionBinnedInMatchedObject_425_450", "CMS"],
     #["_closureTest/l1tMuonGenMuonMatching_SingleMu_FlatPt_8to100_QualityCut_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtL1TMuonDistribution", "Original L1TMuon"],
   ]
   cfg.saveFileName = "comparisonResult.root"
+  cfg.draw=True
 
   plotDistributionComparisonPlot(cfg)
 
