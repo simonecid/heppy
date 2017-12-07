@@ -11,6 +11,7 @@ from heppy.analyzers.Matcher import Matcher
 from heppy.analyzers.Selector import Selector
 from heppy.analyzers.triggerrates.MatchedParticlesTreeProducer import MatchedParticlesTreeProducer
 from heppy.analyzers.triggerrates.MatchedObjectBinnedDistributions import MatchedObjectBinnedDistributions
+from heppy.analyzers.Filter import Filter
 from heppy.analyzers.triggerrates.MatchedObjectBinnedCumulativeDistributions import MatchedObjectBinnedCumulativeDistributions
 from heppy.analyzers.triggerrates.CMSMatchingReader import CMSMatchingReader
 from heppy.analyzers.triggerrates.ObjectFinder import ObjectFinder
@@ -36,6 +37,8 @@ barrelEta = float(_heppyGlobalOptions["barrelEta"])
 endcapEta = float(_heppyGlobalOptions["endcapEta"])
 detectorEta = float(_heppyGlobalOptions["detectorEta"])
 deltaR2Matching = float(_heppyGlobalOptions["deltaR2Matching"])
+qualityThreshold = int(_heppyGlobalOptions["quality"])
+
 
 if "binning" in _heppyGlobalOptions:
   import ast
@@ -99,52 +102,51 @@ def deltaR (ptc):
 def isMatched(ptc):
   return ptc.match is not None
 
-def qualityCut(ptc):
-  return ptc.quality >=int(_heppyGlobalOptions["quality"])
+def matchQualityCut(ptc):
+  return ptc.match.quality >=qualityThreshold
 
 def quality(ptc):
   return ptc.quality
 
-def dr2Selection(ptc):
-  return abs(ptc.deltaR2) < deltaR2Matching #dr < 0.5
+# Retrieving the sample to analyse
 
-def genParticleInDetector(ptc):
+def isGenObjectWithinDetectorAcceptance(ptc):
+  # pass if in barrel momentum is lower than threshold
+  if ((abs(ptc.eta()) < barrelEta) and (ptc.pt() > minimumPtInBarrel)):
+    return True
+  # If not in barrel check if it is in the endcap acceptance
+  if ((abs(ptc.eta()) >= barrelEta) and (abs(ptc.eta()) < endcapEta) and (ptc.pt() > minimumPtInEndcap)): 
+    return True
+  # If not in endcap check if it is in the forward acceptance
+  if ((abs(ptc.eta()) >= endcapEta) and (abs(ptc.eta()) < detectorEta) and (ptc.pt() > minimumPtInForward)): 
+    return True
 
-  #Reject every particle outside detectorEta
-  if (abs(ptc.match.eta()) > detectorEta):
-    return False
+  return False
 
-  if (abs(ptc.match.eta()) < barrelEta):
-    #It is OK if the momentum is high enough to not start spiralling
-    return (ptc.match.pt() > minimumPtInBarrel)
-    #Is it in endcap?
-  elif (abs(ptc.match.eta()) < endcapEta):
-    return (ptc.match.pt() > minimumPtInEndcap)
-    #then it has to be in the forward
-  else: return (ptc.match.pt() > minimumPtInForward)
+# Defining pdgids
 
-kinematicCutSelector = cfg.Analyzer(
-  Selector,
-  'kinematicCutSelector',
-  output = 'trigger_objects_in_detector',
-  input_objects = 'trigger_objects',
-  filter_func = genParticleInDetector
+def goodGenObjectSelection(event):
+  # If no trigger object we are not interested in the qualirty or match
+  # But we want to check that the gen mu falls into the detector
+  if not event.trigger_objects:
+    return isGenObjectWithinDetectorAcceptance(event.gen_objects[0])
+  return (isGenObjectWithinDetectorAcceptance(event.gen_objects[0]) and (abs(event.trigger_objects[0].deltaR2) < deltaR2Matching)) #dr < 0.5
+
+def qualityCut(event):
+  if not event.trigger_objects:
+    return True
+  return event.trigger_objects[0].quality >= qualityThreshold
+
+goodGenObjectFilter = cfg.Analyzer(
+  Filter,
+  'goodGenObjectFilter',
+  filter_func = goodGenObjectSelection 
 )
 
-qualityCutSelector = cfg.Analyzer(
-  Selector,
-  'qualityCutSelector',
-  output = 'good_trigger_objects',
-  input_objects = 'trigger_objects_in_detector',
+qualityFilter = cfg.Analyzer(
+  Filter,
+  'qualityFilter',
   filter_func = qualityCut
-)
-
-tightRestrictionMatchSelector = cfg.Analyzer(
-  Selector,
-  'tightRestrictionMatchSelector',
-  output = 'matched_trigger_object',
-  input_objects = 'good_trigger_objects',
-  filter_func = dr2Selection 
 )
 
 #ptBins = []
@@ -156,7 +158,7 @@ objectPtDistributionBinnedInMatchedObject = cfg.Analyzer(
   instance_label = 'objectPtDistributionBinnedInMatchedObject',
   histo_name = 'objectPtDistributionBinnedInMatchedObject',
   histo_title = 'p_{t}^{' + objectName + '} distribution binned in p^{' + matchedObjectName +'}_{t}',
-  matched_collection = 'matched_trigger_object',
+  matched_collection = 'trigger_objects',
   binning = ptBins,
   nbins = 2000,
   min = 0,
@@ -174,7 +176,7 @@ objectPtCumulativeDistributionBinnedInMatchedObject = cfg.Analyzer(
   instance_label = 'objectPtCumulativeDistributionBinnedInMatchedObject',
   histo_name = 'objectPtCumulativeDistributionBinnedInMatchedObject',
   histo_title = 'p_{t}^{' + objectName + '} cumulative distribution binned in p^{' + matchedObjectName +'}_{t}',
-  matched_collection = 'matched_trigger_object',
+  matched_collection = 'trigger_objects',
   binning = ptBins,
   nbins = 2000,
   min = 0,
@@ -193,7 +195,7 @@ matchedObjectPtDistributionBinnedInMatchedObject = cfg.Analyzer(
   instance_label = 'matchedObjectPtDistributionBinnedInMatchedObject',
   histo_name = 'matchedObjectPtDistributionBinnedInMatchedObject',
   histo_title = 'p_{t}^{' + matchedObjectName + '} distribution binned in p^{' + matchedObjectName +'}_{t}',
-  matched_collection = 'matched_trigger_object',
+  matched_collection = 'trigger_objects',
   binning = ptBins,
   nbins = 2000,
   min = 0,
@@ -211,7 +213,7 @@ deltaPtDistributionBinnedInMatchedObject = cfg.Analyzer(
   instance_label = 'deltaPtDistributionBinnedInMatchedObject',
   histo_name = 'deltaPtDistributionBinnedInMatchedObject',
   histo_title = 'p_{t}^{' + objectName + '} - p_{t}^{' + matchedObjectName +'} distribution binned in p^{' + matchedObjectName +'}_{t}',
-  matched_collection = 'matched_trigger_object',
+  matched_collection = 'trigger_objects',
   binning = ptBins,
   nbins = 1600,
   min = -400,
@@ -229,7 +231,7 @@ objectEtaDistributionBinnedInMatchedObject = cfg.Analyzer(
   instance_label = 'objectEtaDistributionBinnedInMatchedObject',
   histo_name = 'objectEtaDistributionBinnedInMatchedObject',
   histo_title = '#eta^{' + objectName + '} distribution binned in p^{' + matchedObjectName +'}_{t}',
-  matched_collection = 'matched_trigger_object',
+  matched_collection = 'trigger_objects',
   binning = ptBins,
   nbins = 200,
   min = -10,
@@ -247,7 +249,7 @@ matchedObjectEtaDistributionBinnedInMatchedObject = cfg.Analyzer(
   instance_label = 'matchedObjectEtaDistributionBinnedInMatchedObject',
   histo_name = 'matchedObjectEtaDistributionBinnedInMatchedObject',
   histo_title = '#eta^{' + matchedObjectName + '} distribution binned in p^{' + matchedObjectName +'}_{t}',
-  matched_collection = 'matched_trigger_object',
+  matched_collection = 'trigger_objects',
   binning = ptBins,
   nbins = 200,
   min = -10,
@@ -265,7 +267,7 @@ objectMatchedObjectPtRatioDistributionBinnedInMatchedObject = cfg.Analyzer(
   instance_label = 'objectMatchedObjectPtRatioDistributionBinnedInMatchedObject',
   histo_name = 'objectMatchedObjectPtRatioDistributionBinnedInMatchedObject',
   histo_title = 'p_{t}^{' + objectName + '}/p_{t}^{' + matchedObjectName +'} distribution binned in p^{' + matchedObjectName +'}_{t}',
-  matched_collection = 'matched_trigger_object',
+  matched_collection = 'trigger_objects',
   binning = ptBins,
   nbins = 800,
   min = 0,
@@ -283,7 +285,7 @@ deltaRDistributionBinnedInMatchedObject = cfg.Analyzer(
   instance_label = 'deltaRDistributionBinnedInMatchedObject',
   histo_name = 'deltaRDistributionBinnedInMatchedObject',
   histo_title = '#DeltaR distribution binned in p^{' + matchedObjectName +'}_{t}',
-  matched_collection = 'matched_trigger_object',
+  matched_collection = 'trigger_objects',
   binning = ptBins,
   nbins = 500,
   min = 0,
@@ -305,7 +307,7 @@ objectPtDistribution = cfg.Analyzer(
   min = 0,
   max = 1000,
   nbins = 2000,
-  input_objects = 'matched_trigger_object',
+  input_objects = 'trigger_objects',
   value_func = pt,
   x_label = "p_{t}^{" + objectName + "}",
   y_label = "\# events"
@@ -320,7 +322,7 @@ objectQualityDistribution = cfg.Analyzer(
   min = 0,
   max = 20,
   nbins = 20,
-  input_objects = 'matched_trigger_object',
+  input_objects = 'trigger_objects',
   value_func = quality,
   x_label = "Quality^{" + objectName + "}",
   y_label = "\# events"
@@ -335,7 +337,7 @@ matchedObjectPtDistribution = cfg.Analyzer(
   min = 0,
   max = 200,
   nbins = 200,
-  input_objects = 'matched_trigger_object',
+  input_objects = 'trigger_objects',
   value_func = matchedParticlePt,
   x_label = "p_{t}^{" + objectName + "}",
   y_label = "\# events"
@@ -347,18 +349,36 @@ genJetL1TObjectTree = cfg.Analyzer(
   file_label = "ratePlotFile",
   tree_name = 'genJetL1TObjectTree',
   tree_title = 'Tree containing info about matched gen and ' + objectName,
-  particle_collection = 'matched_trigger_object',
+  particle_collection = 'trigger_objects',
   matched_particle_name = objectName,
   particle_name = "genJet"
+)
+
+
+
+genPtDistribution = cfg.Analyzer(
+  Histogrammer,
+  'pt' + selectedComponents[0].gen_object + 'Distribution',
+  file_label = 'tfile1',
+  x_label= "pt [GeV]",
+  y_label = "# events",
+  histo_name = 'pt' + selectedComponents[0].gen_object +'Distribution',
+  histo_title = selectedComponents[0].gen_object + ' transverse momentum distribution',
+  min = 0,
+  max = 500,
+  nbins = 1000,
+  input_objects = 'gen_objects',
+  value_func = pt,
+  log_y = True
 )
 
 # definition of a sequence of analyzers,
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
   source,
-  kinematicCutSelector,
-  qualityCutSelector,
-  tightRestrictionMatchSelector,
+  goodGenObjectFilter,
+  qualityFilter,
+  genPtDistribution,
   objectPtDistributionBinnedInMatchedObject,
   objectMatchedObjectPtRatioDistributionBinnedInMatchedObject,
   objectEtaDistributionBinnedInMatchedObject,
