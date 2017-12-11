@@ -8,6 +8,7 @@ import argparse
 import ast
 from bisect import bisect_right
 from array import array
+import os
 
 def computeEfficiencies(numberOfFiles=-1, **kwargs):
   chainGenObj = TChain (kwargs["GenObjTree"])
@@ -22,7 +23,7 @@ def computeEfficiencies(numberOfFiles=-1, **kwargs):
       numberOfFiles = len(matchFiles)
     
     for x in xrange(0, numberOfFiles):
-      chainGenObj.Add(kwargs["GenObjFileFolder"] + " /" + genObjFiles[x])
+      chainGenObj.Add(kwargs["GenObjFileFolder"] + "/" + genObjFiles[x])
       chainL1TObjGenObj.Add(kwargs["MatchFileFolder"] + "/" + matchFiles[x])
 
   bins = ast.literal_eval(kwargs["binning"])
