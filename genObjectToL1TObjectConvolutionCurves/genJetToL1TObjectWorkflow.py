@@ -14,7 +14,7 @@ from math import isnan
 from glob import glob
 
 saveFolder = "_jetTriggerRate_Test"
-binning = "[3, 4, 5, 7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 110, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 400, 425, 450, 475, 500]"
+binning = "[3, 4, 5, 7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 80, 90, 100, 110, 125, 150, 175, 200, 250, 300, 400, 500]"
 ##binning = "[0, 1.5, 3, 5, 8, 11, 15, 20, 30, 40, 50, 70, 100, 140, 200]"
 qualityThreshold = 0
 barrelEta = 1.44 # 0-1.44 barrel
@@ -37,13 +37,13 @@ efficiencyMatchTree = "MatchGenJetWithL1Objects/matchedL1TJetGenJetTree"
 efficiencyGenTree = "MatchGenJetWithL1Objects/genJetTree"
 numberOfFiles = 5
 
-sample_ClosureTest1 = "cmsMatching_QCD_15_3000_L1TJet_GenJet"
+sample_ClosureTest1 = "cmsMatching_QCD_15_3000_L1TJet_GenJet_Smaller"
 sample_ClosureTest2 = "cmsMatching_QCD_15_3000_GenJet_Smaller"
 sample_ClosureTest3 = "cmsMatching_SingleNeutrinoPU140_BarrelOnly_LeadingL1TJet"
 #sample_ClosureTest4 = "cmsMatching_SingleNeutrinoPU140_BarrelOnly_L1TJet"
 
-sampleRateEstimation = "MinimumBias_14TeV_GenParticles_500kevents"
-numberOfDelphesEvents = 500000
+sampleRateEstimation = "MinimumBias_14TeV_GenParticles_partial"
+numberOfDelphesEvents = 3860000
 averagePileUp = 140
 bunchCrossingFrequency = 31.6e6 # 2808 bunches
 #instantaneousLuminosity = 5e34 #cm^-2 s^-1
@@ -62,27 +62,30 @@ os.system("mkdir -p " + saveFolder)
 #  else:
 #    print "Stopping process."
 #    exit()
-
-print "--- COMPUTING CONVOLUTION CURVES ---"
-
-parser = create_parser()
-(options,args) = parser.parse_args()
-folderAndScriptName = [saveFolder, "genObjectToL1TObjectConvolutionCurves/binnedDistributionsCMS_cfg.py"]
-options.extraOptions.append("sample=" + sample_BinnedDistributions)
-options.extraOptions.append("binning=" + binning)
-options.extraOptions.append("quality=" + str(qualityThreshold))
-options.extraOptions.append("minimumPtInBarrel=" + str(minimumPtToReachBarrel))
-options.extraOptions.append("minimumPtInEndcap=" + str(minimumPtToReachEndcap))
-options.extraOptions.append("minimumPtInForward=" + str(minimumPtToReachForward))
-options.extraOptions.append("barrelEta=" + str(barrelEta))
-options.extraOptions.append("endcapEta=" + str(endcapEta))
-options.extraOptions.append("detectorEta=" + str(detectorEta))
-options.extraOptions.append("triggerObjectName=" + triggerObject)
-options.extraOptions.append("genObjectName=" + genObject)
-options.extraOptions.append("deltaR2Matching=" + str(deltaR2Matching))
-options.nevents=300000
-loop = main(options, folderAndScriptName, parser)
-os.system("mv " + saveFolder + "/" + sample_BinnedDistributions + " " + saveFolder + "/" + genObject + "_" +  triggerObject + "_" + "convolutionCurves")
+#
+#print "--- COMPUTING CONVOLUTION CURVES ---"
+#
+#parser = create_parser()
+#(options,args) = parser.parse_args()
+#folderAndScriptName = [saveFolder, "genObjectToL1TObjectConvolutionCurves/binnedDistributionsCMS_cfg.py"]
+#options.extraOptions.append("sample=" + sample_BinnedDistributions)
+#options.extraOptions.append("binning=" + binning)
+#options.extraOptions.append("quality=" + str(qualityThreshold))
+#options.extraOptions.append("minimumPtInBarrel=" + str(minimumPtToReachBarrel))
+#options.extraOptions.append("minimumPtInEndcap=" + str(minimumPtToReachEndcap))
+#options.extraOptions.append("minimumPtInForward=" + str(minimumPtToReachForward))
+#options.extraOptions.append("barrelEta=" + str(barrelEta))
+#options.extraOptions.append("endcapEta=" + str(endcapEta))
+#options.extraOptions.append("detectorEta=" + str(detectorEta))
+#options.extraOptions.append("triggerObjectName=" + triggerObject)
+#options.extraOptions.append("genObjectName=" + genObject)
+#options.extraOptions.append("deltaR2Matching=" + str(deltaR2Matching))
+##options.nevents=300000
+#loop = main(options, folderAndScriptName, parser)
+#
+#os.system("mkdir " + saveFolder + "/" + genObject + "_" +  triggerObject + "_" + "convolutionCurves")
+#os.system("hadd " + saveFolder + "/" + genObject + "_" +  triggerObject + "_" + "convolutionCurves/histograms.root " + saveFolder + "/" + sample_BinnedDistributions + "_Chunk*/histograms.root")
+#
 #
 #print "--- COMPUTING THE CONVERSION FACTORS/EFFICIENCIES ---"
 #
@@ -346,7 +349,7 @@ os.system("mv " + saveFolder + "/" + sample_BinnedDistributions + " " + saveFold
 #fullPURatePlotInForward.Write()
 #
 #pileupRatePlotFile.Close()
-
+#
 print "--- RUNNING THE CLOSURE TESTS ---"
 
 print "CREATING THE MOMENTUM DISTRIBUTION PLOTS FOR MATCHED CMS GEN JET TO SIML1TOBJECT"
@@ -374,34 +377,35 @@ options.nevents=300000
 loop = main(options, folderAndScriptName, parser)
 os.system("mv " + saveFolder + "/" + sample_ClosureTest1 + " " + saveFolder + "/" + sample_ClosureTest1 + "_ClosureTestPlots_QualityCutOnGenObject")
 
-#print "CREATING THE MOMENTUM DISTRIBUTION PLOTS FOR CMS GEN JET TO SIML1TOBJECT (EVERY GEN JET IS CONSIDERED)"
-#
-##We take every gen mu.
-##We check if they fall into the detector
-##If they do, we apply the probabilistic selection and the smearing
-#
-#parser = create_parser()
-#(options,args) = parser.parse_args()
-#folderAndScriptName = [saveFolder, "genObjectToL1TObjectConvolutionCurves/plotTransverseMomentumDistributionForClosureTest_cfg.py"]
-#convolutionFileName = saveFolder + "/" + genObject + "_" +  triggerObject + "_" + "convolutionCurves/histograms.root"
-#options.extraOptions.append("sample=" + sample_ClosureTest2)
-#options.extraOptions.append("convolutionFileName=" + convolutionFileName)
-#options.extraOptions.append("binning=" + binning)
-#options.extraOptions.append("minimumPtInBarrel=" + str(minimumPtToReachBarrel))
-#options.extraOptions.append("minimumPtInEndcap=" + str(minimumPtToReachEndcap))
-#options.extraOptions.append("minimumPtInForward=" + str(minimumPtToReachForward))
-#options.extraOptions.append("detectorEta=" + str(detectorEta))
-#options.extraOptions.append("barrelEta=" + str(barrelEta))
-#options.extraOptions.append("endcapEta=" + str(endcapEta))
-#options.extraOptions.append("probabilityFile=" + "" + saveFolder + "/efficiencyFactors.root")
-#options.extraOptions.append("probabilityHistogram=" + "efficiencyHistogram")
-#options.extraOptions.append("quality=" + str(qualityThreshold))
-#options.extraOptions.append("triggerObjectName=" + triggerObject)
-#options.extraOptions.append("genObjectName=" + genObject)
-##options.nevents=300000
-#loop = main(options, folderAndScriptName, parser)
-#os.system("mv " + saveFolder + "/" + sample_ClosureTest2 + " " + saveFolder + "/" + sample_ClosureTest2 + "_ClosureTestPlots_AllGenObjects")
-#
+print "CREATING THE MOMENTUM DISTRIBUTION PLOTS FOR CMS GEN JET TO SIML1TOBJECT (EVERY GEN JET IS CONSIDERED)"
+
+#We take every gen mu.
+#We check if they fall into the detector
+#If they do, we apply the probabilistic selection and the smearing
+
+parser = create_parser()
+(options,args) = parser.parse_args()
+folderAndScriptName = [saveFolder, "genObjectToL1TObjectConvolutionCurves/plotTransverseMomentumDistributionForClosureTest_cfg.py"]
+convolutionFileName = saveFolder + "/" + genObject + "_" +  triggerObject + "_" + "convolutionCurves/histograms.root"
+options.extraOptions.append("sample=" + sample_ClosureTest2)
+options.extraOptions.append("convolutionFileName=" + convolutionFileName)
+options.extraOptions.append("binning=" + binning)
+options.extraOptions.append("minimumPtInBarrel=" + str(minimumPtToReachBarrel))
+options.extraOptions.append("minimumPtInEndcap=" + str(minimumPtToReachEndcap))
+options.extraOptions.append("minimumPtInForward=" + str(minimumPtToReachForward))
+options.extraOptions.append("detectorEta=" + str(detectorEta))
+options.extraOptions.append("barrelEta=" + str(barrelEta))
+options.extraOptions.append("endcapEta=" + str(endcapEta))
+options.extraOptions.append("probabilityFile=" + "" + saveFolder + "/efficiencyFactors.root")
+options.extraOptions.append("probabilityHistogram=" + "efficiencyHistogram")
+options.extraOptions.append("quality=" + str(qualityThreshold))
+options.extraOptions.append("triggerObjectName=" + triggerObject)
+options.extraOptions.append("genObjectName=" + genObject)
+options.extraOptions.append("deltaR2Matching=" + str(deltaR2Matching))
+#options.nevents=300000
+loop = main(options, folderAndScriptName, parser)
+os.system("mv " + saveFolder + "/" + sample_ClosureTest2 + " " + saveFolder + "/" + sample_ClosureTest2 + "_ClosureTestPlots_AllGenObjects")
+
 print "CREATING THE COMPARISON PLOTS"
 
 cfg = lambda x: 1
@@ -416,17 +420,17 @@ cfg.saveFileName = "" + saveFolder + "/closureTest1.root"
 
 plotDistributionComparisonPlot(cfg)
 #
-#cfg = lambda x: 1
-#cfg.plots = [
-##  #Files here
-#  [saveFolder + "/" + sample_ClosureTest1 + "_ClosureTestPlots_QualityCutOnGenObject/histograms.root", "coarseBinnedPt" + triggerObject + "Distribution", "CMS " + triggerObject],
-#  [saveFolder + "/" + sample_ClosureTest2 + "_ClosureTestPlots_AllGenObjects/histograms.root", "coarseBinnedSmearedPt" + genObject + "Distribution", "Sim " + triggerObject + " from every " + genObject]
-##  ["_closureTest/l1tMuonGenMuonMatching_QCD_15_3000_NoPU_Phase1_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtSimL1TMuonDistribution", "SimL1TMuon"],
-##  ["_closureTest/l1tMuonGenMuonMatching_QCD_15_3000_NoPU_Phase1_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtL1TMuonDistribution", "Original L1TMuon"],
-#]
-#cfg.saveFileName = "" + saveFolder + "/closureTest2.root"
-#
-#plotDistributionComparisonPlot(cfg)
+cfg = lambda x: 1
+cfg.plots = [
+#  #Files here
+  [saveFolder + "/" + sample_ClosureTest1 + "_ClosureTestPlots_QualityCutOnGenObject/histograms.root", "coarseBinnedPt" + triggerObject + "Distribution", "CMS " + triggerObject],
+  [saveFolder + "/" + sample_ClosureTest2 + "_ClosureTestPlots_AllGenObjects/histograms.root", "coarseBinnedSmearedPt" + genObject + "Distribution", "Sim " + triggerObject + " from every " + genObject]
+#  ["_closureTest/l1tMuonGenMuonMatching_QCD_15_3000_NoPU_Phase1_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtSimL1TMuonDistribution", "SimL1TMuon"],
+#  ["_closureTest/l1tMuonGenMuonMatching_QCD_15_3000_NoPU_Phase1_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtL1TMuonDistribution", "Original L1TMuon"],
+]
+cfg.saveFileName = "" + saveFolder + "/closureTest2.root"
+
+plotDistributionComparisonPlot(cfg)
 #
 #
 #print "CREATING THE ORIGINAL CMS RATE PLOT"
