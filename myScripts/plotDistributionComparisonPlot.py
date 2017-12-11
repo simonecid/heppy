@@ -171,8 +171,8 @@ if __name__ == "__main__":
     #Files here
     # ["MinBiasDistribution_13TeV_DelphesCMS_CMSJets_GenJetPTDistribution/genJetPtDistribution_Normalised.root", "ptSimL1TMuonDistribution", "MinBias"],
     #["_closureTest/l1tMuonGenMuonMatching_SingleMu_FlatPt_8to100_QualityCut_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtSimL1TMuonDistribution", "SimL1TMuon"],
-    ["_jetTriggerRate_Test/cmsMatching_QCD_15_3000_L1TJet_GenJet_ClosureTestPlots_QualityCutOnGenObject/histograms.root", "smearedObjectDeltaPtDistributionBinnedInMatchedObject_425_450", "Sim-L1TJets PU140 and hard pt cut of 30"],
-    ["_jetTriggerRate_Test/cmsMatching_QCD_15_3000_L1TJet_GenJet_ClosureTestPlots_QualityCutOnGenObject/histograms.root", "l1tObjectDeltaPtDistributionBinnedInMatchedObject_425_450", "CMS"],
+    ["_jetTriggerRate_Test/cmsMatching_QCD_15_3000_L1TJet_GenJet_Smaller_ClosureTestPlots_QualityCutOnGenObject/histograms.root", "smearedObjectDeltaPtDistributionBinnedInMatchedObject_400_450", "Sim-L1TJets PU140 and hard pt cut of 30"],
+    ["_jetTriggerRate_Test/cmsMatching_QCD_15_3000_L1TJet_GenJet_Smaller_ClosureTestPlots_QualityCutOnGenObject/histograms.root", "l1tObjectDeltaPtDistributionBinnedInMatchedObject_400_450", "CMS"],
     #["_closureTest/l1tMuonGenMuonMatching_SingleMu_FlatPt_8to100_QualityCut_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtL1TMuonDistribution", "Original L1TMuon"],
   ]
   cfg.saveFileName = "comparisonResult.root"
