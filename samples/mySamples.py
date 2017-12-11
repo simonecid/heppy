@@ -2274,6 +2274,8 @@ cmsMatching_QCD_15_3000_L1TJet_GenJet_Smaller = cfg.MCComponent(
   tree_name = "MatchGenJetWithL1Objects/matchedL1TJetGenJetTree",
   files = [
     "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_L11Obj_To_GenJet_Match_ClosestDR/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_2580409.0.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_L11Obj_To_GenJet_Match_ClosestDR/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_2580409.10.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_L11Obj_To_GenJet_Match_ClosestDR/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_2580409.11.root",
   ],
   gen_object = "genJet",
   trigger_object = "l1tJet"
@@ -2284,6 +2286,8 @@ cmsMatching_QCD_15_3000_GenJet_Smaller = cfg.MCComponent(
   tree_name = "MatchGenJetWithL1Objects/genJetTree",
   files = [
     "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_L11Obj_To_GenJet_Match_ClosestDR/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_2580409.0.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_L11Obj_To_GenJet_Match_ClosestDR/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_2580409.10.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_L11Obj_To_GenJet_Match_ClosestDR/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_2580409.11.root",
   ],
   gen_object = "genJet"
 )
@@ -5510,3 +5514,4 @@ HardQCD_13TeV_PtBinned_900_1000_GeV.splitFactor = 16
 #cmsMatching_QCD_15_3000_GenJet.splitFactor = 7
 #cmsMatching_SingleNeutrinoPU140_L1TEGamma.splitFactor  = 10
 NeutrinoGun_NoTau_13TeV_DelphesCMS.splitFactor = 4
+cmsMatching_QCD_15_3000_L1TJet_GenJet.splitFactor = 5
