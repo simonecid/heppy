@@ -222,7 +222,7 @@ deltaPtDistributionBinnedInMatchedObject = cfg.Analyzer(
   plot_func = deltaPt,
   bin_func = pt,
   log_y = False,
-  x_label = "p_{t}^{" + objectName + "} - p_{t}^{match} [GeV]",
+  x_label = "p_{t}^{" + objectName + "} - p_{t}^{" + matchedObjectName + "} [GeV]",
   y_label = "# events",
 )
 
@@ -353,8 +353,6 @@ genJetL1TObjectTree = cfg.Analyzer(
   matched_particle_name = objectName,
   particle_name = "genJet"
 )
-
-
 
 genPtDistribution = cfg.Analyzer(
   Histogrammer,
