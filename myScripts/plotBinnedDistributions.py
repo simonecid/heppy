@@ -7,7 +7,7 @@ from ROOT import TCanvas
 from ROOT import TLegend
 
 #convolutionFile = TFile("_muonTriggerRate_BarrelCut5.5_EndcapCut1.5_Iteration2/binnedDistributions.root")
-convolutionFile = TFile("_jetTriggerRate_BarrelOnly_HardPtCut25GeV_NoPUConvolutionCurves_0.025RSquared/genJet_l1tJet_convolutionCurves/histograms.root")
+convolutionFile = TFile("_jetTriggerRate_Test/genJet_l1tJet_convolutionCurves/histograms.root")
 
 '''List of every distribution to plot'''
 distributionNames = [
@@ -15,8 +15,8 @@ distributionNames = [
   #"objectMatchedObjectPtRatioDistributionBinnedInMatchedObject",
   #"matchedObjectEtaDistributionBinnedInMatchedObject",
   #"objectEtaDistributionBinnedInMatchedObject",
-  #"deltaRDistributionBinnedInMatchedObject",
-  "deltaPtDistributionBinnedInMatchedObject",
+  "deltaRDistributionBinnedInMatchedObject",
+  #"deltaPtDistributionBinnedInMatchedObject",
   #"matchedObjectPtDistributionBinnedInMatchedObject"
 ]
 
@@ -30,7 +30,7 @@ distributionNames = [
 #ptBins = [3, 5, 10, 15, 20, 25, 30, 35, 40, 50, 60, 70, 80, 100, 125, 150, 175, 200, 250, 300]
 #ptBins = [10, 15, 20, 25, 30, 35, 40, 50, 60, 70, 80, 100]
 #ptBins = [25, 30, 35, 40, 50, 60, 70, 80]
-ptBins = [3, 4, 5, 7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 110, 125, 150, 175, 200, 250, 300, 350, 400, 450, 500]
+ptBins = [3, 4, 5, 7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 80, 90, 100, 110, 125, 150, 175, 200, 250, 300, 400, 500]
 #ptBins = [3, 4, 5, 7, 10, 15, 20, 25]
 
 # MUON BINNING
@@ -96,6 +96,8 @@ for name in distributionNames:
     if histogram.GetEntries() == 0:
       print "Bin", str(ptBins[x]) + " < p_{t}^{jet} < " + str(ptBins[x+1]), "is empty"
       continue
+    else:
+      print "Bin", str(ptBins[x]) + " < p_{t}^{jet} < " + str(ptBins[x+1]), "contains", str(histogram.GetEntries()), "entries"
     histogram.Scale(1/histogram.GetEntries())
     histogram.GetYaxis().SetTitle("a.u.")
     maximumYs[name] = histogram.GetMaximum() if histogram.GetMaximum() > maximumYs[name] else maximumYs[name]
