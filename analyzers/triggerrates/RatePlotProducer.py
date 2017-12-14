@@ -187,9 +187,9 @@ class RatePlotProducer(Analyzer):
     self.histogram.Draw("")
     c1.SetLogy(True)
 
-    line = TLine(xMin, self.cfg_ana.yscale, xMax, self.cfg_ana.yscale)
-    line.SetLineColor(2)
-    line.Draw()
+    #line = TLine(xMin, self.cfg_ana.yscale, xMax, self.cfg_ana.yscale)
+    #line.SetLineColor(2)
+    #line.Draw()
 
     # I would like to draw a line to signal a threshold over which the probability of having 2 or more jets
     # with an higher transverse momentum than the threshold is below 5%
@@ -200,22 +200,18 @@ class RatePlotProducer(Analyzer):
     # p can also be interpreted as the fraction of jets in my distribution
     # (1 - p) * numberOfJets will tell me which jet represents the threshold
 
-    equation = lambda p : 1 - power(1 - p, self.cfg_ana.pileup) - self.cfg_ana.pileup * p * power(1 - p, self.cfg_ana.pileup - 1) - 0.05
-    p_solution = fsolve(equation, 1./self.cfg_ana.pileup)
-    thresholdIdx = int ( (1 - p_solution) * len(self.sortedPtArray))
-    threshold = self.sortedPtArray[thresholdIdx]
+    #equation = lambda p : 1 - power(1 - p, self.cfg_ana.pileup) - self.cfg_ana.pileup * p * power(1 - p, self.cfg_ana.pileup - 1) - 0.05
+    #p_solution = fsolve(equation, 1./self.cfg_ana.pileup)
+    #thresholdIdx = int ( (1 - p_solution) * len(self.sortedPtArray))
+    #threshold = self.sortedPtArray[thresholdIdx]
 
     #print "Threshold for", self.cfg_ana.plot_name, "is", threshold, "w/ p", p_solution, "thresholdIdx", thresholdIdx, "numPts", len(self.sortedPtArray)
 
     # Drawing the threshold line
 
-    pileupLine = TLine(threshold, yMin, threshold, yMax)
-    pileupLine.SetLineColor(6)
-    pileupLine.Draw()
-
-    c1.Update()
-    c1.Write()
-    c1.Print(self.cfg_ana.plot_name + ".svg", "svg")
+    #pileupLine = TLine(threshold, yMin, threshold, yMax)
+    #pileupLine.SetLineColor(6)
+    #pileupLine.Draw()
 
     self.histogram.Write()
 
