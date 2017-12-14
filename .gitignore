@@ -10,6 +10,6 @@ bin/*
 *.pdf
 *.png
 *.svg
-_*
+_*/
 *.tar.gz
 *.dat
