@@ -227,6 +227,34 @@ MinBiasDistribution_13TeV_DelphesFCC_CMSJets = cfg.MCComponent(
   nGenEvents = 500000
 )
 
+MinBiasDistribution_100TeV_DelphesFCC_CMSJets_partial = cfg.MCComponent(
+  'MinBiasDistribution_100TeV_DelphesFCC_CMSJets_partial',
+  files = [
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.0.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.10.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.11.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.12.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.13.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.14.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.15.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.16.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.17.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.18.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.19.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.1.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.2.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.3.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.4.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.5.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.6.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.7.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.8.root",
+    "/hdfs/FCC-hh/minBias_100TeV_DelphesFCC_CMSJets/events_MinimumBiasGeneration_25kevents_100TeV_DelphesFCC_CMSJets_2282065.9.root",
+  ],
+  xSection =80,
+  nGenEvents = 500000
+)
+
 MinBiasDistribution_100TeV_DelphesFCC_CMSJets = cfg.MCComponent(
   'MinBiasDistribution_100TeV_DelphesFCC_CMSJets',
   files = [

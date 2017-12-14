@@ -187,9 +187,9 @@ class RatePlotProducer(Analyzer):
     self.histogram.Draw("")
     c1.SetLogy(True)
 
-    line = TLine(xMin, self.cfg_ana.yscale, xMax, self.cfg_ana.yscale)
-    line.SetLineColor(2)
-    line.Draw()
+    #line = TLine(xMin, self.cfg_ana.yscale, xMax, self.cfg_ana.yscale)
+    #line.SetLineColor(2)
+    #line.Draw()
 
     # I would like to draw a line to signal a threshold over which the probability of having 2 or more jets
     # with an higher transverse momentum than the threshold is below 5%
@@ -212,11 +212,7 @@ class RatePlotProducer(Analyzer):
     #pileupLine = TLine(threshold, yMin, threshold, yMax)
     #pileupLine.SetLineColor(6)
     #pileupLine.Draw()
-
     self.histogram.Write()
-    c1.Update()
-    c1.Write()
-    c1.Print(self.cfg_ana.plot_name + ".svg", "svg")
 
 
     #self.rootfile.Close()
