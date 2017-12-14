@@ -136,12 +136,12 @@ def matchedObjectPt (ptc):
 
 genPtDistribution = cfg.Analyzer(
   Histogrammer,
-  'pt' + selectedComponents[0].gen_object + 'Distribution',
+  'pt' + genObjectName + 'Distribution',
   file_label = 'tfile1',
   x_label= "pt [GeV]",
   y_label = "# events",
-  histo_name = 'pt' + selectedComponents[0].gen_object +'Distribution',
-  histo_title = selectedComponents[0].gen_object + ' transverse momentum distribution',
+  histo_name = 'pt' + genObjectName +'Distribution',
+  histo_title = genObjectName + ' transverse momentum distribution',
   min = 0,
   max = 500,
   nbins = 1000,
@@ -153,12 +153,12 @@ genPtDistribution = cfg.Analyzer(
 
 smearedPtDistribution = cfg.Analyzer(
   Histogrammer,
-  'smearedPt' +selectedComponents[0].gen_object + 'Distribution',
+  'smearedPt' + genObjectName + 'Distribution',
   file_label = 'tfile1',
   x_label= "pt [GeV]",
   y_label = "# events",
-  histo_name = 'smearedPt' + selectedComponents[0].gen_object +'Distribution',
-  histo_title = "Smeared " + selectedComponents[0].gen_object + ' transverse momentum distribution',
+  histo_name = 'smearedPt' + genObjectName +'Distribution',
+  histo_title = "Smeared " + genObjectName + ' transverse momentum distribution',
   min = 0,
   max = 500,
   nbins = 1000,
@@ -169,12 +169,12 @@ smearedPtDistribution = cfg.Analyzer(
 
 acceptedGenPtDistribution = cfg.Analyzer(
   Histogrammer,
-  'acceptedGenPt'+selectedComponents[0].gen_object + 'Distribution',
+  'acceptedGenPt'+ genObjectName + 'Distribution',
   file_label = 'tfile1',
   x_label= "pt [GeV]",
   y_label = "# events",
-  histo_name = 'pt' + selectedComponents[0].gen_object +'Distribution',
-  histo_title = selectedComponents[0].gen_object + ' transverse momentum distribution',
+  histo_name = 'pt' + genObjectName +'Distribution',
+  histo_title = genObjectName + ' transverse momentum distribution',
   min = 0,
   max = 500,
   nbins = 1000,
@@ -185,12 +185,12 @@ acceptedGenPtDistribution = cfg.Analyzer(
 
 coarseBinnedSmearedPtDistribution = cfg.Analyzer(
   Histogrammer,
-  'coarseBinnedSmearedPt' +selectedComponents[0].gen_object + 'Distribution',
+  'coarseBinnedSmearedPt' + genObjectName + 'Distribution',
   file_label = 'tfile1',
   x_label= "pt [GeV]",
   y_label = "# events",
-  histo_name = 'coarseBinnedSmearedPt' +selectedComponents[0].gen_object + 'Distribution',
-  histo_title = "Smeared " + selectedComponents[0].gen_object + ' transverse momentum distribution',
+  histo_name = 'coarseBinnedSmearedPt' + genObjectName + 'Distribution',
+  histo_title = "Smeared " + genObjectName + ' transverse momentum distribution',
   bins = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 220, 240, 260, 280, 300, 340, 400],
   input_objects = triggerObjectName,
   value_func = pt,
