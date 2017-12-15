@@ -58,12 +58,14 @@ def plotDistributionComparisonPlot(cfg):
   histograms[0].GetYaxis().SetTitleSize(20)
   histograms[0].GetYaxis().SetTitleFont(43)
   histograms[0].GetYaxis().SetTitleOffset(1.55)
+  #histograms[0].Scale(1./histograms[0].GetEntries())
   histograms[0].Draw("SAME HIST")         # Draw histograms[1] on top of histograms[0]
 
   # histograms[1] settings
   histograms[1].SetMarkerColor(2)
   histograms[1].SetLineColor(2)
   histograms[1].SetLineWidth(1)
+  #histograms[1].Scale(1./histograms[1].GetEntries())
   histograms[1].Draw("SAME HIST")         # Draw histograms[1] on top of histograms[0]
 
   maximumY *= 1.1
@@ -171,8 +173,8 @@ if __name__ == "__main__":
     #Files here
     # ["MinBiasDistribution_13TeV_DelphesCMS_CMSJets_GenJetPTDistribution/genJetPtDistribution_Normalised.root", "ptSimL1TMuonDistribution", "MinBias"],
     #["_closureTest/l1tMuonGenMuonMatching_SingleMu_FlatPt_8to100_QualityCut_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtSimL1TMuonDistribution", "SimL1TMuon"],
-    ["_jetTriggerRate_Test/cmsMatching_QCD_15_3000_L1TJet_GenJet_Smaller_ClosureTestPlots_QualityCutOnGenObject/histograms.root", "smearedObjectDeltaPtDistributionBinnedInMatchedObject_400_450", "Sim-L1TJets PU140 and hard pt cut of 30"],
-    ["_jetTriggerRate_Test/cmsMatching_QCD_15_3000_L1TJet_GenJet_Smaller_ClosureTestPlots_QualityCutOnGenObject/histograms.root", "l1tObjectDeltaPtDistributionBinnedInMatchedObject_400_450", "CMS"],
+    ["_jetTriggerRate_LeadingJEt/leadingGenJet_l1tJet_convolutionCurves/histograms.root", "deltaPtDistributionBinnedInMatchedObject_25_30", "Only leading jets in barrel, #deltaR^{2} < 0.025 - 5212 pairs"],
+    ["_jetTriggerRate_BarrelOnly_HardPtCut25GeV_NoPUConvolutionCurves_0.025RSquared/genJet_l1tJet_convolutionCurves/histograms.root", "deltaPtDistributionBinnedInMatchedObject_25_30", "Every pair in barrel, #deltaR^{2} < 0.025 - 9741 pairs"],
     #["_closureTest/l1tMuonGenMuonMatching_SingleMu_FlatPt_8to100_QualityCut_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtL1TMuonDistribution", "Original L1TMuon"],
   ]
   cfg.saveFileName = "comparisonResult.root"
