@@ -610,4 +610,5 @@ MinimumBias_14TeV_GenParticles_500kevents = cfg.Component(
 )
 
 MinimumBias_14TeV_GenParticles_partial.splitFactor = 6
+MinimumBias_14TeV_GenParticles_full.splitFactor = 6
 MinimumBias_14TeV_GenParticles_500kevents.splitFactor = 5
