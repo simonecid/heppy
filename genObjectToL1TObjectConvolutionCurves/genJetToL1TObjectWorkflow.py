@@ -12,8 +12,9 @@ import ast
 from heppy.myScripts.plotDistributionComparisonPlot import plotDistributionComparisonPlot
 from math import isnan
 from glob import glob
+from importlib import import_module
 
-saveFolder = "_jetTriggerRate_LeadingJet/"
+saveFolder = "_jetTriggerRate_LeadingJet_full/"
 binning = "[3, 4, 5, 7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 80, 90, 100, 110, 125, 150, 175, 200, 250, 300, 400, 500]"
 ##binning = "[0, 1.5, 3, 5, 8, 11, 15, 20, 30, 40, 50, 70, 100, 140, 200]"
 qualityThreshold = 0
@@ -42,17 +43,19 @@ sample_ClosureTest2 = "cmsMatching_QCD_15_3000_GenJet_Smaller"
 sample_ClosureTest3 = "cmsMatching_SingleNeutrinoPU140_BarrelOnly_LeadingL1TJet"
 #sample_ClosureTest4 = "cmsMatching_SingleNeutrinoPU140_BarrelOnly_L1TJet"
 
+sampleModule = "sample_MinimumBias_NoTau_14TeV_GenParticles"
 sampleRateEstimation = "MinimumBias_14TeV_GenParticles_full"
-numberOfDelphesEvents = 7400000
 averagePileUp = 140
 bunchCrossingFrequency = 31.6e6 # 2808 bunches
 #instantaneousLuminosity = 5e34 #cm^-2 s^-1
 #minBiasCrossSection = 56.79 # mb, from Pythia
-interactionFrequency = averagePileUp * bunchCrossingFrequency
 
 ###################################################################################################
 #################################### DO NOT TOUCH FROM DOWN ON ####################################
 ###################################################################################################
+interactionFrequency = averagePileUp * bunchCrossingFrequency
+componentRateEstimation = getattr(import_module("heppy.samples." + sampleModule), sampleRateEstimation)
+numberOfDelphesEvents = componentRateEstimation.nGenEvents
 os.system("mkdir -p " + saveFolder)
 
 #if os.listdir(saveFolder):
