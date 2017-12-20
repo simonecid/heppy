@@ -23,7 +23,7 @@ endcapEta = 3 #1.44 - 3 endcap
 detectorEta = 5.05 # 3 - 1.44 forward
 binningArray = array("f", ast.literal_eval(binning))
 magneticField = 3.8 # Tesla
-deltaR2Matching = 0.025
+deltaR2Matching = 0.25
 #Used to normalise trigger rates in output from Delphes sim
 #minimumPtToReachBarrel = barrelRadius * magneticField/6.6
 minimumPtToReachBarrel = 25 # Some cut
