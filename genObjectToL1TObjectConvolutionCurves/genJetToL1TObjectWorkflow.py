@@ -84,6 +84,7 @@ options.extraOptions.append("triggerObjectName=" + triggerObject)
 options.extraOptions.append("genObjectName=" + genObject)
 options.extraOptions.append("deltaR2Matching=" + str(deltaR2Matching))
 #options.nevents=300000
+options.force = True
 loop = main(options, folderAndScriptName, parser)
 
 os.system("mkdir " + saveFolder + "/" + genObject + "_" +  triggerObject + "_" + "convolutionCurves")
@@ -157,6 +158,7 @@ options.extraOptions.append("barrelEta=" + str(barrelEta))
 options.extraOptions.append("endcapEta=" + str(endcapEta))
 options.extraOptions.append("detectorEta=" + str(detectorEta))
 options.extraOptions.append("triggerObjectName=" + str(triggerObject))
+options.force = True
 options.nevents = numberOfDelphesEvents
 loop = main(options, folderAndScriptName, parser)
 
@@ -308,50 +310,50 @@ eventPassProbabilityHistogramInForward.Write()
 
 nonNormalisedRatePlotFile.Close()
 passProbabilityFile.Close()
-
-print "COMPUTING THE TRIGGER PASS PROBABILITY IN LINEAR SCALING APPROXIMATION AND WITH FULL FORMULA"
-
-passProbabilityFile = TFile("" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + sampleRateEstimation + "_RatePlots_TriggerPassProbability.root")
-ppPassProbabilityHistogram = passProbabilityFile.Get("ppPassProbabilityHistogram")
-ppPassProbabilityHistogramInBarrel = passProbabilityFile.Get("ppPassProbabilityHistogramInBarrel")
-ppPassProbabilityHistogramInEndcap = passProbabilityFile.Get("ppPassProbabilityHistogramInEndcap")
-ppPassProbabilityHistogramInForward = passProbabilityFile.Get("ppPassProbabilityHistogramInForward")
-eventPassProbabilityHistogram = passProbabilityFile.Get("eventPassProbabilityHistogram")
-eventPassProbabilityHistogramInBarrel = passProbabilityFile.Get("eventPassProbabilityHistogramInBarrel")
-eventPassProbabilityHistogramInEndcap = passProbabilityFile.Get("eventPassProbabilityHistogramInEndcap")
-eventPassProbabilityHistogramInForward = passProbabilityFile.Get("eventPassProbabilityHistogramInForward")
-
-linearPURatePlot = ppPassProbabilityHistogram.Clone("linearPURatePlot")
-linearPURatePlotInBarrel = ppPassProbabilityHistogramInBarrel.Clone("linearPURatePlotInBarrel")
-linearPURatePlotInEndcap = ppPassProbabilityHistogramInEndcap.Clone("linearPURatePlotInEndcap")
-linearPURatePlotInForward = ppPassProbabilityHistogramInForward.Clone("linearPURatePlotInForward")
-fullPURatePlot = eventPassProbabilityHistogram.Clone("fullPURatePlot")
-fullPURatePlotInBarrel = eventPassProbabilityHistogramInBarrel.Clone("fullPURatePlotInBarrel")
-fullPURatePlotInEndcap = eventPassProbabilityHistogramInEndcap.Clone("fullPURatePlotInEndcap")
-fullPURatePlotInForward = eventPassProbabilityHistogramInForward.Clone("fullPURatePlotInForward")
-
-linearPURatePlot.Scale(interactionFrequency)
-linearPURatePlotInBarrel.Scale(interactionFrequency)
-linearPURatePlotInEndcap.Scale(interactionFrequency)
-linearPURatePlotInForward.Scale(interactionFrequency)
-fullPURatePlot.Scale(bunchCrossingFrequency)
-fullPURatePlotInBarrel.Scale(bunchCrossingFrequency)
-fullPURatePlotInEndcap.Scale(bunchCrossingFrequency)
-fullPURatePlotInForward.Scale(bunchCrossingFrequency)
-
-pileupRatePlotFile = TFile("" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + sampleRateEstimation + "_RatePlots_PU" + str(averagePileUp) + "RatePlot.root", "RECREATE")
-pileupRatePlotFile.cd()
-
-linearPURatePlot.Write()
-linearPURatePlotInBarrel.Write()
-linearPURatePlotInEndcap.Write()
-linearPURatePlotInForward.Write()
-fullPURatePlot.Write()
-fullPURatePlotInBarrel.Write()
-fullPURatePlotInEndcap.Write()
-fullPURatePlotInForward.Write()
-
-pileupRatePlotFile.Close()
+#
+#print "COMPUTING THE TRIGGER PASS PROBABILITY IN LINEAR SCALING APPROXIMATION AND WITH FULL FORMULA"
+#
+#passProbabilityFile = TFile("" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + sampleRateEstimation + "_RatePlots_TriggerPassProbability.root")
+#ppPassProbabilityHistogram = passProbabilityFile.Get("ppPassProbabilityHistogram")
+#ppPassProbabilityHistogramInBarrel = passProbabilityFile.Get("ppPassProbabilityHistogramInBarrel")
+#ppPassProbabilityHistogramInEndcap = passProbabilityFile.Get("ppPassProbabilityHistogramInEndcap")
+#ppPassProbabilityHistogramInForward = passProbabilityFile.Get("ppPassProbabilityHistogramInForward")
+#eventPassProbabilityHistogram = passProbabilityFile.Get("eventPassProbabilityHistogram")
+#eventPassProbabilityHistogramInBarrel = passProbabilityFile.Get("eventPassProbabilityHistogramInBarrel")
+#eventPassProbabilityHistogramInEndcap = passProbabilityFile.Get("eventPassProbabilityHistogramInEndcap")
+#eventPassProbabilityHistogramInForward = passProbabilityFile.Get("eventPassProbabilityHistogramInForward")
+#
+#linearPURatePlot = ppPassProbabilityHistogram.Clone("linearPURatePlot")
+#linearPURatePlotInBarrel = ppPassProbabilityHistogramInBarrel.Clone("linearPURatePlotInBarrel")
+#linearPURatePlotInEndcap = ppPassProbabilityHistogramInEndcap.Clone("linearPURatePlotInEndcap")
+#linearPURatePlotInForward = ppPassProbabilityHistogramInForward.Clone("linearPURatePlotInForward")
+#fullPURatePlot = eventPassProbabilityHistogram.Clone("fullPURatePlot")
+#fullPURatePlotInBarrel = eventPassProbabilityHistogramInBarrel.Clone("fullPURatePlotInBarrel")
+#fullPURatePlotInEndcap = eventPassProbabilityHistogramInEndcap.Clone("fullPURatePlotInEndcap")
+#fullPURatePlotInForward = eventPassProbabilityHistogramInForward.Clone("fullPURatePlotInForward")
+#
+#linearPURatePlot.Scale(interactionFrequency)
+#linearPURatePlotInBarrel.Scale(interactionFrequency)
+#linearPURatePlotInEndcap.Scale(interactionFrequency)
+#linearPURatePlotInForward.Scale(interactionFrequency)
+#fullPURatePlot.Scale(bunchCrossingFrequency)
+#fullPURatePlotInBarrel.Scale(bunchCrossingFrequency)
+#fullPURatePlotInEndcap.Scale(bunchCrossingFrequency)
+#fullPURatePlotInForward.Scale(bunchCrossingFrequency)
+#
+#pileupRatePlotFile = TFile("" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + sampleRateEstimation + "_RatePlots_PU" + str(averagePileUp) + "RatePlot.root", "RECREATE")
+#pileupRatePlotFile.cd()
+#
+#linearPURatePlot.Write()
+#linearPURatePlotInBarrel.Write()
+#linearPURatePlotInEndcap.Write()
+#linearPURatePlotInForward.Write()
+#fullPURatePlot.Write()
+#fullPURatePlotInBarrel.Write()
+#fullPURatePlotInEndcap.Write()
+#fullPURatePlotInForward.Write()
+#
+#pileupRatePlotFile.Close()
 #
 #print "--- RUNNING THE CLOSURE TESTS ---"
 #
@@ -377,6 +379,7 @@ pileupRatePlotFile.Close()
 #options.extraOptions.append("genObjectName=" + genObject)
 #options.extraOptions.append("deltaR2Matching=" + str(deltaR2Matching))
 #options.nevents=300000
+#options.force = True
 #loop = main(options, folderAndScriptName, parser)
 #os.system("mv " + saveFolder + "/" + sample_ClosureTest1 + " " + saveFolder + "/" + sample_ClosureTest1 + "_ClosureTestPlots_QualityCutOnGenObject")
 #
@@ -406,6 +409,7 @@ pileupRatePlotFile.Close()
 #options.extraOptions.append("genObjectName=" + genObject)
 #options.extraOptions.append("deltaR2Matching=" + str(deltaR2Matching))
 ##options.nevents=300000
+#options.force = True
 #loop = main(options, folderAndScriptName, parser)
 #os.system("mv " + saveFolder + "/" + sample_ClosureTest2 + " " + saveFolder + "/" + sample_ClosureTest2 + "_ClosureTestPlots_AllGenObjects")
 #
@@ -494,6 +498,7 @@ pileupRatePlotFile.Close()
 #options.extraOptions.append("quality=" + str(qualityThreshold))
 #options.extraOptions.append("triggerObjectName=Sim" + triggerObject)
 #options.extraOptions.append("genObjectName=" + genObject)
+#options.force = True
 #loop = main(options, folderAndScriptName, parser)
 #os.system("mv " + saveFolder + "/delphesSample" + " " + saveFolder + "/genJetSimL1TObjectTree_ClosureTestPlots")
 #
