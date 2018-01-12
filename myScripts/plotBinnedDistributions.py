@@ -7,7 +7,8 @@ from ROOT import TCanvas
 from ROOT import TLegend
 
 #convolutionFile = TFile("_muonTriggerRate_BarrelCut5.5_EndcapCut1.5_Iteration2/binnedDistributions.root")
-convolutionFile = TFile("_jetTriggerRate_Test/genJet_l1tJet_convolutionCurves/histograms.root")
+convolutionFile = TFile(
+    "_muonTriggerRate_BarrelCut5.5_EndcapCut1.5_GenMuons/binnedDistributions.root")
 
 '''List of every distribution to plot'''
 distributionNames = [
@@ -30,7 +31,7 @@ distributionNames = [
 #ptBins = [3, 5, 10, 15, 20, 25, 30, 35, 40, 50, 60, 70, 80, 100, 125, 150, 175, 200, 250, 300]
 #ptBins = [10, 15, 20, 25, 30, 35, 40, 50, 60, 70, 80, 100]
 #ptBins = [25, 30, 35, 40, 50, 60, 70, 80]
-ptBins = [3, 4, 5, 7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 80, 90, 100, 110, 125, 150, 175, 200, 250, 300, 400, 500]
+ptBins = [1.5, 2.3, 3, 4]
 #ptBins = [3, 4, 5, 7, 10, 15, 20, 25]
 
 # MUON BINNING

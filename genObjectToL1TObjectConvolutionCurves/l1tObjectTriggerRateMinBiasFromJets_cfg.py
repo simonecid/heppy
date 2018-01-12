@@ -315,7 +315,7 @@ sequence = cfg.Sequence( [
   endcapSelector,
   forwardSelector,
   simL1TObjectLeadingPtDistribution,
-  genJetSimL1TObjectTree,
+  #genJetSimL1TObjectTree,
   simL1TObjectRate,
   genJetRate,
   barrelSimL1TObjectRate,
