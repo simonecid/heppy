@@ -13,6 +13,8 @@ from heppy.myScripts.plotDistributionComparisonPlot import plotDistributionCompa
 from math import isnan
 from glob import glob
 from importlib import import_module
+import yaml
+import argparse
 
 saveFolder = "_jetTriggerRate_LeadingJet_full/"
 binning = "[3, 4, 5, 7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 80, 90, 100, 110, 125, 150, 175, 200, 250, 300, 400, 500]"
@@ -513,3 +515,15 @@ loop = main(options, folderAndScriptName, parser)
 #loop = main(options, folderAndScriptName, parser)
 #os.system("mv " + saveFolder + "/" + sample_ClosureTest4 + " " + saveFolder + "/" + sample_ClosureTest4+ "_TriggerObjectPtDistribution")
 
+
+if __name__ == "__main__":
+
+  parser = argparse.ArgumentParser()
+
+  parser.add_argument('--ConfigFile', type=str, required=True)
+  arguments = parser.parse_args()
+
+  configFile = parser.ConfigFile
+  parameters = yaml.load(file(configFile, 'r'))
+
+  
