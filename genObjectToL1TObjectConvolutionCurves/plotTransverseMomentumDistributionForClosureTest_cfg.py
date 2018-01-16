@@ -54,6 +54,8 @@ if "convolutionFileName" in _heppyGlobalOptions:
 if "sample" in _heppyGlobalOptions:
   sampleName = _heppyGlobalOptions["sample"]
 
+selectedComponents = []
+
 if sampleName == "delphesSample":
   delphesSample = cfg.MCComponent(
     'delphesSample',
@@ -64,13 +66,6 @@ if sampleName == "delphesSample":
   )
   selectedComponents = [
     delphesSample
-  ]
-else:
-# Retrieving the sample to analyse:
-  sampleName = _heppyGlobalOptions["sample"]
-  sample = getattr(import_module("heppy.samples.mySamples"), sampleName)
-  selectedComponents = [
-    sample
   ]
 
 # Retrieving the sample to analyse

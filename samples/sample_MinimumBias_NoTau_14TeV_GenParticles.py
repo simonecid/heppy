@@ -609,6 +609,18 @@ MinimumBias_14TeV_GenParticles_500kevents = cfg.Component(
   nGenEvents = 500000
 )
 
+MinimumBias_14TeV_GenParticles_100kevents = cfg.Component(
+  'MinimumBias_14TeV_GenParticles_100kevents',
+  files = [
+    "/hdfs/FCC-hh/MinimumBias_14TeV_OnlyGenParticleClassification_JetPTMin_3/events_NeutrinoGun_PU140_NoTau_100events_13TeV_DelphesCMS_OnlyGenParticleClassification_PU140_2985665.252.root",
+    "/hdfs/FCC-hh/MinimumBias_14TeV_OnlyGenParticleClassification_JetPTMin_3/events_NeutrinoGun_PU140_NoTau_100events_13TeV_DelphesCMS_OnlyGenParticleClassification_PU140_2985665.255.root",
+    "/hdfs/FCC-hh/MinimumBias_14TeV_OnlyGenParticleClassification_JetPTMin_3/events_NeutrinoGun_PU140_NoTau_100events_13TeV_DelphesCMS_OnlyGenParticleClassification_PU140_2985665.257.root",
+    "/hdfs/FCC-hh/MinimumBias_14TeV_OnlyGenParticleClassification_JetPTMin_3/events_NeutrinoGun_PU140_NoTau_100events_13TeV_DelphesCMS_OnlyGenParticleClassification_PU140_2985665.258.root",
+    "/hdfs/FCC-hh/MinimumBias_14TeV_OnlyGenParticleClassification_JetPTMin_3/events_NeutrinoGun_PU140_NoTau_100events_13TeV_DelphesCMS_OnlyGenParticleClassification_PU140_2985665.259.root",
+  ],
+  nGenEvents = 100000
+)
+
 MinimumBias_14TeV_GenParticles_partial.splitFactor = 6
 MinimumBias_14TeV_GenParticles_full.splitFactor = 6
 MinimumBias_14TeV_GenParticles_500kevents.splitFactor = 5

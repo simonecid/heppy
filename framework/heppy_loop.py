@@ -146,10 +146,13 @@ def main( options, args, parser ):
     file = open( cfgFileName, 'r' )
     sys.path.append( os.path.dirname(cfgFileName) )
 
-    cfg = imp.load_source( 'heppy.__cfg_to_run__', 
-                           cfgFileName, file)
+    selComps = getattr(options, "components", None)
 
-    selComps = [comp for comp in cfg.config.components if len(comp.files)>0]
+    cfg = imp.load_source( 'heppy.__cfg_to_run__', 
+                        cfgFileName, file)
+    if selComps is None:
+        selComps = [comp for comp in cfg.config.components if len(comp.files)>0]
+        
     selComps = split(selComps)
     # for comp in selComps:
     #    print comp
@@ -172,7 +175,7 @@ def main( options, args, parser ):
         # when running only one loop, do not use multiprocessor module.
         # then, the exceptions are visible -> use only one sample for testing
         global loop
-        loop = runLoop( comp, outDir, cfg.config, options )
+        loop = runLoop( selComps[0], outDir, cfg.config, options )
     return loop
 
 

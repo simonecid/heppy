@@ -1,4 +1,4 @@
-saveFolder: "_jetTriggerRate_LeadingJet_full/"
+saveFolder: "_yamlFileTest/"
 
 binning: "[3, 4, 5, 7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 80, 90, 100, 110, 125, 150, 175, 200, 250, 300, 400, 500]"
 qualityThreshold: 0
@@ -10,25 +10,42 @@ deltaR2Matching: 0.25
 minimumPtToReachBarrel: 25 # Some cut
 minimumPtToReachEndcap: 1000000 # disabling endcap with high pt threshold
 minimumPtToReachForward: 1000000 # killing forward
-sample_BinnedDistributions: "cmsMatching_QCD_15_3000_OnlyBarrelLeadingGenJet_GenJet_L1TJet"
 genObject: "leadingGenJet"
 triggerObject: "l1tJet"
+
+moduleNameConvolutionCurves: "heppy.samples.mySamples"
+componentNameConvolutionCurves: "cmsMatching_QCD_15_3000_OnlyBarrelLeadingGenJet_GenJet_L1TJet"
 
 efficiencySourceFolder: "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_ClosestDRMatch_MuonVeto_BarrelLeadingL1TJetOnly_OnlyBarrelLeadingGenJet"
 efficiencyMatchTree: "MatchLeadingGenJetWithL1Objects/matchedLeadingGenJetL1TJetTree"
 efficiencyGenTree: "MatchLeadingGenJetWithL1Objects/leadingGenJetTree"
-numberOfEfficiencyFiles: -1
+numberOfEfficiencyFiles: 1
 
-sample_ClosureTest1: "cmsMatching_QCD_15_3000_L1TJet_GenJet_Smaller"
-sample_ClosureTest2: "cmsMatching_QCD_15_3000_GenJet_Smaller"
-sample_ClosureTest3: "cmsMatching_SingleNeutrinoPU140_BarrelOnly_LeadingL1TJet"
+moduleNameClosureTest1: "heppy.samples.mySamples"
+componentNameClosureTest1: "cmsMatching_QCD_15_3000_L1TJet_GenJet_Smaller"
+moduleNameClosureTest2: "heppy.samples.mySamples"
+componentNameClosureTest2: "cmsMatching_QCD_15_3000_GenJet_Smaller"
+moduleNameRateClosureTest: "heppy.samples.mySamples"
+componentNameRateClosureTest: "cmsMatching_SingleNeutrinoPU140_BarrelOnly_LeadingL1TJet"
 
-sampleModule: "sample_MinimumBias_NoTau_14TeV_GenParticles"
-sampleRateEstimation: "MinimumBias_14TeV_GenParticles_full"
+moduleNameRatePlots: "heppy.samples.sample_MinimumBias_NoTau_14TeV_GenParticles"
+componentNameRatePlots: "MinimumBias_14TeV_GenParticles_partial"
 averagePileUp: 140
-bunchCrossingFrequency: 31.6e6 # 2808 bunches
+bunchCrossingFrequency: !!float 31.6e6 # 2808 bunches
 
-run: 
+steps: 
+#- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+#  function: computeConvolutionCurves
+#- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+#  function: obtainEfficiencies
+#- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+#  function: computeNonNormalisedRatePlots
+#- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+#  function: normaliseRatePlots
+#- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+#  function: runClosureTest1
+#- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+#  function: runClosureTest2
 - module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
-  function: convolutionCurves
-  
+  function: runRateClosureTest
+

@@ -61,9 +61,6 @@ sample = getattr(import_module("heppy.samples.sample_MinimumBias_NoTau_14TeV_Gen
 if sample is None:
   sample = getattr(import_module("heppy.samples.mySamples"), sampleName, None)
 
-if sample is None:
-  raise Exception("ERROR: You have selected a non-declared sample, exiting script.")
-
 selectedComponents = [
   sample
 ]
