@@ -55,9 +55,8 @@ else:
   probabilityFile = ""
   probabilityHistogram = ""
 
-sample = getattr(import_module("heppy.samples." + moduleName), sampleName)
+
 selectedComponents = [
-  sample
 ]
 
 mySettings = lambda a: None
@@ -160,7 +159,7 @@ l1tMuonRate = cfg.Analyzer(
   RatePlotProducerPileUp,
   instance_label = 'l1tMuonRate',
   file_label = 'ratePlotFile',
-  plot_name = 'simL1TMuonTriggerRate',
+  plot_name = 'simL1TMuonRate',
   plot_title = 'Muon trigger rate',
   zerobias_rate = mySettings.bunchCrossingFrequency,
   input_objects = 'l1tMuons',
@@ -255,9 +254,9 @@ smearedSelector = cfg.Analyzer(
 
 barrelMuonRate = cfg.Analyzer(
   RatePlotProducerPileUp,
-  instance_label = 'barrelMuonRate',
+  instance_label = 'barrelSimL1TMuonRate',
   file_label = 'ratePlotFile',
-  plot_name = 'barrelMuonRate',
+  plot_name = 'barrelSimL1TMuonRate',
   plot_title = 'abs(#eta) < 1.1 trigger rate',
   zerobias_rate = mySettings.bunchCrossingFrequency,
   input_objects = 'leading_muon_barrel',
@@ -268,9 +267,9 @@ barrelMuonRate = cfg.Analyzer(
 
 endcapMuonRate = cfg.Analyzer(
   RatePlotProducerPileUp,
-  instance_label = 'endcapMuonRate',
+  instance_label = 'endcapSimL1TMuonRate',
   file_label = 'ratePlotFile',
-  plot_name = 'endcapMuonRate',
+  plot_name = 'endcapSimL1TMuonRate',
   plot_title = '1.1 < abs(#eta) < 2.4 trigger rate',
   zerobias_rate = mySettings.bunchCrossingFrequency,
   input_objects = 'leading_muon_endcap',

@@ -63,13 +63,7 @@ if sampleName == "delphesMuonSample":
   selectedComponents = [
     delphesMuonSample
   ]
-else:
-# Retrieving the sample to analyse:
-  sampleName = _heppyGlobalOptions["sample"]
-  sample = getattr(import_module("heppy.samples.mySamples"), sampleName)
-  selectedComponents = [
-    sample
-  ]
+selectedComponents = []
 
 # Retrieving the sample to analyse
 
@@ -127,12 +121,12 @@ def matchedObjectPt (ptc):
 
 genPtDistribution = cfg.Analyzer(
   Histogrammer,
-  'pt'+selectedComponents[0].gen_object + 'Distribution',
+  'pt'+_heppyGlobalOptions["genObjectName"] + 'Distribution',
   file_label = 'tfile1',
   x_label= "pt [GeV]",
   y_label = "# events",
-  histo_name = 'pt' + selectedComponents[0].gen_object +'Distribution',
-  histo_title = selectedComponents[0].gen_object + ' transverse momentum distribution',
+  histo_name = 'pt' + _heppyGlobalOptions["genObjectName"] +'Distribution',
+  histo_title = _heppyGlobalOptions["genObjectName"] + ' transverse momentum distribution',
   min = 0,
   max = 200,
   nbins = 400,
@@ -144,12 +138,12 @@ genPtDistribution = cfg.Analyzer(
 
 smearedPtDistribution = cfg.Analyzer(
   Histogrammer,
-  'smearedPt' +selectedComponents[0].gen_object + 'Distribution',
+  'smearedPt' +_heppyGlobalOptions["genObjectName"] + 'Distribution',
   file_label = 'tfile1',
   x_label= "pt [GeV]",
   y_label = "# events",
-  histo_name = 'smearedPt' + selectedComponents[0].gen_object +'Distribution',
-  histo_title = "Smeared " + selectedComponents[0].gen_object + ' transverse momentum distribution',
+  histo_name = 'smearedPt' + _heppyGlobalOptions["genObjectName"] +'Distribution',
+  histo_title = "Smeared " + _heppyGlobalOptions["genObjectName"] + ' transverse momentum distribution',
   min = 0,
   max = 200,
   nbins = 400,
@@ -160,12 +154,12 @@ smearedPtDistribution = cfg.Analyzer(
 
 acceptedGenPtDistribution = cfg.Analyzer(
   Histogrammer,
-  'acceptedGenPt'+selectedComponents[0].gen_object + 'Distribution',
+  'acceptedGenPt'+_heppyGlobalOptions["genObjectName"] + 'Distribution',
   file_label = 'tfile1',
   x_label= "pt [GeV]",
   y_label = "# events",
-  histo_name = 'pt' + selectedComponents[0].gen_object +'Distribution',
-  histo_title = selectedComponents[0].gen_object + ' transverse momentum distribution',
+  histo_name = 'pt' + _heppyGlobalOptions["genObjectName"] +'Distribution',
+  histo_title = _heppyGlobalOptions["genObjectName"] + ' transverse momentum distribution',
   min = 0,
   max = 200,
   nbins = 400,
@@ -176,12 +170,12 @@ acceptedGenPtDistribution = cfg.Analyzer(
 
 coarseBinnedSmearedPtDistribution = cfg.Analyzer(
   Histogrammer,
-  'coarseBinnedSmearedPt' +selectedComponents[0].gen_object + 'Distribution',
+  'coarseBinnedSmearedPt' +_heppyGlobalOptions["genObjectName"] + 'Distribution',
   file_label = 'tfile1',
   x_label= "pt [GeV]",
   y_label = "# events",
-  histo_name = 'coarseBinnedSmearedPt' +selectedComponents[0].gen_object + 'Distribution',
-  histo_title = "Smeared " + selectedComponents[0].gen_object + ' transverse momentum distribution',
+  histo_name = 'coarseBinnedSmearedPt' +_heppyGlobalOptions["genObjectName"] + 'Distribution',
+  histo_title = "Smeared " + _heppyGlobalOptions["genObjectName"] + ' transverse momentum distribution',
   bins = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 260],
   input_objects = 'l1tMuons',
   value_func = pt,
@@ -190,12 +184,12 @@ coarseBinnedSmearedPtDistribution = cfg.Analyzer(
 
 ptDistribution = cfg.Analyzer(
   Histogrammer,
-  'pt' + selectedComponents[0].trigger_object + 'Distribution',
+  'pt' + _heppyGlobalOptions["triggerObjectName"] + 'Distribution',
   file_label = 'tfile1',
   x_label= "pt [GeV]",
   y_label = "# events",
-  histo_name = 'pt' + selectedComponents[0].trigger_object +'Distribution',
-  histo_title = selectedComponents[0].trigger_object + ' transverse momentum distribution',
+  histo_name = 'pt' + _heppyGlobalOptions["triggerObjectName"] +'Distribution',
+  histo_title = _heppyGlobalOptions["triggerObjectName"] + ' transverse momentum distribution',
   min = 0,
   max = 200,
   nbins = 400,
@@ -206,12 +200,12 @@ ptDistribution = cfg.Analyzer(
 
 coarseBinnedPtDistribution = cfg.Analyzer(
   Histogrammer,
-  'coarseBinnedPt' + selectedComponents[0].trigger_object + 'Distribution',
+  'coarseBinnedPt' + _heppyGlobalOptions["triggerObjectName"] + 'Distribution',
   file_label = 'tfile1',
   x_label= "pt [GeV]",
   y_label = "# events",
-  histo_name = 'coarseBinnedPt' + selectedComponents[0].trigger_object + 'Distribution',
-  histo_title = selectedComponents[0].trigger_object + ' transverse momentum distribution',
+  histo_name = 'coarseBinnedPt' + _heppyGlobalOptions["triggerObjectName"] + 'Distribution',
+  histo_title = _heppyGlobalOptions["triggerObjectName"] + ' transverse momentum distribution',
   bins = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 260],
   input_objects = 'trigger_objects',
   value_func = pt,
