@@ -2,7 +2,7 @@ from heppy.framework.heppy_loop import *
 import yaml
 from importlib import import_module
 
-def runYAMLWorkflow(yamlConf)
+def runYAMLWorkflow(yamlConf):
 
   saveFolder = yamlConf["saveFolder"]
 
