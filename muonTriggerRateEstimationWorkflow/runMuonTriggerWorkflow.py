@@ -672,34 +672,3 @@ def buildRateComparisonPlot(yamlConf):
 #]
 #cfg.saveFileName = "" + saveFolder + "/rateClosureTest.root"
 #plotDistributionComparisonPlot(cfg)
-
-
-if __name__ == "__main__":
-
-  parser = create_parser()
-
-  options, other = parser.parse_args()
-
-  # Getting the config file from the hreppy extra options
-  for opt in options.extraOptions:
-        if "=" in opt:
-            (key, val) = opt.split("=", 1)
-            if key == "ConfigFile":
-              configFile = val
-
-  parameters = yaml.load(file(configFile, 'r'))
-  saveFolder = parameters["saveFolder"]
-
-  os.system("mkdir -p " + saveFolder)
-
-  steps = parameters["steps"]
-  for step in steps:
-    moduleName = step["module"]
-    functionName = step["function"]
-    print ">>>>> Executing", functionName, "..."
-    try:
-      function = getattr(import_module(moduleName), functionName)
-    except AttributeError:
-      print ">>>>> Error: can not find function", functionName, "in module", moduleName
-      exit()
-    function(parameters)

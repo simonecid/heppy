@@ -239,11 +239,11 @@ def normaliseRatePlots(yamlConf):
   saveFolder = yamlConf["saveFolder"]
   genObject = yamlConf["genObject"]
   triggerObject = yamlConf["triggerObject"]
-  interactionFrequency = yamlConf["interactionFrequency"]
   moduleNameRatePlots = yamlConf["moduleNameRatePlots"]
   componentNameRatePlots = yamlConf["componentNameRatePlots"]
   averagePileUp = yamlConf["averagePileUp"]
   bunchCrossingFrequency = yamlConf["bunchCrossingFrequency"]
+  interactionFrequency = averagePileUp * bunchCrossingFrequency
   
   if "numberOfDelphesEvents" in yamlConf:
     numberOfDelphesEvents = yamlConf["numberOfDelphesEvents"]
@@ -624,40 +624,3 @@ def runRateClosureTest(yamlConf):
 #
 #loop = main(options, folderAndScriptName, parser)
 #os.system("mv " + saveFolder + "/" + sample_ClosureTest4 + " " + saveFolder + "/" + sample_ClosureTest4+ "_TriggerObjectPtDistribution")
-
-
-if __name__ == "__main__":
-
-  parser = create_parser()
-
-
-  options, other = parser.parse_args()
-
-  # Getting the config file from the hreppy extra options
-  for opt in options.extraOptions:
-        if "=" in opt:
-            (key, val) = opt.split("=", 1)
-            if key == "ConfigFile":
-              configFile = val
-
-  parameters = yaml.load(file(configFile, 'r'))
-  averagePileUp = parameters["averagePileUp"]
-  saveFolder = parameters["saveFolder"]
-  bunchCrossingFrequency = parameters["bunchCrossingFrequency"]
-  sampleModule = parameters["moduleNameRatePlots"]
-  componentNameRatePlots = parameters["componentNameRatePlots"]
-  parameters["interactionFrequency"] = averagePileUp * bunchCrossingFrequency
-
-  os.system("mkdir -p " + saveFolder)
-
-  steps = parameters["steps"]
-  for step in steps:
-    moduleName = step["module"]
-    functionName = step["function"]
-    print ">>>>> Executing", functionName, "..."
-    try:
-      function = getattr(import_module(moduleName), functionName)
-    except AttributeError:
-      print ">>>>> Error: can not find function", functionName, "in module", moduleName
-      exit()
-    function(parameters) 
