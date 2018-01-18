@@ -174,12 +174,14 @@ def computeNonNormalisedRatePlots(yamlConf):
   options.extraOptions.append("detectorEta=" + str(yamlConf["detectorEta"]))
   options.extraOptions.append("triggerObjectName=" + str(yamlConf["triggerObject"]))
   options.force = True
+
   if "numberOfDelphesEvents" in yamlConf:
-    options.nevents = numberOfDelphesEvents
+    options.nevents = yamlConf["numberOfDelphesEvents"]
+
   loop = main(options, folderAndScriptName, parser)
 
   print "MERGING LOCAL HEPPY CHUNKS"
-
+  
   #Merging the histograms and trees
   filesToMerge = glob(saveFolder + "/" + componentNameRatePlots + "*/ratePlots.root")
   
