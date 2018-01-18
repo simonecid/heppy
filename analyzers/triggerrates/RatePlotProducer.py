@@ -67,13 +67,12 @@ class RatePlotProducer(Analyzer):
                                       self.cfg_ana.plot_name + '.root']),
                             'recreate')
 
-    bins = array("f", self.cfg_ana.bins)
-    self.histogram = TH1F(self.cfg_ana.plot_name, self.cfg_ana.plot_title, len(bins) - 1 , bins)
+    self.bins = array("f", self.cfg_ana.bins)
+    self.histogram = TH1F(self.cfg_ana.plot_name, self.cfg_ana.plot_title, len(self.bins) - 1 , self.bins)
     self.numberOfEvents = 0 
 
     # Sorted array of pt, used to find the estimate the probability that 2 jets above a certain
     # threshold will appear in the same event
-    self.sortedPtArray = []
 
   def process(self, event):
     '''Process the event.
@@ -92,10 +91,13 @@ class RatePlotProducer(Analyzer):
     startIdx = 0
 
     #Adding events for that thresholds
-    for x in range(0, len(self.cfg_ana.bins) - 1):
-      if self.cfg_ana.bins[x] <= 0:
+    for x in xrange(0, len(self.bins) - 1):
+      if self.bins[x] <= 0:
         self.histogram.AddBinContent(x+1)
         startIdx = x + 1
+      else:
+        # stop here, no more below 0 bins
+        break
 
     #startIdx keeps track of where the positive thresholds start
 
@@ -103,11 +105,9 @@ class RatePlotProducer(Analyzer):
     # We treat here single objects
     if not isinstance(input_collection, collections.Iterable):
 
-      insort(self.sortedPtArray, input_collection.pt())
-
-      for x in range(startIdx, len(self.cfg_ana.bins) - 1):
+      for x in xrange(startIdx, len(self.bins) - 1):
         # Preparing the check function
-          trigger_func = self.thresholdTriggerGenerator(self.cfg_ana.bins[x])
+          trigger_func = self.thresholdTriggerGenerator(self.bins[x])
           # Checking if the object passes the trigger
           if trigger_func(input_collection):
             self.histogram.AddBinContent(x+1)
@@ -116,18 +116,15 @@ class RatePlotProducer(Analyzer):
             break
 
     elif isinstance(input_collection, collections.Mapping):
-
-      for key, val in input_collection.iteritems():
-        insort(self.sortedPtArray, val.pt())
-      
+  
       # Iterating through all the objects
-      for x in range(startIdx, len(self.cfg_ana.bins) - 1):
+      for x in xrange(startIdx, len(self.bins) - 1):
         # Checking what thresholds are satisfied
         isPassed = False
         for key, val in input_collection.iteritems():
 
           # Preparing the check function
-          trigger_func = self.thresholdTriggerGenerator(self.cfg_ana.bins[x])
+          trigger_func = self.thresholdTriggerGenerator(self.bins[x])
           # Checking if the object passes the trigger
           if trigger_func(val):
             self.histogram.AddBinContent(x+1)
@@ -137,19 +134,15 @@ class RatePlotProducer(Analyzer):
 
         if not isPassed:
           #If no objects passes the threshold I can stop
-          break
+          break     
       
     else:
-
-      for obj in input_collection:
-        insort(self.sortedPtArray, obj.pt())
-
-      for x in range(startIdx, len(self.cfg_ana.bins) - 1):
+      for x in xrange(startIdx, len(self.bins) - 1):
         # Checking what thresholds are satisfied
         isPassed = False
         for obj in input_collection:
           # Preparing the check function
-          trigger_func = self.thresholdTriggerGenerator(self.cfg_ana.bins[x])
+          trigger_func = self.thresholdTriggerGenerator(self.bins[x])
           # Checking if the object passes the trigger
           if trigger_func(obj):
             self.histogram.AddBinContent(x+1)
@@ -186,32 +179,6 @@ class RatePlotProducer(Analyzer):
     c1.SetGridy()
     self.histogram.Draw("")
     c1.SetLogy(True)
-
-    #line = TLine(xMin, self.cfg_ana.yscale, xMax, self.cfg_ana.yscale)
-    #line.SetLineColor(2)
-    #line.Draw()
-
-    # I would like to draw a line to signal a threshold over which the probability of having 2 or more jets
-    # with an higher transverse momentum than the threshold is below 5%
-
-    # To find the threshold I have to solve numerically the equation 
-    # 1 - (1 - p)^(pileup) - pileup * p * (1 - p)^(pileup) = 0.05
-    # where p is the probability that a jet will be above a certain threshold
-    # p can also be interpreted as the fraction of jets in my distribution
-    # (1 - p) * numberOfJets will tell me which jet represents the threshold
-
-    #equation = lambda p : 1 - power(1 - p, self.cfg_ana.pileup) - self.cfg_ana.pileup * p * power(1 - p, self.cfg_ana.pileup - 1) - 0.05
-    #p_solution = fsolve(equation, 1./self.cfg_ana.pileup)
-    #thresholdIdx = int ( (1 - p_solution) * len(self.sortedPtArray))
-    #threshold = self.sortedPtArray[thresholdIdx]
-
-    #print "Threshold for", self.cfg_ana.plot_name, "is", threshold, "w/ p", p_solution, "thresholdIdx", thresholdIdx, "numPts", len(self.sortedPtArray)
-
-    # Drawing the threshold line
-
-    #pileupLine = TLine(threshold, yMin, threshold, yMax)
-    #pileupLine.SetLineColor(6)
-    #pileupLine.Draw()
     self.histogram.Write()
 
 
