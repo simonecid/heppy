@@ -48,8 +48,8 @@ def computeEfficiencies(numberOfFiles=-1, **kwargs):
     if entryIndex % 1000 == 0:
       print entryIndex, "/", nEntries
     chainGenObj.GetEntry(entryIndex)
-    genObj_pt = chainGenObj.leadingGenJet_pt
-    genObj_eta = chainGenObj.leadingGenJet_eta
+    genObj_pt = chainGenObj.genJet_pt
+    genObj_eta = chainGenObj.genJet_eta
     isGoodMuon = False
     if ((abs(genObj_eta) < barrelEta) and (genObj_pt > minPtInBarrel)):
       isGoodMuon = True
@@ -72,8 +72,8 @@ def computeEfficiencies(numberOfFiles=-1, **kwargs):
     if entryIndex % 1000 == 0:
       print entryIndex, "/", nEntries
     chainL1TObjGenObj.GetEntry(entryIndex)
-    genObj_pt = chainL1TObjGenObj.leadingGenJet_pt
-    genObj_eta = chainL1TObjGenObj.leadingGenJet_eta
+    genObj_pt = chainL1TObjGenObj.genJet_pt
+    genObj_eta = chainL1TObjGenObj.genJet_eta
     deltaR2 = chainL1TObjGenObj.deltaR2
 
     #Checking if the gen and l1t objects are enough close
