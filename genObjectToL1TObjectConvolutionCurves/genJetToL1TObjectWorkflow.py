@@ -69,7 +69,7 @@ def computeConvolutionCurves(yamlConf):
   options.extraOptions.append("triggerObjectName=" + yamlConf["triggerObject"])
   options.extraOptions.append("genObjectName=" + yamlConf["genObject"])
   options.extraOptions.append("deltaR2Matching=" + str(yamlConf["deltaR2Matching"]))
-  options.nevents=100000
+  #options.nevents=100000
   options.force = True
   loop = main(options, folderAndScriptName, parser)
   os.system("rm -r " + saveFolder + "/" + genObject + "_" +  triggerObject + "_" + "convolutionCurves")
@@ -437,7 +437,7 @@ def runClosureTest1(yamlConf):
   options.extraOptions.append("triggerObjectName=" + yamlConf["triggerObject"])
   options.extraOptions.append("genObjectName=" + yamlConf["genObject"])
   options.extraOptions.append("deltaR2Matching=" + str(yamlConf["deltaR2Matching"]))
-  options.nevents=300000
+  #options.nevents=300000
   options.force = True
   loop = main(options, folderAndScriptName, parser)
   os.system("mv " + saveFolder + "/" + componentNameClosureTest1 + " " + saveFolder + "/" + componentNameClosureTest1 + "_ClosureTestPlots_QualityCutOnGenObject")
