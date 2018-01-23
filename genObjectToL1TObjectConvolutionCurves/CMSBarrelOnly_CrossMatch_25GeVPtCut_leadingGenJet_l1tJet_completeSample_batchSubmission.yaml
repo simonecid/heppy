@@ -13,12 +13,11 @@ triggerObject: "l1tJet"
 
 moduleNameConvolutionCurves: "heppy.samples.mySamples"
 componentNameConvolutionCurves: "cmsMatching_QCD_15_3000_CrossMatch_LeadingJetSample_genJet_l1tJet"
-numberOfEventsConvolutionCurves: 10000
 
 efficiencySourceFolder: "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly"
 efficiencyMatchTree: "MatchLeadingGenJetWithL1Objects/matchedLeadingGenJetL1TJetTree"
 efficiencyGenTree: "MatchLeadingGenJetWithL1Objects/leadingGenJetTree"
-numberOfEfficiencyFiles: 1
+numberOfEfficiencyFiles: -1
 
 moduleNameClosureTest1: "heppy.samples.mySamples"
 componentNameClosureTest1: "cmsMatching_QCD_15_3000_CrossMatch_LeadingJetSample_genJet_l1tJet"
@@ -31,7 +30,6 @@ moduleNameRatePlots: "heppy.samples.sample_MinimumBias_NoTau_14TeV_GenParticles_
 componentNameRatePlots: "MinimumBias_14TeV_GenParticles"
 averagePileUp: 140
 bunchCrossingFrequency: !!float 31.6e6 # 2808 bunches
-numberOfDelphesEvents: 10000
 
 steps: 
 - module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
