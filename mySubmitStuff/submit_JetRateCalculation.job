@@ -1,6 +1,6 @@
 Universe = vanilla
 job = jetRateCalculation
-cmd = genObjectToL1TObjectConvolutionCurves
+cmd = genObjectToL1TObjectConvolutionCurves/runGenJetToL1TJetWorkflowOnCondor.sh
 args= -j $(job) -c $(cluster) -p $(process) -i genObjectToL1TObjectConvolutionCurves/CMSBarrelOnly_CrossMatch_25GeVPtCut_leadingGenJet_l1tJet_completeSample_batchSubmission.yaml
 # Better not to put logs in the same folder, as they are plenty
 output = /storage/sb17498/logs/heppy/$(job)_$(cluster).$(process).out
