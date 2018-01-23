@@ -34,4 +34,8 @@ if __name__ == "__main__":
               configFile = val
 
   yamlConf = yaml.load(file(configFile, 'r'))
+  for opt in options.extraOptions:
+        if "=" in opt:
+            (key, val) = opt.split("=", 1)
+            yamlConf[key] = val
   runYAMLWorkflow(yamlConf)

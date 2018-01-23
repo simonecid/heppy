@@ -69,7 +69,8 @@ def computeConvolutionCurves(yamlConf):
   options.extraOptions.append("triggerObjectName=" + yamlConf["triggerObject"])
   options.extraOptions.append("genObjectName=" + yamlConf["genObject"])
   options.extraOptions.append("deltaR2Matching=" + str(yamlConf["deltaR2Matching"]))
-  #options.nevents=100000
+  if "numberOfEventsConvolutionCurves" in yamlConf:
+    options.nevents = yamlConf["numberOfEventsConvolutionCurves"]
   options.force = True
   loop = main(options, folderAndScriptName, parser)
   os.system("rm -r " + saveFolder + "/" + genObject + "_" +  triggerObject + "_" + "convolutionCurves")
@@ -160,6 +161,15 @@ def computeNonNormalisedRatePlots(yamlConf):
   options.components = split(componentRatePlots)
   for component in options.components:
     component.splitFactor = 1
+
+  # Getting the job index from the heppy extra options
+  if "job" in yamlConf:
+    job = int(yamlConf["job"])
+  else:
+    job = None
+
+  if job is not None: 
+    options.components = [options.components[job]]
 
   #options.extraOptions.append("sample=" + yamlConf["sampleRateEstimation"])
   options.extraOptions.append("convolutionFileName=" + convolutionFileName)

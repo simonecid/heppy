@@ -2,7 +2,7 @@
 
 set -o xtrace
 
-while getopts "j:c:p:s:i:t:" o; do
+while getopts "j:c:p:i:" o; do
   case "${o}" in
     j)
       jobName=${OPTARG}
@@ -12,18 +12,13 @@ while getopts "j:c:p:s:i:t:" o; do
       ;;
     p)
       processId=${OPTARG}
-      ;;  
-    s)
-      sampleName=${OPTARG}
-      ;;
+      ;; 
     i)
       inputFile=${OPTARG}
       ;;
-    t)
-      numThreads=${OPTARG}
-      ;;
     esac
 done
+
 
 echo "Dumping sysinfo"
 
@@ -38,7 +33,7 @@ echo "I am running on" $HOSTNAME
 echo "Running heppy job"
 
 HOME_FOLDER="$(pwd)"
-SAVE_DESTINATION="${jobName}_${sampleName}"
+SAVE_DESTINATION="${jobName}_${clusterId}.${processId}"
 
 mkdir ${SAVE_DESTINATION}
 
@@ -46,16 +41,18 @@ set +o xtrace
 source /software/sb17498/FCCSW/init.sh
 set -o xtrace
 
-cp -r /software/sb17498/heppy .
+cd ${HOME_FOLDER}
+git clone https://www.github.com/simonecid/heppy
 cd heppy
 set +o xtrace
 source init.sh
 set -o xtrace
 
-heppy ${HOME_FOLDER}/${SAVE_DESTINATION} ${inputFile} --option=sample=${sampleName} -j ${numThreads}
+python myScripts/runYAMLWorkflow.py --option ConfigFile=${inputFile} --option job=${processId} --option saveFolder=${SAVE_DESTINATION}
 
 # Zip file
+tar -czvf ${SAVE_DESTINATION}.tar.gz ${SAVE_DESTINATION}
+mv ${SAVE_DESTINATION}.tar.gz ${HOME_FOLDER}
 cd ${HOME_FOLDER}
-tar -czvf ${jobName}_${sampleName}_${clusterId}.${processId}.tar.gz ${SAVE_DESTINATION}
 
 set +o xtrace
