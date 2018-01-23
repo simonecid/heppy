@@ -69,17 +69,17 @@ def computeConvolutionCurves(yamlConf):
   options.extraOptions.append("triggerObjectName=" + yamlConf["triggerObject"])
   options.extraOptions.append("genObjectName=" + yamlConf["genObject"])
   options.extraOptions.append("deltaR2Matching=" + str(yamlConf["deltaR2Matching"]))
-  #options.nevents=300000
+  options.nevents=100000
   options.force = True
   loop = main(options, folderAndScriptName, parser)
   os.system("rm -r " + saveFolder + "/" + genObject + "_" +  triggerObject + "_" + "convolutionCurves")
-  os.system("mkdir " + saveFolder + "/" + genObject + "_" +  triggerObject + "_" + "convolutionCurves")
   if componentConvolutionCurves[0].splitFactor > 1:
+    os.system("mkdir " + saveFolder + "/" + genObject + "_" +  triggerObject + "_" + "convolutionCurves")
     os.system("hadd " + saveFolder + "/" + genObject + "_" + triggerObject + "_" + "convolutionCurves/histograms.root " +
               saveFolder + "/" + componentNameConvolutionCurves + "_Chunk*/histograms.root")
   else:
-    os.system("mv " + saveFolder + "/" + componentNameConvolutionCurves + "/histograms.root " +
-    saveFolder + "/" + genObject + "_" + triggerObject + "_" + "convolutionCurves/histograms.root")
+    os.system("mv " + saveFolder + "/" + componentNameConvolutionCurves + " " +
+    saveFolder + "/" + genObject + "_" + triggerObject + "_" + "convolutionCurves")
 
 
 def obtainEfficiencies(yamlConf):
@@ -558,7 +558,7 @@ def runRateClosureTest(yamlConf):
   options.force = True
 
   #options.nevents=100
-  #loop = main(options, folderAndScriptName, parser)
+  loop = main(options, folderAndScriptName, parser)
   os.system("mv " + saveFolder + "/" + componentNameRateClosureTest +
             " " + saveFolder + "/" + componentNameRateClosureTest + "_CMSTriggerRate")
   
