@@ -45,7 +45,7 @@ def computeEfficiencies(numberOfFiles=-1, **kwargs):
   nEntries = chainGenObj.GetEntries()
 
   chainGenObj.GetEntry(0)
-  isLeadingGenJet = hasattr("leadingGenJet_pt", chainGenObj)
+  isLeadingGenJet = hasattr(chainGenObj, "leadingGenJet_pt")
 
   for entryIndex in xrange(0, nEntries):
     if entryIndex % 1000 == 0:
