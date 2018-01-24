@@ -50,4 +50,5 @@ steps:
 #  function: runClosureTest2
 #- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
 #  function: runRateClosureTest
-
+- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+  function: buildRateComparisonPlotFromHDFS

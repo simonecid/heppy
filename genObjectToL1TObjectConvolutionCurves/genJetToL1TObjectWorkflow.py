@@ -633,6 +633,30 @@ def buildRateComparisonPlot(yamlConf):
   ]
   cfg.saveFileName = "" + saveFolder + "/rateClosureTest.root"
   plotDistributionComparisonPlot(cfg)
+
+
+def buildRateComparisonPlotFromHDFS(yamlConf):
+  saveFolder = yamlConf["saveFolder"]
+  genObject = yamlConf["genObject"]
+  triggerObject = yamlConf["triggerObject"]
+  averagePileUp = yamlConf["averagePileUp"]
+  bunchCrossingFrequency = yamlConf["bunchCrossingFrequency"]
+  moduleNameRateClosureTest = yamlConf["moduleNameRateClosureTest"]
+  componentNameRateClosureTest = yamlConf["componentNameRateClosureTest"]
+  componentNameRatePlots = yamlConf["componentNameRatePlots"]
+
+  print "CREATING RATIO PLOT FOR CMS VS DELPHES RATE"
+
+  def cfg(x): return 1
+  cfg.plots = [
+      #  #Files here
+      ["/hdfs/FCC-hh/cmsMatching_SingleNeutrinoPU140_BarrelOnly_LeadingL1TJet_CMSTriggerRate/ratePlots.root",
+       "triggerRate", "CMS " + triggerObject],
+      ["" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + componentNameRatePlots + \
+          "_RatePlots_PU" + str(averagePileUp) + "RatePlot.root", "fullPURatePlot", "Sim " + triggerObject]
+  ]
+  cfg.saveFileName = "" + saveFolder + "/rateClosureTest.root"
+  plotDistributionComparisonPlot(cfg)
 #
 #print "CREATING THE SIM-" + triggerObject + "PT DISTRIBUTION PLOT"
 #parser = create_parser()

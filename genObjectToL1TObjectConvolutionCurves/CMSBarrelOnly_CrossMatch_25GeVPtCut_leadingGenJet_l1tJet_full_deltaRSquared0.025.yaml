@@ -1,4 +1,4 @@
-saveFolder: "_jetTriggerRate_leadingJet_CrossMatch_deltaRSquared0.025/"
+saveFolder: "jetTriggerRate_leadingJet_CrossMatch_deltaRSquared0.025_3153422/"
 
 binning: "[3, 4, 5, 7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 80, 90, 100, 110, 125, 150, 175, 200, 250, 300, 400, 500]"
 qualityThreshold: 0
@@ -50,4 +50,6 @@ steps:
 #  function: runClosureTest2
 #- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
 #  function: runRateClosureTest
+- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+  function: buildRateComparisonPlotFromHDFS
 
