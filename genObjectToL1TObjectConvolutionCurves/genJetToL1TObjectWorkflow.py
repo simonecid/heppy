@@ -190,8 +190,16 @@ def computeNonNormalisedRatePlots(yamlConf):
 
   loop = main(options, folderAndScriptName, parser)
 
+def mergeNonNormalisedRatePlots(yamlConf):
+
   print "MERGING LOCAL HEPPY CHUNKS"
-  
+  saveFolder = yamlConf["saveFolder"]
+  genObject = yamlConf["genObject"]
+  triggerObject = yamlConf["triggerObject"]
+
+  moduleNameRatePlots = yamlConf["moduleNameRatePlots"]
+  componentNameRatePlots = yamlConf["componentNameRatePlots"]
+
   #Merging the histograms and trees
   filesToMerge = glob(saveFolder + "/" + componentNameRatePlots + "*/ratePlots.root")
   
@@ -246,6 +254,21 @@ def computeNonNormalisedRatePlots(yamlConf):
 
 
 def normaliseRatePlots(yamlConf):
+  saveFolder = yamlConf["saveFolder"]
+  genObject = yamlConf["genObject"]
+  triggerObject = yamlConf["triggerObject"]
+
+  moduleNameRatePlots = yamlConf["moduleNameRatePlots"]
+  componentNameRatePlots = yamlConf["componentNameRatePlots"]
+
+  componentRatePlots = [getattr(import_module(
+      moduleNameRatePlots), componentNameRatePlots, None)]
+
+  if componentRatePlots[0] is None:
+    print "Error:  component does not exist"
+    raise ValueError('Component ' + componentNameRatePlots +
+                     " has not been declared in module " + moduleNameRatePlots)
+
   print "OBTAINING THE RATE IN THE LINEAR SCALING APPROXIMATION"
 
   saveFolder = yamlConf["saveFolder"]
@@ -587,6 +610,16 @@ def runRateClosureTest(yamlConf):
   barrelRateHist.Write()
   endcapRateHist.Write()
   cmsRatePlotFile.Close()
+
+def buildRateComparisonPlot(yamlConf):
+  saveFolder = yamlConf["saveFolder"]
+  genObject = yamlConf["genObject"]
+  triggerObject = yamlConf["triggerObject"]
+  averagePileUp = yamlConf["averagePileUp"]
+  bunchCrossingFrequency = yamlConf["bunchCrossingFrequency"]
+  moduleNameRateClosureTest = yamlConf["moduleNameRateClosureTest"]
+  componentNameRateClosureTest = yamlConf["componentNameRateClosureTest"]
+  componentNameRatePlots = yamlConf["componentNameRatePlots"]
   
   print "CREATING RATIO PLOT FOR CMS VS DELPHES RATE"
   

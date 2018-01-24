@@ -39,6 +39,8 @@ steps:
 - module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
   function: computeNonNormalisedRatePlots
 - module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+  function: mergeNonNormalisedRatePlots
+- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
   function: normaliseRatePlots
 - module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
   function: runClosureTest1
@@ -46,4 +48,3 @@ steps:
   function: runClosureTest2
 - module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
   function: runRateClosureTest
-

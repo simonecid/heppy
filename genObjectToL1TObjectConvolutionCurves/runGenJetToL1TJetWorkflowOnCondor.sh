@@ -33,7 +33,7 @@ echo "I am running on" $HOSTNAME
 echo "Running heppy job"
 
 HOME_FOLDER="$(pwd)"
-SAVE_DESTINATION="${jobName}_${clusterId}.${processId}"
+SAVE_DESTINATION="${jobName}_${clusterId}"
 
 mkdir ${SAVE_DESTINATION}
 
