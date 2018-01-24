@@ -32,7 +32,6 @@ moduleNameRatePlots: "heppy.samples.sample_MinimumBias_NoTau_14TeV_GenParticles"
 componentNameRatePlots: "MinimumBias_14TeV_GenParticles_full"
 averagePileUp: 140
 bunchCrossingFrequency: !!float 31.6e6 # 2808 bunches
-numberOfDelphesEvents: 10000
 
 steps: 
 - module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
