@@ -6,7 +6,7 @@ barrelEta: 1.44 # 0-1.44 barrel
 endcapEta: 3 #1.44 - 3 endcap
 detectorEta: 5.05 # 3 - 1.44 forward
 magneticField: 3.8 # Tesla
-deltaR2Matching: 0.09
+deltaR2Matching: 0.09 # deltaR 0.3
 minimumPtToReachBarrel: 25 # Some cut
 minimumPtToReachEndcap: 1000000 # disabling endcap with high pt threshold
 minimumPtToReachForward: 1000000 # killing forward
