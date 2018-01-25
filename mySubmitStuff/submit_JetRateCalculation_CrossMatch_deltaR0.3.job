@@ -1,7 +1,7 @@
 Universe = vanilla
 job = jetTriggerRate_leadingJet_CrossMatch_deltaR0.3
 cmd = genObjectToL1TObjectConvolutionCurves/runGenJetToL1TJetWorkflowOnCondor.sh
-args= -j $(job) -c $(cluster) -p $(process) -i genObjectToL1TObjectConvolutionCurves/CMSBarrelOnly_CrossMatch_25GeVPtCut_leadingGenJet_l1tJet_full_deltaR0.3.yaml
+args= -j $(job) -c $(cluster) -i genObjectToL1TObjectConvolutionCurves/CMSBarrelOnly_CrossMatch_25GeVPtCut_leadingGenJet_l1tJet_full_deltaR0.3.yaml
 # Better not to put logs in the same folder, as they are plenty
 output = /storage/sb17498/logs/heppy/$(job)_$(cluster).$(process).out
 error = /storage/sb17498/logs/heppy/$(job)_$(cluster).$(process).err

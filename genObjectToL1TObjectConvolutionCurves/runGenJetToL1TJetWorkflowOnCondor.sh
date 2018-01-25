@@ -48,7 +48,14 @@ set +o xtrace
 source init.sh
 set -o xtrace
 
-python myScripts/runYAMLWorkflow.py --option ConfigFile=${inputFile} --option job=${processId} --option saveFolder=${SAVE_DESTINATION}
+if [ -z ${processId} ]
+then 
+  # if no process id then run in non-batch mode
+  python myScripts/runYAMLWorkflow.py --option ConfigFile=${inputFile} --option saveFolder=${SAVE_DESTINATION}
+else
+  # else go in batch mode.
+  python myScripts/runYAMLWorkflow.py --option ConfigFile=${inputFile} --option job=${processId} --option saveFolder=${SAVE_DESTINATION}
+fi
 
 # Zip file
 tar -czvf ${SAVE_DESTINATION}.tar.gz ${SAVE_DESTINATION}
