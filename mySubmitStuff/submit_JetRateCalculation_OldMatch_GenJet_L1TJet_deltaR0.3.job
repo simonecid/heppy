@@ -1,0 +1,17 @@
+Universe = vanilla
+job = jetTriggerRate_genJet_oldMatch_deltaR0.3
+cmd = genObjectToL1TObjectConvolutionCurves/runGenJetToL1TJetWorkflowOnCondor.sh
+args= -j $(job) -c $(cluster) -i genObjectToL1TObjectConvolutionCurves/CMSBarrelOnly_OldMatch_25GeVPtCut_genJet_l1tJet_full_deltaR0.3.yaml
+# Better not to put logs in the same folder, as they are plenty
+output = /storage/sb17498/logs/heppy/$(job)_$(cluster).$(process).out
+error = /storage/sb17498/logs/heppy/$(job)_$(cluster).$(process).err
+log = /storage/sb17498/logs/heppy/$(job)_$(cluster).$(process).log
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT_OR_EVICT
+
+requirements=Target.Machine=!="hd-38-02.dice.priv"
+request_cpus = 2
+request_memory = 5000
+request_disk = 1000000
+
+queue 1
