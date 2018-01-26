@@ -22,9 +22,9 @@ efficiencyGenTree: "MatchGenJetWithL1Objects/genJetTree"
 numberOfEfficiencyFiles: -1
 
 moduleNameClosureTest1: "heppy.samples.mySamples"
-componentNameClosureTest1: "cmsMatching_QCD_15_3000_L1TJet_GenJet_Smaller"
+componentNameClosureTest1: "cmsMatching_QCD_15_3000_L1TJet_GenJet"
 moduleNameClosureTest2: "heppy.samples.mySamples"
-componentNameClosureTest2: "cmsMatching_QCD_15_3000_GenJet_Smaller"
+componentNameClosureTest2: "cmsMatching_QCD_15_3000_GenJet"
 moduleNameRateClosureTest: "heppy.samples.mySamples"
 componentNameRateClosureTest: "cmsMatching_SingleNeutrinoPU140_BarrelOnly_LeadingL1TJet"
 
@@ -44,10 +44,10 @@ steps:
   function: mergeNonNormalisedRatePlots
 - module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
   function: normaliseRatePlots
-#- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
-#  function: runClosureTest1
-#- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
-#  function: runClosureTest2
+- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+  function: runClosureTest1
+- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+  function: runClosureTest2
 #- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
 #  function: runRateClosureTest
 - module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
