@@ -5737,8 +5737,6 @@ cmsMatching_QCD_15_3000_CrossMatch_genJet_Smaller = cfg.MCComponent(
   tree_name = "MatchGenJetWithL1Objects/genJetTree",
   files = [
     "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_3150158.0.root",
-    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_3150158.1.root",
-    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_3150158.10.root",
   ],
   gen_object = "genJet"
 )
@@ -5748,8 +5746,6 @@ cmsMatching_QCD_15_3000_CrossMatch_genJet_l1tJet_Smaller = cfg.MCComponent(
   tree_name = "MatchGenJetWithL1Objects/matchedL1TJetGenJetTree",
   files = [
     "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_3150158.0.root",
-    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_3150158.1.root",
-    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_3150158.10.root",
   ],
   gen_object = "genJet",
   trigger_object = "l1tJet"
