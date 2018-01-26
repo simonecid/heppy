@@ -1,12 +1,19 @@
 from heppy.framework.heppy_loop import * 
 import yaml
 from importlib import import_module
+from multiprocessing import Process, Queue
+
+def functionWrapper(queue, function, yamlConf):
+  function(yamlConf)
+  queue.put(yamlConf)
+
 
 def runYAMLWorkflow(yamlConf):
 
   saveFolder = yamlConf["saveFolder"]
 
   os.system("mkdir -p " + saveFolder)
+  os.system("cp " + yamlConf["ConfigFile"] + " " + saveFolder)
 
   steps = yamlConf["steps"]
   for step in steps:
@@ -18,7 +25,11 @@ def runYAMLWorkflow(yamlConf):
     except AttributeError:
       print ">>>>> Error: can not find function", functionName, "in module", moduleName
       exit()
-    function(yamlConf)
+    queue = Queue()
+    functionProcess = Process(target=functionWrapper, args=(queue, function, yamlConf))
+    functionProcess.start()
+    functionProcess.join()
+    yamlConf = queue.get()
 
 
 if __name__ == "__main__":
