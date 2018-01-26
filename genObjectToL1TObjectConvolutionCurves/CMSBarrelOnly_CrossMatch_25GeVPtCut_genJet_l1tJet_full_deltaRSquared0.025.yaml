@@ -1,4 +1,4 @@
-saveFolder: "_jetTriggerRate_25GeVCut_BarrelOnly_CrossMatch_deltaRSquared0.025_fullSample/"
+saveFolder: "_jetTriggerRate_25GeVCut_genJetResolution_BarrelOnly_CrossMatch_deltaRSquared0.025_fullSample/"
 
 binning: "[3, 4, 5, 7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 80, 90, 100, 110, 125, 150, 175, 200, 250, 300, 400, 500]"
 qualityThreshold: 0
@@ -6,7 +6,7 @@ barrelEta: 1.44 # 0-1.44 barrel
 endcapEta: 3 #1.44 - 3 endcap
 detectorEta: 5.05 # 3 - 1.44 forward
 magneticField: 3.8 # Tesla
-deltaR2Matching: 0.0025 #dR = 0.3
+deltaR2Matching: 0.025 #dR = 0.3
 minimumPtToReachBarrel: 25 # Some cut
 minimumPtToReachEndcap: 1000000 # disabling endcap with high pt threshold
 minimumPtToReachForward: 1000000 # killing forward
