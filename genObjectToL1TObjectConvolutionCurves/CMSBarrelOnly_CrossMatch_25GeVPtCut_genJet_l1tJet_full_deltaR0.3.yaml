@@ -1,4 +1,4 @@
-saveFolder: "_jetTriggerRate_25GeVCut_BarrelOnly_CrossMatch_deltaR0.3_fullSample/"
+saveFolder: "_jetTriggerRate_25GeVCut_genJetResolution_BarrelOnly_CrossMatch_deltaR0.3_fullSample/"
 
 binning: "[3, 4, 5, 7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 80, 90, 100, 110, 125, 150, 175, 200, 250, 300, 400, 500]"
 qualityThreshold: 0
