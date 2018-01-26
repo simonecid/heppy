@@ -32,6 +32,7 @@ ptBins = [0, 1.5, 3, 5, 8, 11, 15, 20, 30, 40, 50, 70, 100, 140, 200]
 muonMinimumPtInBarrel = float(_heppyGlobalOptions["minimumPtInBarrel"])
 muonMinimumPtInEndcap = float(_heppyGlobalOptions["minimumPtInEndcap"])
 barrelEta = float(_heppyGlobalOptions["barrelEta"])
+deltaR2Matching = float(_heppyGlobalOptions["deltaR2Matching"])
 
 if "binning" in _heppyGlobalOptions:
   import ast
@@ -102,7 +103,7 @@ def quality(ptc):
   return ptc.quality
 
 def dr2Selection(ptc):
-  return abs(ptc.deltaR2) < 0.25 #dr < 0.5
+  return abs(ptc.deltaR2) < deltaR2Matching  # dr < 0.5
 
 def genMuInDetector(ptc):
   if (abs(ptc.match.eta()) < barrelEta):
