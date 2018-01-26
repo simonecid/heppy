@@ -165,6 +165,7 @@ def obtainEfficiencies(yamlConf):
       barrelEta=yamlConf["barrelEta"],
       minPtInBarrel=yamlConf["minimumPtToReachBarrel"],
       minPtInEndcap=yamlConf["minimumPtToReachEndcap"],
+      deltaR2Matching=yamlConf["deltaR2Matching"]
   )
   print "PROCESSING FROM HIGH MOMENTUM MUONS"
   numberOfMatchedObjects_highPt, numberOfGenObjects_highPt = computeEfficiencies(
@@ -178,6 +179,7 @@ def obtainEfficiencies(yamlConf):
       barrelEta=yamlConf["barrelEta"],
       minPtInBarrel=yamlConf["minimumPtToReachBarrel"],
       minPtInEndcap=yamlConf["minimumPtToReachEndcap"],
+      deltaR2Matching=yamlConf["deltaR2Matching"]
   )
 
   numberOfMatchedObjects = numberOfMatchedObjects_lowPt + numberOfMatchedObjects_highPt
