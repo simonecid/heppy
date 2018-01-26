@@ -21,6 +21,7 @@ def computeEfficiencies(**kwargs):
   barrelEta = float(kwargs["barrelEta"])
   minPtInBarrel = float(kwargs["minPtInBarrel"])
   minPtInEndcap = float(kwargs["minPtInEndcap"])
+  deltaR2Matching = float(kwargs["deltaR2Matching"])
   
   conversion_factors = []
 
@@ -56,6 +57,10 @@ def computeEfficiencies(**kwargs):
     chainL1TObjGenObj.GetEntry(entryIndex)
     genObj_pt = chainL1TObjGenObj.genParticle_pt
     genObj_eta = chainL1TObjGenObj.genParticle_eta
+    deltaR2 = chainL1TObjGenObj.deltaR2
+    #Checking if the gen and l1t objects are enough close
+    if (deltaR2 > deltaR2Matching):
+      continue
     # There are two different pt threshold based on the muon eta
     # If in barrel and the momentum is higher than the threshold, muon is good
     isGoodMuon = False
@@ -92,6 +97,8 @@ if __name__ == "__main__":
   parser.add_argument('--barrelEta', type=float)
   parser.add_argument('--minPtInBarrel', type=float)
   parser.add_argument('--minPtInEndcap', type=float)
+  parser.add_argument('--deltaR2Matching', type=float)
+
 
   args = parser.parse_args()
 
@@ -106,6 +113,7 @@ if __name__ == "__main__":
     barrelEta = args.barrelEta,
     minPtInBarrel = args.minPtInBarrel,
     minPtInEndcap = args.minPtInEndcap,
+    deltaR2Matching=args.deltaR2Matching,
   )
   factors = accepted/total
   print "Conversion factors are", factors
