@@ -5704,6 +5704,63 @@ cmsMatching_QCD_15_3000_CrossMatch_LeadingJetSample_genJet_l1tJet = cfg.MCCompon
   trigger_object = "l1tJet"
 )
 
+cmsMatching_QCD_15_3000_PU140_CrossMatch_LeadingJetSample_genJet = cfg.MCComponent(
+    'cmsMatching_QCD_15_3000_PU140_CrossMatch_LeadingJetSample_genJet',
+    tree_name="MatchLeadingGenJetWithL1Objects/leadingGenJetTree",
+  files = [
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.0.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.10.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.11.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.12.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.13.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.14.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.15.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.16.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.17.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.18.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.19.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.1.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.2.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.3.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.4.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.5.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.6.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.7.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.8.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.9.root",
+  ],
+  gen_object = "genJet",
+)
+
+cmsMatching_QCD_15_3000_PU140_CrossMatch_LeadingJetSample_genJet_l1tJet = cfg.MCComponent(
+    'cmsMatching_QCD_15_3000_PU140_CrossMatch_LeadingJetSample_genJet_l1tJet',
+    tree_name="MatchLeadingGenJetWithL1Objects/matchedLeadingGenJetL1TJetTree",
+  files = [
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.0.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.10.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.11.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.12.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.13.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.14.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.15.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.16.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.17.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.18.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.19.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.1.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.2.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.3.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.4.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.5.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.6.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.7.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.8.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_3156150.9.root",
+  ],
+  gen_object = "genJet",
+  trigger_object = "l1tJet"
+)
+
 cmsMatching_QCD_15_3000_CrossMatch_LeadingJetSample_genJet = cfg.MCComponent(
     'cmsMatching_QCD_15_3000_CrossMatch_LeadingJetSample_genJet',
     tree_name="MatchLeadingGenJetWithL1Objects/leadingGenJetTree",
