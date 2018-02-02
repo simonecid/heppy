@@ -21,7 +21,7 @@ if "-i" not in sys.argv:
 
 
 from heppy.framework.looper import Looper
-from heppy.framework.config import split
+from heppy.framework.config import split, Component
 
 # global, to be used interactively when only one component is processed.
 loop = None
@@ -43,9 +43,6 @@ def runLoopAsync(comp, outDir, configName, options):
 
 _globalGracefulStopFlag = multiprocessing.Value('i',0)
 def runLoop( comp, outDir, config, options):
-   
-    if options.input is not None:
-        comp.files = [options.input]
 
     fullName = '/'.join( [outDir, comp.name ] )
     # import pdb; pdb.set_trace()
@@ -154,6 +151,14 @@ def main( options, args, parser ):
         selComps = [comp for comp in cfg.config.components if len(comp.files)>0]
         
     selComps = split(selComps)
+
+    if options.input is not None:
+        comp = Component(
+            'component',
+            files=[options.input],
+        )
+        selComps = [comp]
+
     # for comp in selComps:
     #    print comp
     if len(selComps)>options.ntasks:
