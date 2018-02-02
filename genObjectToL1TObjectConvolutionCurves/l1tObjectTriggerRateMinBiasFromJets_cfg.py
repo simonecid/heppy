@@ -19,6 +19,7 @@ from importlib import import_module
 from heppy.analyzers.triggerrates.Histogrammer import Histogrammer
 from heppy.analyzers.triggerrates.LeadingQuantityHistogrammer import LeadingQuantityHistogrammer
 from heppy.analyzers.triggerrates.LeadingObjectFinder import LeadingObjectFinder  
+from heppy.analyzers.triggerrates.MomentumShifter import MomentumShifter
 
 
 
@@ -36,6 +37,7 @@ minimumPtInForward = float(_heppyGlobalOptions["minimumPtInForward"])
 barrelEta = float(_heppyGlobalOptions["barrelEta"])
 endcapEta = float(_heppyGlobalOptions["endcapEta"])
 detectorEta = float(_heppyGlobalOptions["detectorEta"])
+momentumShift = float(_heppyGlobalOptions["momentumShift"])
 triggerObjectName = _heppyGlobalOptions["triggerObjectName"]
 
 ptBins = [0, 1.5, 3, 5, 8, 11, 15, 20, 30, 40, 50, 70, 100, 140, 200]
@@ -121,10 +123,18 @@ goodJetSelector = cfg.Analyzer(
   filter_func = jetInDetector 
 )
 
+shiftJetMomentum = cfg.Analyzer(
+  MomentumShifter,
+  'shiftJetMomentum',
+  input_collection = 'good_jets',
+  output_collection = "shifted_good_jets",
+  shift = momentumShift
+)
+
 smearJetToTriggerObject = cfg.Analyzer(
   Smearer,
   'smearJetToTriggerObject',
-  input_collection = 'good_jets',
+  input_collection='shifted_good_jets',
   output_collection = triggerObjectName,
   convolution_file = convolutionFileName,
   convolution_histogram_prefix = "deltaPtDistributionBinnedInMatchedObject",
@@ -255,7 +265,7 @@ smearedSelector = cfg.Analyzer(
   Selector,
   'smearedSelector',
   output = 'smeared_good_jets',
-  input_objects = 'good_jets',
+  input_objects = 'shifted_good_jets',
   filter_func = isSmeared
 )
 
@@ -305,6 +315,7 @@ forwardSimL1TObjectRate = cfg.Analyzer(
 sequence = cfg.Sequence( [
   source,
   goodJetSelector,
+  shiftJetMomentum,
   smearJetToTriggerObject,
   smearedSelector,
   leadingPtSimL1TObjectFinder,
