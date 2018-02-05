@@ -1,3 +1,4 @@
+binning: "[3, 4, 5, 7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 80, 90, 100, 110, 125, 150, 175, 200, 250, 300, 400, 500]"
 qualityThreshold: 0
 barrelEta: 1.44 # 0-1.44 barrel
 endcapEta: 3 #1.44 - 3 endcap
@@ -11,9 +12,9 @@ genObject: "genJet"
 triggerObject: "l1tJet"
 
 moduleNameConvolutionCurves: "heppy.samples.mySamples"
-componentNameConvolutionCurves: "cmsMatching_QCD_15_3000_CrossMatch_LeadingJetSample_genJet_l1tJet"
+componentNameConvolutionCurves: "cmsMatching_QCD_15_3000_PU140_CrossMatch_LeadingJetSample_genJet_l1tJet"
 
-efficiencySourceFolder: "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly"
+efficiencySourceFolder: "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly"
 efficiencyMatchTree: "MatchLeadingGenJetWithL1Objects/matchedLeadingGenJetL1TJetTree"
 efficiencyGenTree: "MatchLeadingGenJetWithL1Objects/leadingGenJetTree"
 numberOfEfficiencyFiles: -1
@@ -31,15 +32,10 @@ averagePileUp: 140
 bunchCrossingFrequency: !!float 31.6e6 # 2808 bunches
 
 steps: 
-#- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
-#  function: computeConvolutionCurves
-#- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
-#  function: obtainEfficiencies
-#- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
-#  function: computeNonNormalisedRatePlots
 - module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
-  function: mergeNonNormalisedRatePlots
+  function: computeConvolutionCurves
 - module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
-  function: normaliseRatePlots
+  function: obtainEfficiencies
 - module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
-  function: buildRateComparisonPlotFromHDFS
+  function: computeNonNormalisedRatePlots
+
