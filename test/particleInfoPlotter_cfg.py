@@ -658,6 +658,23 @@ jetGenPtDistribution = cfg.Analyzer(
   log_y = True
 )
 
+jetLeadingGenPtDistribution = cfg.Analyzer(
+  LeadingQuantityHistogrammer,
+  'jetLeadingGenPtDistribution',
+  file_label = 'tfile1',
+  x_label = "pt [GeV]",
+  y_label = "# events",
+  histo_name = 'jetLeadingGenPtDistribution',
+  histo_title = 'Jet leading transverse momentum distribution (gen level)',
+  min = 0,
+  max = 2000,
+  nbins = 4000,
+  input_objects = 'gen_jets',
+  key_func = pt,
+  value_func = pt,
+  log_y = True
+)
+
 jetRecoPtEtaDistribution = cfg.Analyzer(
   Histogrammer_2D,
   'jetRecoPtEtaDistribution',
@@ -709,12 +726,13 @@ sequence = cfg.Sequence( [
   #photonRecoEtaDistribution,
   #photonGenPtDistribution,
   jetRecoPtDistribution,
-  #jetLeadingRecoPtDistribution,
+  jetLeadingRecoPtDistribution,
   #jetSubLeadingRecoPtDistribution,
   #jetLeadingRecoEtaDistribution,
   #jetSubLeadingRecoEtaDistribution,
   #jetRecoEtaDistribution,
   jetGenPtDistribution,
+  jetLeadingGenPtDistribution,
   #jetRecoPtEtaDistribution
 ] )
 
