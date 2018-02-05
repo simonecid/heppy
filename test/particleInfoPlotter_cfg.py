@@ -15,6 +15,7 @@ from heppy.analyzers.triggerrates.LeadingQuantityHistogrammer import LeadingQuan
 from heppy.analyzers.triggerrates.SubLeadingQuantityHistogrammer import SubLeadingQuantityHistogrammer
 from heppy.analyzers.triggerrates.Histogrammer_2D import Histogrammer_2D
 from heppy.samples.sample_MinimumBias_NoTau_14TeV_GenParticles import *
+from heppy.samples.sample_NeutrinoGun_PU140_14TeV_OnlyGenParticleClassification_JetPTMin_3_PropagatedGenJetAtECAL import *
 import sys
 from heppy.framework.looper import Looper
 from heppy.framework.heppy_loop import _heppyGlobalOptions
@@ -41,7 +42,7 @@ test_classification = cfg.MCComponent(
 )
 
 selectedComponents = [
-  MinimumBias_14TeV_GenParticles_500kevents
+    NeutrinoGun_PU140_14TeV_OnlyGenParticleClassification_JetPTMin_3_PropagatedGenJetAtECAL
 ]
 
 # Defining pdgids
@@ -58,8 +59,8 @@ source = cfg.Analyzer(
 
   #gen_particles = 'skimmedGenParticles',
 
-  gen_jets = 'genJets',
-  #jets = 'genJets',
+  gen_jets = 'nonPropagatedGenJets',
+  jets = 'propagatedGenJets',
 
   #electrons = 'genElectrons',
 
@@ -77,6 +78,8 @@ source = cfg.Analyzer(
 
 def particleCheckerFactory (ptcName):
   def particleChecker (ptc):
+    if (abs(ptc.pdgid()) == pdgIds[ptcName]):
+      import pdb; pdb.set_trace()
     return (abs(ptc.pdgid()) == pdgIds[ptcName])
   return particleChecker
 
@@ -650,7 +653,7 @@ jetGenPtDistribution = cfg.Analyzer(
   min = 0,
   max = 2000,
   nbins = 4000,
-  input_objects = 'gen_jets_eta_restricted',
+  input_objects = 'gen_jets',
   value_func = pt,
   log_y = True
 )
@@ -680,7 +683,7 @@ jetRecoPtEtaDistribution = cfg.Analyzer(
 sequence = cfg.Sequence( [
   source,
   #etaGenParticleSelector,
-  etaGenJetSelector,
+  #etaGenJetSelector,
   #electronSelector,
   #muonSelector,
   #tauSelector,
@@ -705,7 +708,7 @@ sequence = cfg.Sequence( [
   #photonSubLeadingRecoEtaDistribution,
   #photonRecoEtaDistribution,
   #photonGenPtDistribution,
-  #jetRecoPtDistribution,
+  jetRecoPtDistribution,
   #jetLeadingRecoPtDistribution,
   #jetSubLeadingRecoPtDistribution,
   #jetLeadingRecoEtaDistribution,
