@@ -33,9 +33,7 @@ echo "I am running on" $HOSTNAME
 echo "Running heppy job"
 
 HOME_FOLDER="$(pwd)"
-SAVE_DESTINATION="${jobName}_${clusterId}"
 
-mkdir ${SAVE_DESTINATION}
 
 set +o xtrace
 source /software/sb17498/FCCSW/init.sh
@@ -51,9 +49,13 @@ set -o xtrace
 if [ -z ${processId} ]
 then 
   # if no process id then run in non-batch mode
+  SAVE_DESTINATION="${jobName}_${clusterId}"
+  mkdir ${SAVE_DESTINATION}
   python myScripts/runYAMLWorkflow.py --option ConfigFile=${inputFile} --option saveFolder=${SAVE_DESTINATION}
 else
   # else go in batch mode.
+  SAVE_DESTINATION="${jobName}_${clusterId}_${processId}"
+  mkdir ${SAVE_DESTINATION}
   python myScripts/runYAMLWorkflow.py --option ConfigFile=${inputFile} --option job=${processId} --option saveFolder=${SAVE_DESTINATION}
 fi
 
