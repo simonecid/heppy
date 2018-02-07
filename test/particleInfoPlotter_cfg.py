@@ -15,7 +15,7 @@ from heppy.analyzers.triggerrates.LeadingQuantityHistogrammer import LeadingQuan
 from heppy.analyzers.triggerrates.SubLeadingQuantityHistogrammer import SubLeadingQuantityHistogrammer
 from heppy.analyzers.triggerrates.Histogrammer_2D import Histogrammer_2D
 from heppy.samples.sample_MinimumBias_NoTau_14TeV_GenParticles import *
-from heppy.samples.sample_NeutrinoGun_PU140_14TeV_OnlyGenParticleClassification_JetPTMin_3_PropagatedGenJetAtECAL import *
+from heppy.samples.sample_NeutrinoGun_PU140_14TeV_OnlyGenParticleClassification_JetPTMin_3_PropagatedGenJetAtECAL_VertexSpread import *
 import sys
 from heppy.framework.looper import Looper
 from heppy.framework.heppy_loop import _heppyGlobalOptions
@@ -42,7 +42,7 @@ test_classification = cfg.MCComponent(
 )
 
 selectedComponents = [
-    NeutrinoGun_PU140_14TeV_OnlyGenParticleClassification_JetPTMin_3_PropagatedGenJetAtECAL
+    NeutrinoGun_PU140_14TeV_OnlyGenParticleClassification_JetPTMin_3_PropagatedGenJetAtECAL_VertexSpread
 ]
 
 # Defining pdgids
