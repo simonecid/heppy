@@ -189,6 +189,12 @@ def computeNonNormalisedRatePlots(yamlConf):
   else:
     options.extraOptions.append(
         "momentumShift=0")
+  if "usePtTransformer" in yamlConf:
+    options.extraOptions.append(
+        "usePtTransformer=" + str(yamlConf["usePtTransformer"]))
+  else:
+    options.extraOptions.append(
+        "usePtTransformer=False")
   options.force = True
 
   if "numberOfDelphesEvents" in yamlConf:
@@ -656,7 +662,8 @@ def buildRateComparisonPlotFromHDFS(yamlConf):
   def cfg(x): return 1
   cfg.plots = [
       #  #Files here
-      ["/hdfs/FCC-hh/cmsMatching_SingleNeutrinoPU140_BarrelOnly_LeadingL1TJet_CMSTriggerRate/ratePlots.root",
+      ["/hdfs/FCC-hh/" + componentNameRateClosureTest + \
+       "_CMSTriggerRate/ratePlots.root",
        "triggerRate", "CMS " + triggerObject],
       ["" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + componentNameRatePlots + \
           "_RatePlots_PU" + str(averagePileUp) + "RatePlot.root", "fullPURatePlot", "Sim " + triggerObject]

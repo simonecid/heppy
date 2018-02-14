@@ -39,6 +39,8 @@ endcapEta = float(_heppyGlobalOptions["endcapEta"])
 detectorEta = float(_heppyGlobalOptions["detectorEta"])
 momentumShift = float(_heppyGlobalOptions["momentumShift"])
 triggerObjectName = _heppyGlobalOptions["triggerObjectName"]
+if "usePtTransformer" in _heppyGlobalOptions:
+  usePtTransformer = True if _heppyGlobalOptions["usePtTransformer"].lower() == "true" else False
 
 ptBins = [0, 1.5, 3, 5, 8, 11, 15, 20, 30, 40, 50, 70, 100, 140, 200]
 
@@ -143,6 +145,20 @@ smearJetToTriggerObject = cfg.Analyzer(
   probability_file = probabilityFile,
   probability_histogram = probabilityHistogram
 )
+
+if usePtTransformer:
+  smearJetToTriggerObject = cfg.Analyzer(
+    Transformer,
+    'transformJetToTriggerObject',
+    input_collection='shifted_good_jets',
+    output_collection = triggerObjectName,
+    convolution_file = convolutionFileName,
+    convolution_histogram_prefix = "objectPtDistributionBinnedInMatchedObject",
+    bins = ptBins,
+    object_x_range = (-300, 300),
+    probability_file = probabilityFile,
+    probability_histogram = probabilityHistogram
+  )
 
 steps = []
 
@@ -323,7 +339,7 @@ sequence = cfg.Sequence( [
   endcapSelector,
   forwardSelector,
   simL1TObjectLeadingPtDistribution,
-  #genJetSimL1TObjectTree,
+  genJetSimL1TObjectTree,
   simL1TObjectRate,
   genJetRate,
   barrelSimL1TObjectRate,
