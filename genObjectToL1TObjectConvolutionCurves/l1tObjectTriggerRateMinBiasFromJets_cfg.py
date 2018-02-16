@@ -41,6 +41,10 @@ momentumShift = float(_heppyGlobalOptions["momentumShift"])
 triggerObjectName = _heppyGlobalOptions["triggerObjectName"]
 if "usePtTransformer" in _heppyGlobalOptions:
   usePtTransformer = True if _heppyGlobalOptions["usePtTransformer"].lower() == "true" else False
+if "genJetCollection" in _heppyGlobalOptions:
+  genJetCollection = _heppyGlobalOptions["genJetCollection"]
+else:
+  genJetCollection = "genJets"
 
 ptBins = [0, 1.5, 3, 5, 8, 11, 15, 20, 30, 40, 50, 70, 100, 140, 200]
 
@@ -80,7 +84,7 @@ source = cfg.Analyzer(
   #gen_particles = 'skimmedGenParticles',
   #gen_vertices = 'genVertices',
 
-  gen_jets = 'genJets',
+  gen_jets = genJetCollection,
 
   #jets = 'jets',
   #bTags = 'bTags',
