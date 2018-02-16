@@ -68,16 +68,10 @@ class Smearer  (Analyzer):
       jetEta = jet.eta()
       jetPhi = jet.phi()
       jetE = jet.e()
-      
       factorIndex = bisect_right(self.cfg_ana.bins, jetPt) - 1
       if factorIndex >= len(self.cfg_ana.bins) - 1:
         jet.match = None
         #factorIndex = len(self.cfg_ana.bins) - 2
-        continue
-      
-      factorIndex = bisect_right(self.cfg_ana.bins, jetPt) - 1
-      if factorIndex >= len(self.cfg_ana.bins) - 1:
-        jet.match = None
         continue
 
       rndNumber = self.rng.uniform(0, 1)
