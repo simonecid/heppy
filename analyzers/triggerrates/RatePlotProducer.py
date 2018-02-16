@@ -8,7 +8,6 @@ from ROOT import TCanvas
 from ROOT import TLine
 from array import array
 from numpy import power
-from scipy.optimize import fsolve
 
 from bisect import insort
 
