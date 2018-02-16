@@ -25,11 +25,17 @@ def runYAMLWorkflow(yamlConf):
     except AttributeError:
       print ">>>>> Error: can not find function", functionName, "in module", moduleName
       exit()
-    queue = Queue()
-    functionProcess = Process(target=functionWrapper, args=(queue, function, yamlConf))
-    functionProcess.start()
-    functionProcess.join()
-    yamlConf = queue.get()
+
+    
+    if ("__debugMode" in yamlConf) and (yamlConf["__debugMode"]):
+      function(yamlConf)
+    else:
+      queue = Queue()
+      functionProcess = Process(target=functionWrapper, args=(queue, function, yamlConf))
+      functionProcess.start()
+      functionProcess.join()
+      yamlConf = queue.get()
+
 
 
 if __name__ == "__main__":
