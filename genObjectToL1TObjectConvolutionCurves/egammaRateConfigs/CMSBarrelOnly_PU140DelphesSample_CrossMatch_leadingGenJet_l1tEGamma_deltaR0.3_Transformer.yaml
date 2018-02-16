@@ -22,9 +22,9 @@ efficiencyGenTree: "MatchLeadingGenJetWithL1Objects/leadingGenJetTree"
 numberOfEfficiencyFiles: -1
 
 moduleNameClosureTest1: "heppy.samples.mySamples_EGamma"
-componentNameClosureTest1: "cmsMatching_QCD_15_3000_PU140_CrossMatch_LeadingJetSample_genJet_l1tEGamma"
+componentNameClosureTest1: "cmsMatching_QCD_15_3000_CrossMatch_LeadingJetSample_genJet_l1tEGamma"
 moduleNameClosureTest2: "heppy.samples.mySamples_EGamma"
-componentNameClosureTest2: "cmsMatching_QCD_15_3000_PU140_CrossMatch_LeadingJetSample_genJet"
+componentNameClosureTest2: "cmsMatching_QCD_15_3000_CrossMatch_LeadingJetSample_genJet"
 moduleNameRateClosureTest: "heppy.samples.mySamples_EGamma"
 componentNameRateClosureTest: "cmsMatching_SingleNeutrinoPU140_BarrelOnly_LeadingL1TEGamma"
 
