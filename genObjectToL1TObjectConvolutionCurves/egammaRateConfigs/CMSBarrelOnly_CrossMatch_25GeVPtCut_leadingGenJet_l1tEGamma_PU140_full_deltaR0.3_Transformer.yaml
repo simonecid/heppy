@@ -1,4 +1,4 @@
-saveFolder: "_egammaTriggerStudies/_jetTriggerRate_leadingJet_PU140_CrossMatch_deltaR0.3_Transformer"
+saveFolder: "_egammaTriggerStudies/_egammaTriggerRate_leadingJet_PU140_CrossMatch_deltaR0.3_Transformer_fullSample"
 
 binning: "[3, 4, 5, 6, 7, 8, 9, 10, 12.5, 15, 17.5, 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 80, 90, 100, 110, 125, 150, 175, 200, 250, 300, 400, 500]"
 qualityThreshold: 0
@@ -52,7 +52,7 @@ steps:
 #  function: runClosureTest2
 #- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
 #  function: runRateClosureTest
-- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
-  function: buildRateComparisonPlot
 #- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
-#  function: buildRateComparisonPlotFromHDFS
+#  function: buildRateComparisonPlot
+- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+  function: buildRateComparisonPlotFromHDFS
