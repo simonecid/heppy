@@ -59,7 +59,7 @@ class NumberOfParticlesDistribution(Analyzer):
                                       '.root']),
                             'recreate')
       
-    self.histogram = TH1I(self.cfg_ana.histo_name, self.cfg_ana.histo_title, self.cfg_ana.nbins, self.cfg_ana.min, self.cfg_ana.max)
+    self.histogram = TH1F(self.cfg_ana.histo_name, self.cfg_ana.histo_title, self.cfg_ana.nbins, self.cfg_ana.min, self.cfg_ana.max)
       
   def process(self, event):
     '''event must contain
