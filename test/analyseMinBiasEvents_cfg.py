@@ -1,7 +1,7 @@
 import os
 import copy
 import heppy.framework.config as cfg
-from heppy.samples.sample_MinimumBias_NoTau_14TeV_GenParticles import MinimumBias_14TeV_GenParticles_full
+from heppy.samples.sample_MinimumBias_NoTau_14TeV_GenParticles_CMSSWTune_WPropagation import MinimumBias_14TeV_GenParticles_full
 import logging
 from ROOT import gSystem
 #from heppy.framework.chain import Chain as Events
@@ -70,7 +70,7 @@ source = cfg.Analyzer(
 
     #gen_particles = 'skimmedGenParticles',
 
-    gen_jets='genJets',
+    gen_jets='nonPropagatedGenJets',
 
     #electrons = 'genElectrons',
 
@@ -167,7 +167,7 @@ numberOfGenJetsInEventDistribution = cfg.Analyzer(
   'numberOfGenJetsInEventDistribution',
   file_label = 'tfile1',
   histo_name='numberOfGenJetsInEventDistribution',
-  histo_title = 'Number of charged generated particles',
+  histo_title = 'Number of gen jets per event',
   min = 0,
   max = 100,
   nbins = 100,
@@ -249,7 +249,7 @@ numberOfGenMuonsInEventDistribution = cfg.Analyzer(
   'numberOfGenMuonsInEventDistribution',
   file_label = 'tfile1',
   histo_name='numberOfGenMuonsInEventDistribution',
-  histo_title = 'Number of charged generated particles',
+  histo_title = 'Number of muons per event',
   min = 0,
   max = 100,
   nbins = 100,
