@@ -1,7 +1,7 @@
 import heppy.framework.config as cfg
 
-MinimumBias_14TeV_GenParticles_full = cfg.Component(
-  'MinimumBias_14TeV_GenParticles_full',
+MinimumBias_14TeV_GenParticles_full_CMSSWTune_WPropagation = cfg.Component(
+  'MinimumBias_14TeV_GenParticles_full_CMSSWTune_WPropagation',
   files = [
     "/hdfs/FCC-hh/MinimumBias_14TeV_OnlyGenParticleClassification_JetPTMin_3_CMSSWtune_WPropagation/events_MinimumBias_14TeV_OnlyGenParticleClassification_JetPTMin_3_CMSSWtune_PropagatedJets_3572668.0.root",
     "/hdfs/FCC-hh/MinimumBias_14TeV_OnlyGenParticleClassification_JetPTMin_3_CMSSWtune_WPropagation/events_MinimumBias_14TeV_OnlyGenParticleClassification_JetPTMin_3_CMSSWtune_PropagatedJets_3572668.10.root",

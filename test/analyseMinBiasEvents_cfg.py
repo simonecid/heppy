@@ -52,7 +52,7 @@ sampleName = "cmsMatching_SingleNeutrinoPU140_GenJet"
 
 #sample = globals()[sampleName]
 selectedComponents = [
-    MinimumBias_14TeV_GenParticles_full
+    MinimumBias_14TeV_GenParticles_full_CMSSWTune_WPropagation
 ]
 
 ''' Returns pt'''
