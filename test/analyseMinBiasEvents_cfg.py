@@ -1,7 +1,7 @@
 import os
 import copy
 import heppy.framework.config as cfg
-from heppy.samples.sample_MinimumBias_NoTau_14TeV_GenParticles_CMSSWTune_WPropagation import MinimumBias_14TeV_GenParticles_full
+from heppy.samples.sample_MinimumBias_NoTau_14TeV_GenParticles_CMSSWTune_WPropagation import MinimumBias_14TeV_GenParticles_full_CMSSWTune_WPropagation
 import logging
 from ROOT import gSystem
 #from heppy.framework.chain import Chain as Events
