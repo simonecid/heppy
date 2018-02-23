@@ -1,7 +1,7 @@
 '''Plots the distribution of the number of particles in a certain event'''
 
 from heppy.framework.analyzer import Analyzer
-from ROOT import TH1I
+from ROOT import TH1F
 import collections
 from ROOT import TCanvas, TFile
 
