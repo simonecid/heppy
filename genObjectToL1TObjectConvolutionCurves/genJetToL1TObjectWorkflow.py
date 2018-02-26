@@ -183,6 +183,8 @@ def computeNonNormalisedRatePlots(yamlConf):
   options.extraOptions.append("endcapEta=" + str(yamlConf["endcapEta"]))
   options.extraOptions.append("detectorEta=" + str(yamlConf["detectorEta"]))
   options.extraOptions.append("triggerObjectName=" + str(yamlConf["triggerObject"]))
+  options.extraOptions.append(
+      "genJetCollection=" + str(yamlConf["genJetCollection"]))
   if "momentumShift" in yamlConf:
     options.extraOptions.append(
         "momentumShift=" + str(yamlConf["momentumShift"]))

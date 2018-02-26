@@ -346,7 +346,7 @@ matchedObjectPtDistribution = cfg.Analyzer(
 genJetL1TObjectTree = cfg.Analyzer(
   MatchedParticlesTreeProducer,
   'genJetL1TObjectTree',
-  file_label = "ratePlotFile",
+  file_label = "tfile1",
   tree_name = 'genJetL1TObjectTree',
   tree_title = 'Tree containing info about matched gen and ' + objectName,
   particle_collection = 'trigger_objects',
@@ -388,6 +388,7 @@ sequence = cfg.Sequence( [
   matchedObjectPtDistribution,
   matchedObjectPtDistributionBinnedInMatchedObject,
   objectPtCumulativeDistributionBinnedInMatchedObject,
+  #genJetL1TObjectTree
 ] )
 
 config = cfg.Config(
