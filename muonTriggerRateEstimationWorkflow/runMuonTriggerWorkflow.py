@@ -2,6 +2,7 @@
 
 from heppy.framework.heppy_loop import * 
 from heppy.muonTriggerRateEstimationWorkflow.computeEfficiencies import computeEfficiencies
+from heppy.genObjectToL1TObjectConvolutionCurves.computeEfficiencies import computeEfficiencies as computeEfficienciesJetToMuon
 from ROOT import TH1F
 from ROOT import TFile
 from ROOT import TChain
@@ -68,6 +69,8 @@ def computeConvolutionCurvesHighPtMuons(yamlConf):
   options.extraOptions.append("genObjectName=" + yamlConf["genObject"])
   options.extraOptions.append(
       "deltaR2Matching=" + str(yamlConf["deltaR2Matching"]))
+  options.extraOptions.append(
+      "deltaEtaMatching=" + str(yamlConf["deltaEtaMatching"]))
   #options.nevents=300000
   options.force = True
   loop = main(options, folderAndScriptName, parser)
@@ -120,6 +123,8 @@ def computeConvolutionCurvesLowPtMuons(yamlConf):
   options.extraOptions.append("genObjectName=" + yamlConf["genObject"])
   options.extraOptions.append(
       "deltaR2Matching=" + str(yamlConf["deltaR2Matching"]))
+  options.extraOptions.append(
+      "deltaEtaMatching=" + str(yamlConf["deltaEtaMatching"]))
   #options.nevents=300000
   options.force = True
   loop = main(options, folderAndScriptName, parser)
@@ -133,6 +138,60 @@ def computeConvolutionCurvesLowPtMuons(yamlConf):
   else:
     os.system("mv " + saveFolder + "/" + componentNameConvolutionCurvesLowPt + "/histograms.root " +
               saveFolder + "/" + genObject + "_" + triggerObject + "_" + "convolutionCurves_lowPt/histograms.root")
+
+def computeConvolutionCurvesJetToMuon(yamlConf):
+
+  saveFolder = yamlConf["saveFolder"]
+  genObject = "genJet"
+  triggerObject = yamlConf["triggerObject"]
+
+  moduleNameConvolutionCurvesJetToMuon = yamlConf["moduleNameConvolutionCurvesJetToMuon"]
+  componentNameConvolutionCurvesJetToMuon = yamlConf["componentNameConvolutionCurvesJetToMuon"]
+
+  componentConvolutionCurvesJetToMuon = [getattr(import_module(
+      moduleNameConvolutionCurvesJetToMuon), componentNameConvolutionCurvesJetToMuon, None)]
+
+  if componentConvolutionCurvesJetToMuon[0] is None:
+    print "Error:  component does not exist"
+    raise ValueError('Component ' + componentNameConvolutionCurvesJetToMuon +
+                     " has not been declared in module " + moduleNameConvolutionCurvesJetToMuon)
+
+  parser = create_parser()
+  (options, args) = parser.parse_args()
+  folderAndScriptName = [
+      saveFolder, "muonTriggerRateEstimationWorkflow/binnedDistributionsCMS_L1TMuon_cfg.py"]
+  options.components = split(componentConvolutionCurvesJetToMuon)
+  for component in options.components:
+    component.splitFactor = 1
+
+  #options.extraOptions.append("sample=" + yamlConf["sampleBinnedDistributions"])
+  options.extraOptions.append("binning=" + yamlConf["binning"])
+  options.extraOptions.append("quality=" + str(yamlConf["qualityThreshold"]))
+  options.extraOptions.append(
+      "minimumPtInBarrel=0")
+  options.extraOptions.append(
+      "minimumPtInEndcap=0")
+  options.extraOptions.append("barrelEta=1000")
+  options.extraOptions.append("detectorEta=1000")
+  options.extraOptions.append("triggerObjectName=" + yamlConf["triggerObject"])
+  options.extraOptions.append("genObjectName=genJet")
+  options.extraOptions.append(
+      "deltaR2Matching=100")
+  options.extraOptions.append(
+      "deltaEtaMatching=100")
+  #options.nevents=300000
+  options.force = True
+  loop = main(options, folderAndScriptName, parser)
+  os.system("rm -r " + saveFolder + "/" + genObject +
+            "_" + triggerObject + "_" + "convolutionCurves_JetToMuon")
+  os.system("mkdir " + saveFolder + "/" + genObject +
+            "_" + triggerObject + "_" + "convolutionCurves_JetToMuon")
+  if componentConvolutionCurvesJetToMuon[0].splitFactor > 1:
+    os.system("hadd " + saveFolder + "/" + genObject + "_" + triggerObject + "_" + "convolutionCurves_JetToMuon/histograms.root " +
+              saveFolder + "/" + componentNameConvolutionCurvesJetToMuon + "_Chunk*/histograms.root")
+  else:
+    os.system("mv " + saveFolder + "/" + componentNameConvolutionCurvesJetToMuon + "/histograms.root " +
+              saveFolder + "/" + genObject + "_" + triggerObject + "_" + "convolutionCurves_JetToMuon/histograms.root")
 
 
 def mergeConvolutionCurves(yamlConf):
@@ -153,8 +212,9 @@ def obtainEfficiencies(yamlConf):
   triggerObject = yamlConf["triggerObject"]
   binningArray = array("f", ast.literal_eval(yamlConf["binning"]))
   print "--- COMPUTING THE CONVERSION FACTORS/EFFICIENCIES ---"
-  print "PROCESSING FROM LOW MOMENTUM MUONS"
-  numberOfMatchedObjects_lowPt, numberOfGenObjects_lowPt = computeEfficiencies(
+  if "efficiencyLowPtSourceFolder" in yamlConf:
+    print "PROCESSING FROM LOW MOMENTUM MUONS"
+    numberOfMatchedObjects_lowPt, numberOfGenObjects_lowPt = computeEfficiencies(
       GenObjTree=yamlConf["efficiencyLowPtGenTree"],
       GenObjFileFolder=yamlConf["efficiencyLowPtSourceFolder"],
       MatchTree=yamlConf["efficiencyLowPtMatchTree"],
@@ -165,10 +225,19 @@ def obtainEfficiencies(yamlConf):
       barrelEta=yamlConf["barrelEta"],
       minPtInBarrel=yamlConf["minimumPtToReachBarrel"],
       minPtInEndcap=yamlConf["minimumPtToReachEndcap"],
-      deltaR2Matching=yamlConf["deltaR2Matching"]
-  )
-  print "PROCESSING FROM HIGH MOMENTUM MUONS"
-  numberOfMatchedObjects_highPt, numberOfGenObjects_highPt = computeEfficiencies(
+      deltaR2Matching=yamlConf["deltaR2Matching"],
+      deltaEtaMatching=yamlConf["deltaEtaMatching"]
+    )
+    if 'numberOfMatchedObjects' in locals():
+      numberOfMatchedObjects = numberOfMatchedObjects_lowPt + numberOfMatchedObjects_highPt
+      numberOfGenObjects = numberOfGenObjects_lowPt + numberOfGenObjects_highPt
+    else: 
+      numberOfMatchedObjects = numberOfMatchedObjects_lowPt
+      numberOfGenObjects = numberOfGenObjects_lowPt
+
+  if "efficiencyHighPtSourceFolder" in yamlConf:
+    print "PROCESSING FROM HIGH MOMENTUM MUONS"
+    numberOfMatchedObjects_highPt, numberOfGenObjects_highPt = computeEfficiencies(
       GenObjTree=yamlConf["efficiencyHighPtGenTree"],
       GenObjFileFolder=yamlConf["efficiencyHighPtSourceFolder"],
       MatchTree=yamlConf["efficiencyHighPtMatchTree"],
@@ -179,11 +248,15 @@ def obtainEfficiencies(yamlConf):
       barrelEta=yamlConf["barrelEta"],
       minPtInBarrel=yamlConf["minimumPtToReachBarrel"],
       minPtInEndcap=yamlConf["minimumPtToReachEndcap"],
-      deltaR2Matching=yamlConf["deltaR2Matching"]
-  )
-
-  numberOfMatchedObjects = numberOfMatchedObjects_lowPt + numberOfMatchedObjects_highPt
-  numberOfGenObjects = numberOfGenObjects_lowPt + numberOfGenObjects_highPt
+      deltaR2Matching=yamlConf["deltaR2Matching"],
+      deltaEtaMatching=yamlConf["deltaEtaMatching"]
+    )
+    if 'numberOfMatchedObjects' in locals():
+      numberOfMatchedObjects = numberOfMatchedObjects_lowPt + numberOfMatchedObjects_highPt
+      numberOfGenObjects = numberOfGenObjects_lowPt + numberOfGenObjects_highPt
+    else: 
+      numberOfMatchedObjects = numberOfMatchedObjects_highPt
+      numberOfGenObjects = numberOfGenObjects_highPt
 
   efficiencyFactors = numberOfMatchedObjects / numberOfGenObjects
   for binIdx in xrange(0, len(efficiencyFactors)):
@@ -195,6 +268,62 @@ def obtainEfficiencies(yamlConf):
 
   efficiencyFactorsFile = TFile(
       "" + saveFolder + "/efficiencyFactors.root", "RECREATE")
+  efficiencyFactorsFile.cd()
+  efficiencyHistogram = TH1F("efficiencyHistogram", "Trigger efficiency", len(
+      binningArray) - 1, binningArray)
+  numberOfMatchedObjectsHistogram = TH1F(
+      "numberOfMatchedObjectsHistogram", "numberOfMatchedObjectsHistogram", len(binningArray) - 1, binningArray)
+  numberOfGenObjectsHistogram = TH1F(
+      "numberOfGenObjectsHistogram", "numberOfGenObjectsHistogram", len(binningArray) - 1, binningArray)
+
+  for x in xrange(0, len(efficiencyFactors)):
+    #Excluding overflow bin
+    if x != len(efficiencyFactors) - 1:
+      efficiencyHistogram.SetBinContent(x + 1, efficiencyFactors[x])
+      numberOfMatchedObjectsHistogram.SetBinContent(
+          x + 1, numberOfMatchedObjects[x])
+      numberOfGenObjectsHistogram.SetBinContent(x + 1, numberOfGenObjects[x])
+
+  efficiencyHistogram.Write()
+  numberOfMatchedObjectsHistogram.Write()
+  numberOfGenObjectsHistogram.Write()
+  efficiencyFactorsFile.Close()
+
+def obtainEfficienciesJetToMuon(yamlConf):
+
+  saveFolder = yamlConf["saveFolder"]
+  genObject = "genJet"
+  triggerObject = "l1tMuon"
+  binningArray = array("f", ast.literal_eval(yamlConf["binning"]))
+  print "--- COMPUTING THE CONVERSION FACTORS/EFFICIENCIES ---"
+  numberOfMatchedObjects_jetToMuon, numberOfGenObjects_jetToMuon = computeEfficienciesJetToMuon(
+    GenObjTree=yamlConf["efficiencyGenTreeJetToMuon"],
+    GenObjFileFolder=yamlConf["efficiencySourceFolderJetToMuon"],
+    MatchTree=yamlConf["efficiencyMatchTreeJetToMuon"],
+    MatchFileFolder=yamlConf["efficiencySourceFolderJetToMuon"],
+    binning=yamlConf["binning"],
+    eta=1400,
+    quality=yamlConf["qualityThreshold"],
+    barrelEta=1000,
+    endcapEta=1200,
+    minPtInBarrel=0,
+    minPtInEndcap=0,
+    minPtInForward=0,
+    deltaR2Matching=100,
+  )
+  numberOfMatchedObjects = numberOfMatchedObjects_jetToMuon
+  numberOfGenObjects = numberOfGenObjects_jetToMuon
+
+  efficiencyFactors = numberOfMatchedObjects / numberOfGenObjects
+  for binIdx in xrange(0, len(efficiencyFactors)):
+    efficiencyFactors[binIdx] = 0 if isnan(
+        efficiencyFactors[binIdx]) else efficiencyFactors[binIdx]
+    if efficiencyFactors[binIdx] > 1:
+      efficiencyFactors[binIdx] = 1
+  print efficiencyFactors
+
+  efficiencyFactorsFile = TFile(
+      "" + saveFolder + "/efficiencyFactors_JetToMuon.root", "RECREATE")
   efficiencyFactorsFile.cd()
   efficiencyHistogram = TH1F("efficiencyHistogram", "Trigger efficiency", len(
       binningArray) - 1, binningArray)
@@ -246,22 +375,29 @@ def computeNonNormalisedRatePlots(yamlConf):
 
   #options.extraOptions.append("sample=" + yamlConf["componentNameRatePlots"])
   options.extraOptions.append("convolutionFileName=" + convolutionFileName)
+  options.extraOptions.append("convolutionFileNameJetToMuon=" + saveFolder + "/genJet_" + triggerObject + "_" + "convolutionCurves_JetToMuon/histograms.root")
   options.extraOptions.append("binning=" + yamlConf["binning"])
   options.extraOptions.append(
       "probabilityFile=" + "" + yamlConf["saveFolder"] + "/efficiencyFactors.root")
   options.extraOptions.append("probabilityHistogram=efficiencyHistogram")
+  options.extraOptions.append(
+      "jetToMuonProbabilityFile=" + "" + yamlConf["saveFolder"] + "/efficiencyFactors_JetToMuon.root")
+  options.extraOptions.append("jetToMuonProbabilityHistogram=efficiencyHistogram")
   options.extraOptions.append(
       "minimumPtInBarrel=" + str(yamlConf["minimumPtToReachBarrel"]))
   options.extraOptions.append(
       "minimumPtInEndcap=" + str(yamlConf["minimumPtToReachEndcap"]))
   options.extraOptions.append("barrelEta=" + str(yamlConf["barrelEta"]))
   options.extraOptions.append("detectorEta=" + str(yamlConf["detectorEta"]))
+  options.extraOptions.append("genJetCollection=" + str(yamlConf["genJetCollection"]))
+  
   options.extraOptions.append(
       "triggerObjectName=" + str(yamlConf["triggerObject"]))
   options.force = True
+
   if "numberOfDelphesEvents" in yamlConf:
     options.nevents = numberOfDelphesEvents
-  #loop = main(options, folderAndScriptName, parser)
+  loop = main(options, folderAndScriptName, parser)
 
   print "MERGING LOCAL HEPPY CHUNKS"
 
@@ -319,8 +455,9 @@ def normaliseMinimumBiasRate(yamlConf):
   saveFolder=yamlConf["saveFolder"]
   genObject=yamlConf["genObject"]
   triggerObject=yamlConf["triggerObject"]
-  bunchCrossingFrequency = parameters["bunchCrossingFrequency"]
-  componentNameRatePlots = parameters["componentNameRatePlots"]
+  bunchCrossingFrequency = yamlConf["bunchCrossingFrequency"]
+  componentNameRatePlots = yamlConf["componentNameRatePlots"]
+  averagePileUp = yamlConf["averagePileUp"]
   interactionFrequency = averagePileUp * bunchCrossingFrequency
   print "CREATING THE NON-NORMALISED PLOTS"
 
@@ -356,13 +493,10 @@ def normaliseMinimumBiasRate(yamlConf):
   endcapRateHist.Scale(interactionFrequency/numberOfDelphesEvents)
 
   totalRateHist.GetXaxis().SetTitle("p_{t}")
-  totalRateHist.GetXaxis().SetRangeUser(5, 50)
   totalRateHist.GetYaxis().SetTitle("Rate [Hz]")
   barrelRateHist.GetXaxis().SetTitle("p_{t}")
-  barrelRateHist.GetXaxis().SetRangeUser(5, 50)
   barrelRateHist.GetYaxis().SetTitle("Rate [Hz]")
   endcapRateHist.GetXaxis().SetTitle("p_{t}")
-  endcapRateHist.GetXaxis().SetRangeUser(5, 50)
   endcapRateHist.GetYaxis().SetTitle("Rate [Hz]")
 
   normalisedRatePlotFile = TFile("" + saveFolder + "/" + componentNameRatePlots + "_RatePlots_Normalised.root", "RECREATE")
@@ -375,18 +509,19 @@ def normaliseMinimumBiasRate(yamlConf):
 
   print "NORMALISING THE RATE PLOT TO OBTAIN THE TRIGGER PASS PROBABILITY FOR MINBIAS AND PU140 EVENTS"
 
-  nonNormalisedRatePlotFile = TFile("" + saveFolder + "/" + componentNameRatePlots + "_RatePlots_NotNormalised.root")
+  nonNormalisedRatePlotFile = TFile("" + saveFolder + "/" + genObject + "_" + triggerObject +
+                                    "_" + componentNameRatePlots + "_RatePlots_NotNormalised.root")
   passProbabilityFile = TFile("" + saveFolder + "/" + componentNameRatePlots + "_RatePlots_TriggerPassProbability.root", "RECREATE")
   totalRateHist = nonNormalisedRatePlotFile.Get(
       "mergedTotalSimL1TMuonRate")
   ppPassProbabilityHistogram = totalRateHist.Clone("ppPassProbabilityHistogram")
-  ppPassProbabilityHistogram.Scale(1/numberOfDelphesEvents)
+  ppPassProbabilityHistogram.Scale(1./numberOfDelphesEvents)
   passProbabilityFile.cd()
   eventPassProbabilityHistogram = ppPassProbabilityHistogram.Clone("eventPassProbabilityHistogram")
 
   for x in xrange(1, eventPassProbabilityHistogram.GetNbinsX()+1):
     ppPassProbability = ppPassProbabilityHistogram.GetBinContent(x)
-    eventPassProbability = 1 - (1 - ppPassProbability)**averagePileUp
+    eventPassProbability = 1. - (1. - ppPassProbability)**averagePileUp
     eventPassProbabilityHistogram.SetBinContent(x, eventPassProbability)
 
   probabilityRatioHistogram = eventPassProbabilityHistogram.Clone("probabilityRatioHistogram")
@@ -406,8 +541,7 @@ def normaliseMinimumBiasRate(yamlConf):
   eventPassProbabilityHistogram = passProbabilityFile.Get("eventPassProbabilityHistogram")
 
   linearPURatePlot = ppPassProbabilityHistogram.Clone("linearPURatePlot")
-  fullPURatePlot = ppPassProbabilityHistogram.Clone("fullPURatePlot")
-
+  fullPURatePlot = eventPassProbabilityHistogram.Clone("fullPURatePlot")
   linearPURatePlot.Scale(interactionFrequency)
   fullPURatePlot.Scale(bunchCrossingFrequency)
 
@@ -663,8 +797,8 @@ def buildRateComparisonPlot(yamlConf):
   #  #Files here
       ["" + saveFolder + "/" + componentNameRateClosureTest + \
        "_CMSTriggerRate/ratePlots.root", "triggerRate", "CMS " + triggerObject],
-      ["" + saveFolder + "/" + componentNameRatePlots + "_RatePlots_Normalised.root",
-       "mergedTotalSimL1TMuonRate", "Sim " + triggerObject]
+      ["" + saveFolder + "/" + componentNameRatePlots + "_RatePlots_PU140RatePlot.root",
+       "fullPURatePlot", "Sim " + triggerObject]
   ]
   cfg.saveFileName = "" + saveFolder + "/rateClosureTest.root"
   plotDistributionComparisonPlot(cfg)
