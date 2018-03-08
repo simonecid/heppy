@@ -103,8 +103,10 @@ def computeEfficiencies(numberOfFiles=-1, **kwargs):
       isGoodMuon = True
     if not isGoodMuon: continue
 
-    #l1tMuon_qual = chainL1TObjGenObj.l1tMuon_qual
-    l1tMuon_qual = 0
+    if quality > 0:
+      l1tMuon_qual = chainL1TObjGenObj.l1tMuon_qual
+    else:
+      l1tMuon_qual = 0
     # Looking for the correct bin
     binNumber = bisect_right(bins, genObj_pt) - 1
     if l1tMuon_qual < quality : 
