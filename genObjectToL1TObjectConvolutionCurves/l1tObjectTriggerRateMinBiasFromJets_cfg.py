@@ -39,8 +39,11 @@ endcapEta = float(_heppyGlobalOptions["endcapEta"])
 detectorEta = float(_heppyGlobalOptions["detectorEta"])
 momentumShift = float(_heppyGlobalOptions["momentumShift"])
 triggerObjectName = _heppyGlobalOptions["triggerObjectName"]
+
 if "usePtTransformer" in _heppyGlobalOptions:
   usePtTransformer = True if _heppyGlobalOptions["usePtTransformer"].lower() == "true" else False
+if "useOnlyLeadingGenJet" in _heppyGlobalOptions:
+  useOnlyLeadingGenJet = True if _heppyGlobalOptions["useOnlyLeadingGenJet"].lower() == "true" else False
 if "genJetCollection" in _heppyGlobalOptions:
   genJetCollection = _heppyGlobalOptions["genJetCollection"]
 else:
@@ -245,6 +248,14 @@ leadingPtSimL1TObjectFinder = cfg.Analyzer(
   key_func = pt
 )
 
+leadingPtGenJetFinder = cfg.Analyzer(
+  LeadingObjectFinder,
+  "leadingPtGenJetFinder",
+  input_collection = "good_jets",
+  output_collection = "good_jets",
+  key_func = pt
+)
+
 def barrelCut(ptc):
   return abs(ptc.eta()) < barrelEta
 
@@ -332,24 +343,46 @@ forwardSimL1TObjectRate = cfg.Analyzer(
 
 # definition of a sequence of analyzers,
 # the analyzers will process each event in this order
-sequence = cfg.Sequence( [
-  source,
-  goodJetSelector,
-  shiftJetMomentum,
-  smearJetToTriggerObject,
-  smearedSelector,
-  leadingPtSimL1TObjectFinder,
-  barrelSelector,
-  endcapSelector,
-  forwardSelector,
-  simL1TObjectLeadingPtDistribution,
-  genJetSimL1TObjectTree,
-  simL1TObjectRate,
-  genJetRate,
-  barrelSimL1TObjectRate,
-  endcapSimL1TObjectRate,
-  forwardSimL1TObjectRate,
-] )
+
+if useOnlyLeadingGenJet:
+  sequence = cfg.Sequence( [
+    source,
+    goodJetSelector,
+    leadingPtGenJetFinder,
+    shiftJetMomentum,
+    smearJetToTriggerObject,
+    smearedSelector,
+    leadingPtSimL1TObjectFinder,
+    barrelSelector,
+    endcapSelector,
+    forwardSelector,
+    simL1TObjectLeadingPtDistribution,
+    genJetSimL1TObjectTree,
+    simL1TObjectRate,
+    genJetRate,
+    barrelSimL1TObjectRate,
+    endcapSimL1TObjectRate,
+    forwardSimL1TObjectRate,
+  ] )
+else:
+  sequence = cfg.Sequence( [
+    source,
+    goodJetSelector,
+    shiftJetMomentum,
+    smearJetToTriggerObject,
+    smearedSelector,
+    leadingPtSimL1TObjectFinder,
+    barrelSelector,
+    endcapSelector,
+    forwardSelector,
+    simL1TObjectLeadingPtDistribution,
+    genJetSimL1TObjectTree,
+    simL1TObjectRate,
+    genJetRate,
+    barrelSimL1TObjectRate,
+    endcapSimL1TObjectRate,
+    forwardSimL1TObjectRate,
+  ] )
 
 
 config = cfg.Config(
