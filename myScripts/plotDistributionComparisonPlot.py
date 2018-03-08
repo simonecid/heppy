@@ -9,6 +9,7 @@ from ROOT import TPad
 from ROOT import TLegend
 from ROOT import TGaxis
 from ROOT import TLine
+from ROOT import gPad
 
 chiSquaredWarningThreshold = 1
 
@@ -35,7 +36,8 @@ def plotDistributionComparisonPlot(cfg):
   maximumY = float("-inf")
 
   pad1 = TPad("pad1", "pad1", 0, 0.3, 1, 1.0)
-  pad1.SetBottomMargin(0.05) # Upper and lower plot are joined
+  #pad1.SetBottomMargin(0.05) # Upper and lower plot are joined
+  pad1.SetBottomMargin(0) # Upper and lower plot are joined
   pad1.SetGridx()         # Vertical grid
   pad1.Draw()             # Draw the upper pad: pad1
   pad1.cd()               # pad1 becomes the current pad
@@ -58,8 +60,32 @@ def plotDistributionComparisonPlot(cfg):
   histograms[0].GetYaxis().SetTitleSize(20)
   histograms[0].GetYaxis().SetTitleFont(43)
   histograms[0].GetYaxis().SetTitleOffset(1.55)
+
+
   #histograms[0].Scale(1./histograms[0].GetEntries())
   histograms[0].Draw("SAME HIST")         # Draw histograms[1] on top of histograms[0]
+
+  if getattr(cfg, "xRange", None) is not None:
+    histograms[0].GetXaxis().SetRangeUser(cfg.xRange[0], cfg.xRange[1])
+    gPad.RedrawAxis()
+
+  if getattr(cfg, "xAxisLabel", None) is not None:
+    histograms[0].GetXaxis().SetTitle(cfg.xAxisLabel)
+    gPad.RedrawAxis()
+  
+  if getattr(cfg, "yAxisLabel", None) is not None:
+    histograms[0].GetYaxis().SetTitle(cfg.yAxisLabel)
+    gPad.RedrawAxis()
+    
+  if getattr(cfg, "yRange", None) is not None:
+    histograms[0].GetYaxis().SetRangeUser(cfg.yRange[0], cfg.yRange[1])
+    gPad.RedrawAxis()
+  else:
+    maximumY *= 1.1
+    histograms[0].GetYaxis().SetRangeUser(1e-6, maximumY)
+    
+  if getattr(cfg, "logY", False):
+    pad1.SetLogy()
 
   # histograms[1] settings
   histograms[1].SetMarkerColor(2)
@@ -68,8 +94,6 @@ def plotDistributionComparisonPlot(cfg):
   #histograms[1].Scale(1./histograms[1].GetEntries())
   histograms[1].Draw("SAME HIST")         # Draw histograms[1] on top of histograms[0]
 
-  maximumY *= 1.1
-  histograms[0].GetYaxis().SetRangeUser(1e-6, maximumY)
 
   # Do not draw the Y axis label on the upper plot and redraw a small
   # axis instead, in order to avoid the first label (0) to be clipped.
@@ -126,6 +150,15 @@ def plotDistributionComparisonPlot(cfg):
   ratioPlot.SetStats(0)      # No statistics on lower plot
   ratioPlot.Divide(histograms[1])
   ratioPlot.SetMarkerStyle(21)
+
+  if getattr(cfg, "xRange", None) is not None:
+    ratioPlot.GetXaxis().SetRangeUser(cfg.xRange[0], cfg.xRange[1])
+    gPad.RedrawAxis()
+
+  if getattr(cfg, "yRangeRatio", None) is not None:
+    ratioPlot.GetYaxis().SetRangeUser(cfg.yRangeRatio[0], cfg.yRangeRatio[1])
+    gPad.RedrawAxis()
+
   ratioPlot.Draw("EP")       # Draw the ratio plot
 
   line0 = TLine(ratioPlot.GetXaxis().GetXmin(), 1, ratioPlot.GetXaxis().GetXmax(), 1)
@@ -173,12 +206,22 @@ if __name__ == "__main__":
     #Files here
     # ["MinBiasDistribution_13TeV_DelphesCMS_CMSJets_GenJetPTDistribution/genJetPtDistribution_Normalised.root", "ptSimL1TMuonDistribution", "MinBias"],
     #["_closureTest/l1tMuonGenMuonMatching_SingleMu_FlatPt_8to100_QualityCut_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtSimL1TMuonDistribution", "SimL1TMuon"],
-    ["_jetTriggerRate_LeadingJEt/leadingGenJet_l1tJet_convolutionCurves/histograms.root", "deltaPtDistributionBinnedInMatchedObject_25_30", "Only leading jets in barrel, #deltaR^{2} < 0.025 - 5212 pairs"],
-    ["_jetTriggerRate_BarrelOnly_HardPtCut25GeV_NoPUConvolutionCurves_0.025RSquared/genJet_l1tJet_convolutionCurves/histograms.root", "deltaPtDistributionBinnedInMatchedObject_25_30", "Every pair in barrel, #deltaR^{2} < 0.025 - 9741 pairs"],
+    ["MinimumBias_14TeV_GenParticles_full_GenDistributions/distributions_fromcmssw.root",
+     "genMuonLeadingPtDistribution_CMSSW", "CMSSW"],
+    ["_MinBias_CMSSWTune/MinimumBias_14TeV_GenParticles_full_CMSSWTune_WPropagation/distributions.root",
+     "genMuonLeadingPtDistribution", "DELPHES"],
     #["_closureTest/l1tMuonGenMuonMatching_SingleMu_FlatPt_8to100_QualityCut_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtL1TMuonDistribution", "Original L1TMuon"],
   ]
   cfg.saveFileName = "comparisonResult.root"
-  cfg.draw=True
+  cfg.draw = True
+  #cfg.xRange = (0, 50)
+  cfg.xRange = (0, 40)
+  cfg.xAxisLabel = "p_{t} [GeV]"
+  cfg.yAxisLabel = "# events"
+  cfg.yRange = (2e-1, 1e6)
+  cfg.yRangeRatio = (0, 2)
+  cfg.logY = True
+  
 
   plotDistributionComparisonPlot(cfg)
 
