@@ -197,6 +197,13 @@ def computeNonNormalisedRatePlots(yamlConf):
   else:
     options.extraOptions.append(
         "usePtTransformer=False")
+  
+  if "useOnlyLeadingGenJet" in yamlConf:
+    options.extraOptions.append(
+        "useOnlyLeadingGenJet=" + str(yamlConf["useOnlyLeadingGenJet"]))
+  else:
+    options.extraOptions.append(
+        "useOnlyLeadingGenJet=False")
   options.force = True
 
   if "numberOfDelphesEvents" in yamlConf:
