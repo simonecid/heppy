@@ -1,4 +1,5 @@
 import os
+import os
 import copy
 import heppy.framework.config as cfg
 from heppy.framework.heppy_loop import _heppyGlobalOptions
@@ -17,6 +18,7 @@ from heppy.analyzers.Selector import Selector
 from heppy.analyzers.triggerrates.Smearer import Smearer
 from importlib import import_module
 from heppy.analyzers.triggerrates.Histogrammer import Histogrammer
+from heppy.analyzers.triggerrates.CollectionMerger import CollectionMerger
 from heppy.analyzers.triggerrates.LeadingQuantityHistogrammer import LeadingQuantityHistogrammer
 from heppy.analyzers.triggerrates.LeadingObjectFinder import LeadingObjectFinder  
 
@@ -48,12 +50,27 @@ if "sample" in _heppyGlobalOptions:
 if "convolutionFileName" in _heppyGlobalOptions:
   convolutionFileName = _heppyGlobalOptions["convolutionFileName"]
 
+if "convolutionFileNameJetToMuon" in _heppyGlobalOptions:
+  convolutionFileNameJetToMuon = _heppyGlobalOptions["convolutionFileNameJetToMuon"]
+
 if "probabilityFile" in _heppyGlobalOptions:
   probabilityFile = _heppyGlobalOptions["probabilityFile"]
   probabilityHistogram = _heppyGlobalOptions["probabilityHistogram"]
 else: 
   probabilityFile = ""
   probabilityHistogram = ""
+
+if "jetToMuonProbabilityFile" in _heppyGlobalOptions:
+  jetToMuonProbabilityFile = _heppyGlobalOptions["jetToMuonProbabilityFile"]
+  jetToMuonProbabilityHistogram = _heppyGlobalOptions["jetToMuonProbabilityHistogram"]
+else: 
+  jetToMuonProbabilityFile = ""
+  jetToMuonProbabilityHistogram = ""
+
+if "genJetCollection" in _heppyGlobalOptions:
+  genJetCollection = _heppyGlobalOptions["genJetCollection"]
+else:
+  genJetCollection = "genJets"
 
 
 selectedComponents = [
@@ -70,7 +87,7 @@ source = cfg.Analyzer(
   #gen_particles = 'skimmedGenParticles',
   #gen_vertices = 'genVertices',
 
-  #gen_jets = 'genJets',
+  gen_jets = genJetCollection,
 
   #jets = 'jets',
   #bTags = 'bTags',
@@ -130,7 +147,7 @@ muonSmearer = cfg.Analyzer(
   Smearer,
   'muonSmearer',
   input_collection = 'good_muons',
-  output_collection = 'l1tMuons',
+  output_collection = 'l1tMuonsFromGenMuons',
   convolution_file = convolutionFileName,
   convolution_histogram_prefix = "deltaPtDistributionBinnedInMatchedObject",
   bins = muon_ptBins,
@@ -207,15 +224,15 @@ muonSimL1TMuonTree = cfg.Analyzer(
     tree_name = 'genMuonSimL1TMuonTree',
     tree_title = 'Tree containing info about matched gen and SimL1TMuons',
     particle_collection = 'smeared_good_muons',
-    matched_particle_name = "SimL1TMuon",
+    matched_particle_name = "l1tMuonsFromGenMuons",
     particle_name = "muon"
   )
 
 leadingPtMuonFinder = cfg.Analyzer(
   LeadingObjectFinder ,
   "leadingPtMuonFinder",
-  input_collection = 'l1tMuons',
-  output_collection = 'leading_muon',
+  input_collection = 'l1tMuonsFromGenMuons',
+  output_collection = 'leading_l1tMuonFromGenMuon',
   key_func = pt
 )
 
@@ -229,7 +246,7 @@ barrelSelector = cfg.Analyzer(
   Selector,
   'barrelSelector',
   output = 'leading_muon_barrel',
-  input_objects = 'leading_muon',
+  input_objects = 'leading_l1tMuonFromGenMuon',
   filter_func = barrelCut 
 )
 
@@ -237,7 +254,7 @@ endcapSelector = cfg.Analyzer(
   Selector,
   'endcapSelector',
   output = 'leading_muon_endcap',
-  input_objects = 'leading_muon',
+  input_objects = 'leading_l1tMuonFromGenMuon',
   filter_func = endcapCut
 )
 
@@ -278,6 +295,33 @@ endcapMuonRate = cfg.Analyzer(
   normalise = False
 )
 
+leadingPtGenJetFinder = cfg.Analyzer(
+  LeadingObjectFinder ,
+  "leadingPtGenJetFinder",
+  input_collection = "gen_jets",
+  output_collection = "leading_gen_jet",
+  key_func = pt
+)
+
+smearJetToTriggerObject = cfg.Analyzer(
+  Transformer,
+  'transformJetToTriggerObject',
+  input_collection='leading_gen_jet',
+  output_collection = 'leading_fake_muon',
+  convolution_file = convolutionFileNameJetToMuon,
+  convolution_histogram_prefix = "objectPtDistributionBinnedInMatchedObject",
+  bins = muon_ptBins,
+  object_x_range = (-300, 300),
+  probability_file = jetToMuonProbabilityFile,
+  probability_histogram = jetToMuonProbabilityHistogram
+)
+
+mergeMuonCollections = cfg.Analyzer(
+    CollectionMerger,
+    input_collections = ["l1tMuonsFromGenMuons", "leading_fake_muon"],
+    output_collection = 'l1tMuons'
+  )
+
 # definition of a sequence of analyzers,
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
@@ -285,6 +329,9 @@ sequence = cfg.Sequence( [
   goodMuonSelector,
   muonSmearer,
   smearedSelector,
+  leadingPtGenJetFinder,
+  smearJetToTriggerObject,
+  mergeMuonCollections,
   leadingPtMuonFinder,
   barrelSelector,
   endcapSelector,
