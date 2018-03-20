@@ -120,3 +120,10 @@ class MatchedObjectBinnedDistributions(Analyzer):
 #      histogram.Write()
       if getattr(self.cfg_ana, "normalise", False):
         histogram.Scale(1.0/histogram.GetEntries())
+      
+      if getattr(self.cfg_ana, "smooth", False):
+        numberOfSmooth = 0
+        for binidx in xrange(1, histogram.GetNbinsX()+1):
+          if histogram.GetBinContent(binidx) > 0:
+            numberOfSmooth += 1
+        histogram.Smooth(numberOfSmooth)
