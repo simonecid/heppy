@@ -1,4 +1,4 @@
-saveFolder: "_muonYamlTest/"
+saveFolder: "_muonYamlTest/plzGodSaveMe"
 
 binning: "[0, 1.5, 2.3, 3, 4, 5, 5.5, 6, 7, 8, 11, 15, 20, 30, 40, 50, 70, 100, 140, 200]"
 qualityThreshold: 8
@@ -22,7 +22,7 @@ efficiencyHighPtGenTree: "MatchL1TMuonWithGenLevelMuons/genParticleTree"
 efficiencyLowPtSourceFolder: "/hdfs/FCC-hh/l1tMuonGenMuonMatching_QCD_15_3000_NoPU_Phase1_WQualityBranch"
 efficiencyLowPtMatchTree: "MatchL1TMuonWithGenLevelMuons/matchedL1TMuonGenParticleTree"
 efficiencyLowPtGenTree: "MatchL1TMuonWithGenLevelMuons/genParticleTree"
-numberOfEfficiencyFiles: 1
+numberOfEfficiencyFiles: -1
 
 moduleNameClosureTest1: "heppy.samples.mySamples"
 componentNameClosureTest1: "l1tMuonGenMuonMatching_QCD_15_3000_NoPU_Phase1_WQualityBranch"
@@ -31,8 +31,8 @@ componentNameClosureTest2: "l1tMuonGenMuonMatching_QCD_15_3000_NoPU_Phase1_WQual
 moduleNameRateClosureTest: "heppy.samples.mySamples"
 componentNameRateClosureTest: "cmsMatching_SingleNeutrinoPU140_LeadingL1TMuon_QualityCut8"
 
-moduleNameRatePlots: "heppy.samples.sample_NeutrinoGun_NoTau_13TeV_GenParticles"
-componentNameRatePlots: "NeutrinoGun_13TeV_GenParticles_50kevents"
+moduleNameRatePlots: "heppy.samples.sample_MinimumBias_NoTau_14TeV_GenParticles"
+componentNameRatePlots: "MinimumBias_14TeV_GenParticles_full"
 averagePileUp: 140
 bunchCrossingFrequency: !!float 31.6e6 # 2808 bunches
 
@@ -55,8 +55,8 @@ steps:
 #    function: runClosureTest1
 #  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
 #    function: runClosureTest2
-#  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-#    function: runCMSRateCalculation
+  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
+    function: runCMSRateCalculation
   - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
     function: buildRateComparisonPlot
 

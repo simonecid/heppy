@@ -59,12 +59,12 @@ source = cfg.Analyzer(
 
   #gen_particles = 'skimmedGenParticles',
 
-  gen_jets = 'nonPropagatedGenJets',
-  jets = 'propagatedGenJets',
+  #gen_jets = 'nonPropagatedGenJets',
+  #jets = 'propagatedGenJets',
 
   #electrons = 'genElectrons',
 
-  #muons = 'genMuons',
+  muons = 'genMuons',
 
   #photons = 'genPhotons',
   #met = 'genMET',
@@ -106,7 +106,7 @@ def eta (ptc):
 # Restricting gen particles and jets in the abs(eta) < 6 region
 
 def etaRestrictor(ptc):
-  return abs(ptc.eta()) < 5.1
+  return abs(ptc.eta()) < 2.4
 #def etaRestrictor(ptc):
 #  return True
 

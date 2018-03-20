@@ -1,7 +1,7 @@
 import os
 import copy
 import heppy.framework.config as cfg
-from heppy.samples.sample_MinimumBias_NoTau_14TeV_GenParticles_CMSSWTune_WPropagation import MinimumBias_14TeV_GenParticles_full_CMSSWTune_WPropagation
+from heppy.samples.sample_MinimumBias_NoTau_100TeV_GenParticles_CMSSWTune_WPropagation import MinimumBias_100TeV_GenParticles_full_CMSSWTune_WPropagation_1MEvents
 import logging
 from ROOT import gSystem
 #from heppy.framework.chain import Chain as Events
@@ -18,6 +18,7 @@ from heppy.analyzers.triggerrates.MatchedObjectBinnedDistributions import Matche
 from heppy.analyzers.fcc.Reader import Reader
 from heppy.analyzers.triggerrates.ObjectFinder import ObjectFinder
 from heppy.analyzers.triggerrates.HistogrammerCumulative import HistogrammerCumulative
+from heppy.analyzers.triggerrates.ParticleTreeProducer import ParticleTreeProducer
 from heppy.framework.heppy_loop import _heppyGlobalOptions
 from math import sqrt
 
@@ -52,7 +53,7 @@ sampleName = "cmsMatching_SingleNeutrinoPU140_GenJet"
 
 #sample = globals()[sampleName]
 selectedComponents = [
-    MinimumBias_14TeV_GenParticles_full_CMSSWTune_WPropagation
+    MinimumBias_100TeV_GenParticles_full_CMSSWTune_WPropagation_1MEvents
 ]
 
 ''' Returns pt'''
@@ -256,6 +257,22 @@ numberOfGenMuonsInEventDistribution = cfg.Analyzer(
   input_objects = 'muons',
 )
 
+muonTree = cfg.Analyzer(
+  ParticleTreeProducer,
+  file_label = "tfile1",
+  tree_name = 'muonTree',
+  tree_title = 'Tree containing info about muons',
+  collection = "muons"
+)
+
+jetTree = cfg.Analyzer(
+  ParticleTreeProducer,
+  file_label = "tfile1",
+  tree_name = 'jetTree',
+  tree_title = 'Tree containing info about jets',
+  collection = "gen_jets"
+)
+
 # definition of a sequence of analyzers,
 # the analyzers will process each event in this order
 sequence = cfg.Sequence( [
@@ -270,6 +287,8 @@ sequence = cfg.Sequence( [
   genMuonEtaDistribution,
   genMuonLeadingEtaDistribution,
   numberOfGenMuonsInEventDistribution,
+  muonTree,
+  jetTree
 ] )
 
 config = cfg.Config(

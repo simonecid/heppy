@@ -1,6 +1,6 @@
 Universe = vanilla
-job = PionInfo_MinBiasDistribution_100TeV_DelphesFCC_CMSJets
-cmd = mySubmitStuff/runHeppyConfigFile.sh
+job = Allocate6Cores4GBRam1GBDisk
+cmd = mySubmitStuff/WakeMeUpWhenTheJobEnds.sh
 args= -j $(job) -c $(cluster) -p $(process) -s MinBiasDistribution_100TeV_DelphesFCC_CMSJets -i test/PionAndKaonPlotter_cfg.py -t 16
 # Better not to put logs in the same folder, as they are plenty
 output = /storage/sb17498/logs/heppy/$(job)_$(cluster).$(process).out

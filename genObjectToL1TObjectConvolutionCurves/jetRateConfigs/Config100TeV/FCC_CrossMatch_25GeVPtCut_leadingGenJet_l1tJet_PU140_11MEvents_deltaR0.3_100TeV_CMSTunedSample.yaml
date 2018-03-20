@@ -1,0 +1,62 @@
+saveFolder: "_jetTriggerStudies_FCC/_jetTriggerRate_leadingJet_CrossMatch_PU140_1MEvents_deltaR0.3_100TeV_FCCSettings/"
+
+binning: "[3, 4, 5, 7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 80, 90, 100, 110, 125, 150, 175, 200, 250, 300, 400, 500]"
+qualityThreshold: 0
+barrelEtaConvolutionCurve: 1.44 # 0-1.44 barrel
+endcapEtaConvolutionCurve: 3 #1.44 - 3 endcap
+detectorEtaConvolutionCurve: 5.05 # 3 - 1.44 forward
+barrelEta: 6
+endcapEta: 6
+detectorEta: 6
+magneticField: 3.8 # Tesla
+deltaR2Matching: 0.09 #dR = 0.3
+minimumPtToReachBarrel: 25 # Some cut
+minimumPtToReachEndcap: 1000000 # disabling endcap with high pt threshold
+minimumPtToReachForward: 1000000 # killing forward
+minimumPtToReachBarrelConvolutionCurve: 25 # Some cut
+minimumPtToReachEndcapConvolutionCurve: 25 # Some cut
+minimumPtToReachForwardConvolutionCurve: 25 # Some cut
+genObject: "genJet"
+triggerObject: "l1tJet"
+
+moduleNameConvolutionCurves: "heppy.samples.mySamples"
+componentNameConvolutionCurves: "cmsMatching_QCD_15_3000_PU140_CrossMatch_LeadingJetSample_genJet_l1tJet"
+
+efficiencySourceFolder: "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_PU140_Phase1_ClosestDRCrossMatch_MuonVeto_BarrelJetsOnly"
+efficiencyMatchTree: "MatchLeadingGenJetWithL1Objects/matchedLeadingGenJetL1TJetTree"
+efficiencyGenTree: "MatchLeadingGenJetWithL1Objects/leadingGenJetTree"
+numberOfEfficiencyFiles: -1
+
+moduleNameClosureTest1: "heppy.samples.mySamples"
+componentNameClosureTest1: "cmsMatching_QCD_15_3000_CrossMatch_LeadingJetSample_genJet_l1tJet"
+moduleNameClosureTest2: "heppy.samples.mySamples"
+componentNameClosureTest2: "cmsMatching_QCD_15_3000_CrossMatch_LeadingJetSample_genJet"
+moduleNameRateClosureTest: "heppy.samples.mySamples"
+componentNameRateClosureTest: "cmsMatching_SingleNeutrinoPU140_BarrelOnly_LeadingL1TJet"
+
+moduleNameRatePlots: "heppy.samples.sample_MinimumBias_NoTau_100TeV_GenParticles_CMSSWTune_WPropagation"
+componentNameRatePlots: "MinimumBias_100TeV_GenParticles_CMSSWTune_WPropagation_1MEvents"
+averagePileUp: 140
+bunchCrossingFrequency: !!float 31.6e6 # 2808 bunches
+genJetCollection: "nonPropagatedGenJets"
+momentumShift: 0
+
+steps: 
+- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+  function: computeConvolutionCurves
+- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+  function: obtainEfficiencies
+- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+  function: computeNonNormalisedRatePlots
+- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+  function: mergeNonNormalisedRatePlots
+- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+  function: normaliseRatePlots
+#- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+#  function: runClosureTest1
+#- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+#  function: runClosureTest2
+#- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+#  function: runRateClosureTest
+- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+  function: buildRateComparisonPlotFromHDFS
