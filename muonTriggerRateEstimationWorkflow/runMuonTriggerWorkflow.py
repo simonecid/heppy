@@ -41,7 +41,7 @@ def computeConvolutionCurvesHighPtMuons(yamlConf):
   componentNameConvolutionCurvesHighPt = yamlConf["componentNameConvolutionCurvesHighPt"]
 
   componentConvolutionCurvesHighPt = [getattr(import_module(
-      moduleNameConvolutionCurvesHighPt), componentNameConvolutionCurvesHighPt, None)]
+    moduleNameConvolutionCurvesHighPt), componentNameConvolutionCurvesHighPt, None)]
 
   if componentConvolutionCurvesHighPt[0] is None:
     print "Error:  component does not exist"
@@ -56,15 +56,32 @@ def computeConvolutionCurvesHighPtMuons(yamlConf):
   for component in options.components:
     component.splitFactor = 1
 
+  if "minimumPtToReachBarrelConvolutionCurve" in yamlConf:
+    minimumPtToReachBarrel = yamlConf["minimumPtToReachBarrelConvolutionCurve"]
+  else:
+    minimumPtToReachBarrel = yamlConf["minimumPtToReachBarrel"]
+  if "minimumPtToReachEndcapConvolutionCurve" in yamlConf:
+    minimumPtToReachEndcap = yamlConf["minimumPtToReachEndcapConvolutionCurve"]
+  else:
+    minimumPtToReachEndcap = yamlConf["minimumPtToReachEndcap"]
+  if "barrelEtaConvolutionCurve" in yamlConf:
+    barrelEta = yamlConf["barrelEtaConvolutionCurve"]
+  else:
+    barrelEta = yamlConf["barrelEta"]
+  if "detectorEtaConvolutionCurve" in yamlConf:
+    detectorEta = yamlConf["detectorEtaConvolutionCurve"]
+  else:
+    detectorEta = yamlConf["detectorEta"]
+
   #options.extraOptions.append("sample=" + yamlConf["sampleBinnedDistributions"])
   options.extraOptions.append("binning=" + yamlConf["binning"])
   options.extraOptions.append("quality=" + str(yamlConf["qualityThreshold"]))
   options.extraOptions.append(
-      "minimumPtInBarrel=" + str(yamlConf["minimumPtToReachBarrel"]))
+      "minimumPtInBarrel=" + str(minimumPtToReachBarrel))
   options.extraOptions.append(
-      "minimumPtInEndcap=" + str(yamlConf["minimumPtToReachEndcap"]))
-  options.extraOptions.append("barrelEta=" + str(yamlConf["barrelEta"]))
-  options.extraOptions.append("detectorEta=" + str(yamlConf["detectorEta"]))
+      "minimumPtInEndcap=" + str(minimumPtToReachEndcap))
+  options.extraOptions.append("barrelEta=" + str(barrelEta))
+  options.extraOptions.append("detectorEta=" + str(detectorEta))
   options.extraOptions.append("triggerObjectName=" + yamlConf["triggerObject"])
   options.extraOptions.append("genObjectName=" + yamlConf["genObject"])
   options.extraOptions.append(
@@ -110,15 +127,33 @@ def computeConvolutionCurvesLowPtMuons(yamlConf):
   for component in options.components:
     component.splitFactor = 1
 
+
+  if "minimumPtToReachBarrelConvolutionCurve" in yamlConf:
+    minimumPtToReachBarrel = yamlConf["minimumPtToReachBarrelConvolutionCurve"]
+  else:
+    minimumPtToReachBarrel = yamlConf["minimumPtToReachBarrel"]
+  if "minimumPtToReachEndcapConvolutionCurve" in yamlConf:
+    minimumPtToReachEndcap = yamlConf["minimumPtToReachEndcapConvolutionCurve"]
+  else:
+    minimumPtToReachEndcap = yamlConf["minimumPtToReachEndcap"]
+  if "barrelEtaConvolutionCurve" in yamlConf:
+    barrelEta = yamlConf["barrelEtaConvolutionCurve"]
+  else:
+    barrelEta = yamlConf["barrelEta"]
+  if "detectorEtaConvolutionCurve" in yamlConf:
+    detectorEta = yamlConf["detectorEtaConvolutionCurve"]
+  else:
+    detectorEta = yamlConf["detectorEta"]
+
   #options.extraOptions.append("sample=" + yamlConf["sampleBinnedDistributions"])
   options.extraOptions.append("binning=" + yamlConf["binning"])
   options.extraOptions.append("quality=" + str(yamlConf["qualityThreshold"]))
   options.extraOptions.append(
-      "minimumPtInBarrel=" + str(yamlConf["minimumPtToReachBarrel"]))
+      "minimumPtInBarrel=" + str(minimumPtToReachBarrel))
   options.extraOptions.append(
-      "minimumPtInEndcap=" + str(yamlConf["minimumPtToReachEndcap"]))
-  options.extraOptions.append("barrelEta=" + str(yamlConf["barrelEta"]))
-  options.extraOptions.append("detectorEta=" + str(yamlConf["detectorEta"]))
+      "minimumPtInEndcap=" + str(minimumPtToReachEndcap))
+  options.extraOptions.append("barrelEta=" + str(barrelEta))
+  options.extraOptions.append("detectorEta=" + str(detectorEta))
   options.extraOptions.append("triggerObjectName=" + yamlConf["triggerObject"])
   options.extraOptions.append("genObjectName=" + yamlConf["genObject"])
   options.extraOptions.append(
@@ -211,6 +246,24 @@ def obtainEfficiencies(yamlConf):
   genObject = yamlConf["genObject"]
   triggerObject = yamlConf["triggerObject"]
   binningArray = array("f", ast.literal_eval(yamlConf["binning"]))
+
+  if "detectorEtaConvolutionCurve" in yamlConf:
+    detectorEta = yamlConf["detectorEtaConvolutionCurve"]
+  else:
+    detectorEta = yamlConf["detectorEta"]
+  if "barrelEtaConvolutionCurve" in yamlConf:
+    barrelEta = yamlConf["barrelEtaConvolutionCurve"]
+  else:
+    barrelEta = yamlConf["barrelEta"]
+  if "minimumPtToReachBarrelConvolutionCurve" in yamlConf:
+    minimumPtToReachBarrel = yamlConf["minimumPtToReachBarrelConvolutionCurve"]
+  else:
+    minimumPtToReachBarrel = yamlConf["minimumPtToReachBarrel"]
+  if "minimumPtToReachEndcapConvolutionCurve" in yamlConf:
+    minimumPtToReachEndcap = yamlConf["minimumPtToReachEndcapConvolutionCurve"]
+  else:
+    minimumPtToReachEndcap = yamlConf["minimumPtToReachEndcap"]
+
   print "--- COMPUTING THE CONVERSION FACTORS/EFFICIENCIES ---"
   if "efficiencyLowPtSourceFolder" in yamlConf:
     print "PROCESSING FROM LOW MOMENTUM MUONS"
@@ -220,11 +273,11 @@ def obtainEfficiencies(yamlConf):
       MatchTree=yamlConf["efficiencyLowPtMatchTree"],
       MatchFileFolder=yamlConf["efficiencyLowPtSourceFolder"],
       binning=yamlConf["binning"],
-      eta=yamlConf["detectorEta"],
+      eta=detectorEta,
       quality=yamlConf["qualityThreshold"],
-      barrelEta=yamlConf["barrelEta"],
-      minPtInBarrel=yamlConf["minimumPtToReachBarrel"],
-      minPtInEndcap=yamlConf["minimumPtToReachEndcap"],
+      barrelEta=barrelEta,
+      minPtInBarrel=minimumPtToReachBarrel,
+      minPtInEndcap=minimumPtToReachEndcap,
       deltaR2Matching=yamlConf["deltaR2Matching"],
       deltaEtaMatching=yamlConf["deltaEtaMatching"]
     )
@@ -243,11 +296,11 @@ def obtainEfficiencies(yamlConf):
       MatchTree=yamlConf["efficiencyHighPtMatchTree"],
       MatchFileFolder=yamlConf["efficiencyHighPtSourceFolder"],
       binning=yamlConf["binning"],
-      eta=yamlConf["detectorEta"],
+      eta=detectorEta,
       quality=yamlConf["qualityThreshold"],
-      barrelEta=yamlConf["barrelEta"],
-      minPtInBarrel=yamlConf["minimumPtToReachBarrel"],
-      minPtInEndcap=yamlConf["minimumPtToReachEndcap"],
+      barrelEta=barrelEta,
+      minPtInBarrel=minimumPtToReachBarrel,
+      minPtInEndcap=minimumPtToReachEndcap,
       deltaR2Matching=yamlConf["deltaR2Matching"],
       deltaEtaMatching=yamlConf["deltaEtaMatching"]
     )
@@ -650,7 +703,7 @@ def runClosureTest1(yamlConf):
   options.extraOptions.append("deltaR2Matching=" + str(yamlConf["deltaR2Matching"]))
   #options.nevents=300000
   options.force = True
-  loop = main(options, folderAndScriptName, parser)
+  #loop = main(options, folderAndScriptName, parser)
   os.system("mv " + saveFolder + "/" + componentNameClosureTest1 + " " + saveFolder + "/" + componentNameClosureTest1 + "_ClosureTestPlots_QualityCutOnGenObject")
   cfg = lambda x: 1
   cfg.plots = [

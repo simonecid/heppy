@@ -57,15 +57,40 @@ def computeConvolutionCurves(yamlConf):
   for component in options.components:
     component.splitFactor = 1
 
+  if "minimumPtToReachBarrelConvolutionCurve" in yamlConf:
+    minimumPtToReachBarrel = yamlConf["minimumPtToReachBarrelConvolutionCurve"]
+  else:
+    minimumPtToReachBarrel = yamlConf["minimumPtToReachBarrel"]
+  if "minimumPtToReachEndcapConvolutionCurve" in yamlConf:
+    minimumPtToReachEndcap = yamlConf["minimumPtToReachEndcapConvolutionCurve"]
+  else:
+    minimumPtToReachEndcap = yamlConf["minimumPtToReachEndcap"]
+  if "minimumPtToReachForwardConvolutionCurve" in yamlConf:
+    minimumPtToReachForward = yamlConf["minimumPtToReachForwardConvolutionCurve"]
+  else:
+    minimumPtToReachForward = yamlConf["minimumPtToReachForward"]
+  if "barrelEtaConvolutionCurve" in yamlConf:
+    barrelEta = yamlConf["barrelEtaConvolutionCurve"]
+  else:
+    barrelEta = yamlConf["barrelEta"]
+  if "endcapEtaConvolutionCurve" in yamlConf:
+    endcapEta = yamlConf["endcapEtaConvolutionCurve"]
+  else:
+    endcapEta = yamlConf["endcapEta"]
+  if "detectorEtaConvolutionCurve" in yamlConf:
+    detectorEta = yamlConf["detectorEtaConvolutionCurve"]
+  else:
+    detectorEta = yamlConf["detectorEta"]
+
   #options.extraOptions.append("sample=" + yamlConf["sampleBinnedDistributions"])
   options.extraOptions.append("binning=" + yamlConf["binning"])
   options.extraOptions.append("quality=" + str(yamlConf["qualityThreshold"]))
-  options.extraOptions.append("minimumPtInBarrel=" + str(yamlConf["minimumPtToReachBarrel"]))
-  options.extraOptions.append("minimumPtInEndcap=" + str(yamlConf["minimumPtToReachEndcap"]))
-  options.extraOptions.append("minimumPtInForward=" + str(yamlConf["minimumPtToReachForward"]))
-  options.extraOptions.append("barrelEta=" + str(yamlConf["barrelEta"]))
-  options.extraOptions.append("endcapEta=" + str(yamlConf["endcapEta"]))
-  options.extraOptions.append("detectorEta=" + str(yamlConf["detectorEta"]))
+  options.extraOptions.append("minimumPtInBarrel=" + str(minimumPtToReachBarrel))
+  options.extraOptions.append("minimumPtInEndcap=" + str(minimumPtToReachEndcap))
+  options.extraOptions.append("minimumPtInForward=" + str(minimumPtToReachForward))
+  options.extraOptions.append("barrelEta=" + str(barrelEta))
+  options.extraOptions.append("endcapEta=" + str(endcapEta))
+  options.extraOptions.append("detectorEta=" + str(detectorEta))
   options.extraOptions.append("triggerObjectName=" + yamlConf["triggerObject"])
   options.extraOptions.append("genObjectName=" + yamlConf["genObject"])
   options.extraOptions.append("deltaR2Matching=" + str(yamlConf["deltaR2Matching"]))
@@ -85,6 +110,31 @@ def computeConvolutionCurves(yamlConf):
 
 def obtainEfficiencies(yamlConf):
 
+  if "minimumPtToReachBarrelConvolutionCurve" in yamlConf:
+    minimumPtToReachBarrel = yamlConf["minimumPtToReachBarrelConvolutionCurve"]
+  else:
+    minimumPtToReachBarrel = yamlConf["minimumPtToReachBarrel"]
+  if "minimumPtToReachEndcapConvolutionCurve" in yamlConf:
+    minimumPtToReachEndcap = yamlConf["minimumPtToReachEndcapConvolutionCurve"]
+  else:
+    minimumPtToReachEndcap = yamlConf["minimumPtToReachEndcap"]
+  if "minimumPtToReachForwardConvolutionCurve" in yamlConf:
+    minimumPtToReachForward = yamlConf["minimumPtToReachForwardConvolutionCurve"]
+  else:
+    minimumPtToReachForward = yamlConf["minimumPtToReachForward"]
+  if "barrelEtaConvolutionCurve" in yamlConf:
+    barrelEta = yamlConf["barrelEtaConvolutionCurve"]
+  else:
+    barrelEta = yamlConf["barrelEta"]
+  if "endcapEtaConvolutionCurve" in yamlConf:
+    endcapEta = yamlConf["endcapEtaConvolutionCurve"]
+  else:
+    endcapEta = yamlConf["endcapEta"]
+  if "detectorEtaConvolutionCurve" in yamlConf:
+    detectorEta = yamlConf["detectorEtaConvolutionCurve"]
+  else:
+    detectorEta = yamlConf["detectorEta"]
+
   saveFolder = yamlConf["saveFolder"]
   genObject = yamlConf["genObject"]
   triggerObject = yamlConf["triggerObject"]
@@ -97,13 +147,13 @@ def obtainEfficiencies(yamlConf):
                                                                     MatchTree = yamlConf["efficiencyMatchTree"],
                                                                     MatchFileFolder = yamlConf["efficiencySourceFolder"],
                                                                     binning = yamlConf["binning"],
-                                                                    eta = yamlConf["detectorEta"],
+                                                                    eta = detectorEta,
                                                                     quality = yamlConf["qualityThreshold"],
-                                                                    barrelEta = yamlConf["barrelEta"],
-                                                                    endcapEta = yamlConf["endcapEta"],
-                                                                    minPtInBarrel = yamlConf["minimumPtToReachBarrel"],
-                                                                    minPtInEndcap = yamlConf["minimumPtToReachEndcap"],
-                                                                    minPtInForward = yamlConf["minimumPtToReachForward"],
+                                                                    barrelEta = barrelEta,
+                                                                    endcapEta = endcapEta,
+                                                                    minPtInBarrel = minimumPtToReachBarrel,
+                                                                    minPtInEndcap = minimumPtToReachEndcap,
+                                                                    minPtInForward = minimumPtToReachForward,
                                                                     deltaR2Matching = yamlConf["deltaR2Matching"],
                                                                     numberOfFiles = yamlConf["numberOfEfficiencyFiles"]
                                                                   )
