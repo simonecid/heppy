@@ -169,6 +169,7 @@ objectPtDistributionBinnedInMatchedObject = cfg.Analyzer(
   log_y = False,
   x_label = "p_{t}^{" + objectName + "} [GeV]",
   y_label = "# events",
+  smooth=True
 )
 
 objectPtCumulativeDistributionBinnedInMatchedObject = cfg.Analyzer(
