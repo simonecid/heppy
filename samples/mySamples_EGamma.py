@@ -195,6 +195,37 @@ cmsMatching_QCD_15_3000_CrossMatch_genJet_l1tEGamma_Smaller = cfg.MCComponent(
   trigger_object = "l1tEGamma"
 )
 
+cmsMatching_SingleNeutrinoPU140_BarrelOnly_LeadingL1TEGamma_11MPU0 = cfg.MCComponent ( 
+ "cmsMatching_SingleNeutrinoPU140_BarrelOnly_LeadingL1TEGamma_11MPU0",
+  tree_name = "MatchGenJetWithL1Objects/l1tLeadingEGammaTree",
+  files = [
+    "/hdfs/FCC-hh/l1tGenJetMatching_SingleNeutrinoPU140_BarrelLeadingJetsOnly/l1tGenJetMatching_SingleNeutrinoPU140_2993953.0.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_SingleNeutrinoPU140_BarrelLeadingJetsOnly/l1tGenJetMatching_SingleNeutrinoPU140_2993953.1.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_SingleNeutrinoPU140_BarrelLeadingJetsOnly/l1tGenJetMatching_SingleNeutrinoPU140_2993953.10.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_SingleNeutrinoPU140_BarrelLeadingJetsOnly/l1tGenJetMatching_SingleNeutrinoPU140_2993953.100.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_SingleNeutrinoPU140_BarrelLeadingJetsOnly/l1tGenJetMatching_SingleNeutrinoPU140_2993953.101.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_SingleNeutrinoPU140_BarrelLeadingJetsOnly/l1tGenJetMatching_SingleNeutrinoPU140_2993953.102.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_SingleNeutrinoPU140_BarrelLeadingJetsOnly/l1tGenJetMatching_SingleNeutrinoPU140_2993953.103.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_SingleNeutrinoPU140_BarrelLeadingJetsOnly/l1tGenJetMatching_SingleNeutrinoPU140_2993953.104.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_SingleNeutrinoPU140_BarrelLeadingJetsOnly/l1tGenJetMatching_SingleNeutrinoPU140_2993953.105.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_SingleNeutrinoPU140_BarrelLeadingJetsOnly/l1tGenJetMatching_SingleNeutrinoPU140_2993953.106.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_SingleNeutrinoPU140_BarrelLeadingJetsOnly/l1tGenJetMatching_SingleNeutrinoPU140_2993953.107.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_SingleNeutrinoPU140_BarrelLeadingJetsOnly/l1tGenJetMatching_SingleNeutrinoPU140_2993953.108.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_SingleNeutrinoPU140_BarrelLeadingJetsOnly/l1tGenJetMatching_SingleNeutrinoPU140_2993953.109.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_SingleNeutrinoPU140_BarrelLeadingJetsOnly/l1tGenJetMatching_SingleNeutrinoPU140_2993953.11.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_SingleNeutrinoPU140_BarrelLeadingJetsOnly/l1tGenJetMatching_SingleNeutrinoPU140_2993953.110.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_SingleNeutrinoPU140_BarrelLeadingJetsOnly/l1tGenJetMatching_SingleNeutrinoPU140_2993953.111.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_SingleNeutrinoPU140_BarrelLeadingJetsOnly/l1tGenJetMatching_SingleNeutrinoPU140_2993953.112.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_SingleNeutrinoPU140_BarrelLeadingJetsOnly/l1tGenJetMatching_SingleNeutrinoPU140_2993953.113.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_SingleNeutrinoPU140_BarrelLeadingJetsOnly/l1tGenJetMatching_SingleNeutrinoPU140_2993953.114.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_SingleNeutrinoPU140_BarrelLeadingJetsOnly/l1tGenJetMatching_SingleNeutrinoPU140_2993953.115.root",
+    "/hdfs/FCC-hh/l1tGenJetMatching_SingleNeutrinoPU140_BarrelLeadingJetsOnly/l1tGenJetMatching_SingleNeutrinoPU140_2993953.116.root",
+  ],
+  gen_object = "l1tEGamma",
+  nGenEvents = 79046
+)
+
+
 cmsMatching_SingleNeutrinoPU140_BarrelOnly_LeadingL1TEGamma = cfg.MCComponent ( 
  "cmsMatching_SingleNeutrinoPU140_BarrelOnly_LeadingL1TEGamma",
   tree_name = "MatchGenJetWithL1Objects/l1tLeadingEGammaTree",
