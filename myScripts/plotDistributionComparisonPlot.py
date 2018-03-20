@@ -36,8 +36,8 @@ def plotDistributionComparisonPlot(cfg):
   maximumY = float("-inf")
 
   pad1 = TPad("pad1", "pad1", 0, 0.3, 1, 1.0)
-  #pad1.SetBottomMargin(0.05) # Upper and lower plot are joined
-  pad1.SetBottomMargin(0) # Upper and lower plot are joined
+  pad1.SetBottomMargin(0.05) # Upper and lower plot are joined
+  #pad1.SetBottomMargin(0) # Upper and lower plot are joined
   pad1.SetGridx()         # Vertical grid
   pad1.Draw()             # Draw the upper pad: pad1
   pad1.cd()               # pad1 becomes the current pad
@@ -206,16 +206,16 @@ if __name__ == "__main__":
     #Files here
     # ["MinBiasDistribution_13TeV_DelphesCMS_CMSJets_GenJetPTDistribution/genJetPtDistribution_Normalised.root", "ptSimL1TMuonDistribution", "MinBias"],
     #["_closureTest/l1tMuonGenMuonMatching_SingleMu_FlatPt_8to100_QualityCut_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtSimL1TMuonDistribution", "SimL1TMuon"],
-    ["MinimumBias_14TeV_GenParticles_full_GenDistributions/distributions_fromcmssw.root",
-     "genMuonLeadingPtDistribution_CMSSW", "CMSSW"],
-    ["_MinBias_CMSSWTune/MinimumBias_14TeV_GenParticles_full_CMSSWTune_WPropagation/distributions.root",
-     "genMuonLeadingPtDistribution", "DELPHES"],
+    ["_MinBias_CMSSWTune/distributions_fromcmssw.root",
+     "genJetPtDistribution_CMSSW", "CMSSW"],
+    ["_MinBias_CMSSWTune/distributions_fromdelphes.root",
+     "genJetPtDistribution_Delphes", "DELPHES"],
     #["_closureTest/l1tMuonGenMuonMatching_SingleMu_FlatPt_8to100_QualityCut_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtL1TMuonDistribution", "Original L1TMuon"],
   ]
   cfg.saveFileName = "comparisonResult.root"
   cfg.draw = True
   #cfg.xRange = (0, 50)
-  cfg.xRange = (0, 40)
+  cfg.xRange = (0, 500)
   cfg.xAxisLabel = "p_{t} [GeV]"
   cfg.yAxisLabel = "# events"
   cfg.yRange = (2e-1, 1e6)
