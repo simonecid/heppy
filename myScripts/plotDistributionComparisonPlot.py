@@ -6,10 +6,12 @@ from ROOT import TTree
 from ROOT import TPaveText
 from ROOT import TCanvas
 from ROOT import TPad
+from ROOT import TGraphErrors
 from ROOT import TLegend
 from ROOT import TGaxis
 from ROOT import TLine
 from ROOT import gPad
+from math import sqrt
 
 chiSquaredWarningThreshold = 1
 
@@ -47,7 +49,8 @@ def plotDistributionComparisonPlot(cfg):
     tfiles.append(tfile)
     histogram = tfile.Get(histogramFileNameAndTitle[1])
     histograms.append(histogram)
-    histogram.SetStats(0)          # No statistics on upper plot
+    if histogram.ClassName() == "TH1F":
+      histogram.SetStats(0)          # No statistics on upper plot
     maximumY = histogram.GetMaximum() if histogram.GetMaximum() > maximumY else maximumY
     legend.AddEntry(histogram, histogramFileNameAndTitle[2], "l")
 
@@ -106,12 +109,23 @@ def plotDistributionComparisonPlot(cfg):
   # Adding a small text with the chi-squared
 
   chiSquared = 0
-  numberOfBins = histograms[0].GetNbinsX()
-  numberOfDegreesOfFreedom = numberOfBins
+  if (histograms[0].ClassName() == "TGraph") or (histograms[0].ClassName() == "TGraphErrors"):
+    numberOfBins = histograms[0].GetN()
+    numberOfDegreesOfFreedom = numberOfBins
+  else:
+    numberOfBins = histograms[0].GetNbinsX()
+    numberOfDegreesOfFreedom = numberOfBins
+
 
   for x in xrange(1, numberOfBins+1): # numberOfBins contains last bin, numberOfBins+1 contains the overflow (latter excluded), underflow also excluded
-    binContent0 = histograms[0].GetBinContent(x)
-    binContent1 = histograms[1].GetBinContent(x)
+    if (histograms[0].ClassName() == "TGraph") or (histograms[0].ClassName() == "TGraphErrors"):
+      binContent0 = histograms[0].GetY()[x-1]
+    else:
+      binContent0 = histograms[0].GetBinContent(x)
+    if (histograms[1].ClassName() == "TGraph") or (histograms[1].ClassName() == "TGraphErrors"):
+      binContent1 = histograms[1].GetY()[x-1]
+    else:
+      binContent1 = histograms[1].GetBinContent(x)
     bin0ErrorSquared = binContent0
     bin1ErrorSquared = binContent1
     #bin1ErrorSquared = 0
@@ -122,7 +136,10 @@ def plotDistributionComparisonPlot(cfg):
       chiSquaredTerm = binDifferenceSquared/(bin0ErrorSquared + bin1ErrorSquared)
       chiSquared += chiSquaredTerm
       if chiSquaredTerm > chiSquaredWarningThreshold:
-        print "Bin", x, "-", histograms[0].GetBinCenter(x), "has a CS=", chiSquaredTerm
+        if (histograms[0].ClassName() == "TGraph") or (histograms[0].ClassName() == "TGraphErrors"):
+          print "Bin", x, "-", histograms[0].GetX()[x-1], "has a CS=", chiSquaredTerm
+        else:
+          print "Bin", x, "-", histograms[0].GetBinCenter(x), "has a CS=", chiSquaredTerm
 
   #chiSquareLabel = TPaveText(0.7, 0.6, 0.9, 0.4)
   #chiSquareLabel.AddText("#chi^{2}/ndf = " + str(chiSquared) + "/" + str(numberOfDegreesOfFreedom) + " = " + str(chiSquared/numberOfDegreesOfFreedom))
@@ -142,13 +159,26 @@ def plotDistributionComparisonPlot(cfg):
 
 
   # Define the ratio plot
-  ratioPlot = histograms[0].Clone("ratioPlot")
+  ratioPlot = TGraphErrors(histograms[0])
+  ratioPlot.SetName("ratioPlot")
+  graph_histo0 = TGraphErrors(histograms[0])
+  graph_histo1 = TGraphErrors(histograms[1])
   ratioPlot.SetLineColor(1)
   ratioPlot.SetMinimum(0.6)  # Define Y ..
   ratioPlot.SetMaximum(1.5) # .. range
-  ratioPlot.Sumw2()
-  ratioPlot.SetStats(0)      # No statistics on lower plot
-  ratioPlot.Divide(histograms[1])
+  #ratioPlot.Sumw2()
+  #ratioPlot.SetStats(0)      # No statistics on lower plot
+
+  #Dividing point by point
+
+  for index in xrange(0, ratioPlot.GetN()):
+    if graph_histo1.GetY()[index] == 0:
+      ratioPlot.GetY()[index] = 0
+      ratioPlot.GetEY()[index] = 0
+    else:
+      ratioPlot.GetY()[index] /= graph_histo1.GetY()[index]
+      ratioPlot.GetEY()[index] = sqrt(((graph_histo1.GetY()[index])**2 * (graph_histo0.GetEY()[index])**2 + (graph_histo0.GetY()[index])**2 * (graph_histo1.GetEY()[index])**2)/(graph_histo1.GetY()[index])**4)
+  
   ratioPlot.SetMarkerStyle(21)
 
   if getattr(cfg, "xRange", None) is not None:
