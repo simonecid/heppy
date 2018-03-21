@@ -1,3 +1,5 @@
+import heppy.framework.config as cfg
+
 MinimumBias_14TeV_GenParticles_CMSSWTune_WPropagation_111MEvents = cfg.Component(
     'MinimumBias_14TeV_GenParticles_CMSSWTune_WPropagation_111MEvents',
   files = [
