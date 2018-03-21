@@ -4,6 +4,7 @@ from heppy.framework.analyzer import Analyzer
 from heppy.statistics.tree import Tree
 from ROOT import TFile
 from ROOT import TH1F
+from ROOT import TGraphErrors
 from ROOT import TCanvas
 from ROOT import TLine
 from array import array
@@ -60,7 +61,7 @@ class RatePlotProducerPileUp(Analyzer):
                             'recreate')
 
     bins = array("f", self.cfg_ana.bins)
-    self.histogram = TH1F(self.cfg_ana.plot_name, self.cfg_ana.plot_title, len(bins) - 1 , bins)
+    self.histogram = TH1F(self.cfg_ana.plot_name+"Hist", self.cfg_ana.plot_title, len(bins) - 1 , bins)
     self.numberOfEvents = self.cfg_comp.nGenEvents
 
   def process(self, event):
@@ -145,13 +146,19 @@ class RatePlotProducerPileUp(Analyzer):
     #Rescaling to corresponding rate    
     if self.cfg_ana.normalise:
       normalisation = self.cfg_ana.zerobias_rate/self.numberOfEvents
-      self.histogram.Scale(normalisation)
-    #Rescaling everything to have rates
+      self.graphErrors = TGraphErrors(self.histogram)
+      for x in xrange(0, self.graphErrors.GetN()):
+        #Rescaling everything to have rates
+        self.graphErrors.GetEY()[x] *= normalisation
+        self.graphErrors.GetY()[x] *= normalisation
+        self.graphErrors.SetName(self.cfg_ana.plot_name)
+        self.histogram = self.graphErrors
 
     if hasattr(self.cfg_ana, "scale_factors"):
       for x in xrange(0, len(self.cfg_ana.scale_factors)):
         self.histogram.SetBinContent(x+1, self.histogram.GetBinContent(x+1)*self.cfg_ana.scale_factors[x])
     
+
     self.histogram.Write()
     xMax = self.histogram.GetXaxis().GetXmax()
     xMin = self.histogram.GetXaxis().GetXmin()
