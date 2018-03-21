@@ -4,6 +4,7 @@ from heppy.framework.heppy_loop import *
 from heppy.genObjectToL1TObjectConvolutionCurves.computeEfficiencies import computeEfficiencies
 from ROOT import TH1F
 from ROOT import TFile
+from ROOT import TGraphErrors
 from ROOT import TChain
 from ROOT import TTree
 import os
@@ -16,6 +17,7 @@ from importlib import import_module
 import yaml
 import argparse
 from heppy.framework.config import split
+from math import sqrt
 
 ###################################################################################################
 #################################### DO NOT TOUCH FROM DOWN ON ####################################
@@ -400,6 +402,10 @@ def normaliseRatePlots(yamlConf):
   barrelRateHist = nonNormalisedRatePlotFile.Get("mergedBarrelSimL1TObjectRate")
   endcapRateHist = nonNormalisedRatePlotFile.Get("mergedEndcapSimL1TObjectRate")
   forwardRateHist = nonNormalisedRatePlotFile.Get("mergedForwardSimL1TObjectRate")
+  #ppPassProbabilityHistogram = TGraphErrors(totalRateHist)
+  #ppPassProbabilityHistogramInBarrel = TGraphErrors(totalRateHist)
+  #ppPassProbabilityHistogramInEndcap = TGraphErrors(totalRateHist)
+  #ppPassProbabilityHistogramInForward = TGraphErrors(totalRateHist)
   ppPassProbabilityHistogram = totalRateHist.Clone("ppPassProbabilityHistogram")
   ppPassProbabilityHistogramInBarrel = totalRateHist.Clone("ppPassProbabilityHistogramInBarrel")
   ppPassProbabilityHistogramInEndcap = totalRateHist.Clone("ppPassProbabilityHistogramInEndcap")
@@ -483,6 +489,34 @@ def normaliseRatePlots(yamlConf):
   fullPURatePlotInEndcap.Scale(bunchCrossingFrequency)
   fullPURatePlotInForward.Scale(bunchCrossingFrequency)
   
+  fullPURatePlotErrors = TGraphErrors(fullPURatePlot)
+  fullPURatePlotInBarrelErrors = TGraphErrors(fullPURatePlotInBarrel)
+  fullPURatePlotInEndcapErrors = TGraphErrors(fullPURatePlotInEndcap)
+  fullPURatePlotInForwardErrors = TGraphErrors(fullPURatePlotInForward)
+
+  fullPURatePlotErrors.SetName("fullPURatePlotErrors")
+  fullPURatePlotInBarrelErrors.SetName("fullPURatePlotInBarrelErrors")
+  fullPURatePlotInEndcapErrors.SetName("fullPURatePlotInEndcapErrors")
+  fullPURatePlotInForwardErrors.SetName("fullPURatePlotInForwardErrors")
+
+  #Estimating the error. The idea is to compute the base rate unit and use it to get the stat error.
+
+  baseRate = bunchCrossingFrequency/((1. * numberOfDelphesEvents)/(1. * averagePileUp))
+
+  for index in xrange(0, fullPURatePlotErrors.GetN()):
+    approxNumberOfEvents = fullPURatePlotErrors.GetY()[index]/baseRate
+    approxNumberOfEventsInBarrel = fullPURatePlotInBarrelErrors.GetY()[index]/baseRate
+    approxNumberOfEventsInEndcap = fullPURatePlotInEndcapErrors.GetY()[index]/baseRate
+    approxNumberOfEventsInForward = fullPURatePlotInForwardErrors.GetY()[index]/baseRate
+    error = sqrt(approxNumberOfEvents) * baseRate
+    errorInBarrel = sqrt(approxNumberOfEventsInBarrel) * baseRate
+    errorInEndcap = sqrt(approxNumberOfEventsInEndcap) * baseRate
+    errorInForward = sqrt(approxNumberOfEventsInForward) * baseRate
+    fullPURatePlotErrors.GetEY()[index] = error
+    fullPURatePlotInBarrelErrors.GetEY()[index] = errorInBarrel
+    fullPURatePlotInEndcapErrors.GetEY()[index] = errorInEndcap
+    fullPURatePlotInForwardErrors.GetEY()[index] = errorInForward
+
   pileupRatePlotFile = TFile("" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + componentNameRatePlots + "_RatePlots_PU" + str(averagePileUp) + "RatePlot.root", "RECREATE")
   pileupRatePlotFile.cd()
   
@@ -490,10 +524,10 @@ def normaliseRatePlots(yamlConf):
   linearPURatePlotInBarrel.Write()
   linearPURatePlotInEndcap.Write()
   linearPURatePlotInForward.Write()
-  fullPURatePlot.Write()
-  fullPURatePlotInBarrel.Write()
-  fullPURatePlotInEndcap.Write()
-  fullPURatePlotInForward.Write()
+  fullPURatePlotErrors.Write()
+  fullPURatePlotInBarrelErrors.Write()
+  fullPURatePlotInEndcapErrors.Write()
+  fullPURatePlotInForwardErrors.Write()
   
   pileupRatePlotFile.Close()
 
@@ -700,7 +734,7 @@ def buildRateComparisonPlot(yamlConf):
       ["" + saveFolder + "/" + componentNameRateClosureTest + \
        "_CMSTriggerRate/ratePlots.root", "triggerRate", "CMS " + triggerObject],
     ["" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + componentNameRatePlots + \
-     "_RatePlots_PU" + str(averagePileUp) + "RatePlot.root", "fullPURatePlot", "Sim " + triggerObject]
+     "_RatePlots_PU" + str(averagePileUp) + "RatePlot.root", "fullPURatePlotErrors", "Sim " + triggerObject]
   ]
   cfg.saveFileName = "" + saveFolder + "/rateClosureTest.root"
   plotDistributionComparisonPlot(cfg)
@@ -725,7 +759,7 @@ def buildRateComparisonPlotFromHDFS(yamlConf):
        "_CMSTriggerRate/ratePlots.root",
        "triggerRate", "CMS " + triggerObject],
       ["" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + componentNameRatePlots + \
-          "_RatePlots_PU" + str(averagePileUp) + "RatePlot.root", "fullPURatePlot", "Sim " + triggerObject]
+          "_RatePlots_PU" + str(averagePileUp) + "RatePlot.root", "fullPURatePlotErrors", "Sim " + triggerObject]
   ]
   cfg.saveFileName = "" + saveFolder + "/rateClosureTest.root"
   plotDistributionComparisonPlot(cfg)
