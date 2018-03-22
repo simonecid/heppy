@@ -1,10 +1,8 @@
 #Sources: 
 # [1] https://indico.cern.ch/event/556692/contributions/2465161/attachments/1468604/2271471/FCC_hh_muons_system_berlin_2017_riegler.pdf
 
-
-saveFolder: "_muonTriggerStudies_FCC/FCCMuons_100TeV_cmsTunedSample_3.9GeVPtCutBarrel_0.8GeVPtCutEndcap_genMuon_l1tMuon_deltaR0.9_CMSTunedSample"
-
 binning: "[0.8, 1.1, 1.4, 1.7, 2.5, 3, 3.5, 3.9, 5, 5.5, 6, 7, 8, 11, 15, 20, 30, 40, 50, 70, 100, 140, 200]"
+binningJet: "[0.8, 1.1, 1.4, 1.7, 2.5, 3, 3.5, 3.9, 5, 5.5, 6, 7, 8, 11, 15, 20, 30, 40, 50, 70, 100, 140, 200, 250, 300, 350, 400]"
 qualityThreshold: 8
 barrelEtaConvolutionCurve: 1.1 
 detectorEtaConvolutionCurve: 2.44
@@ -35,10 +33,12 @@ efficiencyLowPtSourceFolder: "/hdfs/FCC-hh/l1tMuonGenMuonMatching_QCD_15_3000_No
 efficiencyLowPtMatchTree: "MatchL1TMuonWithGenLevelMuons/matchedL1TMuonGenParticleTree"
 efficiencyLowPtGenTree: "MatchL1TMuonWithGenLevelMuons/genParticleTree"
 numberOfEfficiencyFiles: -1
+
 efficiencySourceFolderJetToMuon: "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_MuonVeto_NoCrossMatchLeadingGenJetToMuon_CrossMatchGenJetToMuon/"
 efficiencyMatchTreeJetToMuon: "MatchLeadingGenJetWithL1Objects/matchedLeadingGenJetL1TMuonTree"
 efficiencyGenTreeJetToMuon: "MatchLeadingGenJetWithL1Objects/leadingGenJetTree"
 numberOfEfficiencyFilesJetToMuon: -1
+jetToMuonEfficiencyScaleFactor: 3.4
 
 moduleNameClosureTest1: "heppy.samples.mySamples"
 componentNameClosureTest1: "l1tMuonGenMuonMatching_QCD_15_3000_NoPU_Phase1_WQualityBranch"
@@ -67,13 +67,3 @@ steps:
     function: obtainEfficienciesJetToMuon
   - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
     function: computeNonNormalisedRatePlots
-  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-    function: normaliseMinimumBiasRate
-#  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-#    function: runClosureTest1
-#  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-#    function: runClosureTest2
-  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-    function: runCMSRateCalculation
-  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-    function: buildRateComparisonPlot
