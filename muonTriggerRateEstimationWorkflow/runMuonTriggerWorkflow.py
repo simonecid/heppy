@@ -200,7 +200,12 @@ def computeConvolutionCurvesJetToMuon(yamlConf):
     component.splitFactor = 1
 
   #options.extraOptions.append("sample=" + yamlConf["sampleBinnedDistributions"])
-  options.extraOptions.append("binning=" + yamlConf["binning"])
+  if "binningJet" in yamlConf:
+    binningArray = yamlConf["binningJet"]
+  else:
+    binningArray = yamlConf["binning"]
+
+  options.extraOptions.append("binning=" + binningArray)
   options.extraOptions.append("quality=" + str(yamlConf["qualityThreshold"]))
   options.extraOptions.append(
       "minimumPtInBarrel=0")
@@ -347,7 +352,14 @@ def obtainEfficienciesJetToMuon(yamlConf):
   saveFolder = yamlConf["saveFolder"]
   genObject = "genJet"
   triggerObject = "l1tMuon"
-  binningArray = array("f", ast.literal_eval(yamlConf["binning"]))
+
+  if "binningJet" in yamlConf:
+    binningArray = array("f", ast.literal_eval(yamlConf["binningJet"]))
+    binningStr = yamlConf["binningJet"]
+  else:
+    binningArray = array("f", ast.literal_eval(yamlConf["binning"]))
+    binningStr = yamlConf["binning"]
+
   print "--- COMPUTING THE CONVERSION FACTORS/EFFICIENCIES ---"
   numberOfMatchedObjects_jetToMuon, numberOfGenObjects_jetToMuon = computeEfficienciesJetToMuon(
     GenObjTree=yamlConf["efficiencyGenTreeJetToMuon"],
@@ -366,6 +378,9 @@ def obtainEfficienciesJetToMuon(yamlConf):
   )
   numberOfMatchedObjects = numberOfMatchedObjects_jetToMuon
   numberOfGenObjects = numberOfGenObjects_jetToMuon
+
+  if "jetToMuonEfficiencyScaleFactor" in yamlConf:
+    numberOfMatchedObjects = numberOfMatchedObjects * yamlConf["jetToMuonEfficiencyScaleFactor"]
 
   efficiencyFactors = numberOfMatchedObjects / numberOfGenObjects
   for binIdx in xrange(0, len(efficiencyFactors)):
