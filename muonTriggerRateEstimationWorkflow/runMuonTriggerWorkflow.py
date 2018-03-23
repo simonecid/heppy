@@ -444,8 +444,6 @@ def computeNonNormalisedRatePlots(yamlConf):
 
       hdfsCompliantFileList = [filePath.replace("/hdfs", "") for filePath in comp.files]
 
-      import pdb; pdb.set_trace()
-
       print "COPYING FILES LOCALLY"
       for filePath in hdfsCompliantFileList:
         os.system("/usr/bin/hdfs dfs -copyToLocal " + filePath +
