@@ -188,31 +188,22 @@ def obtainEfficiencies(yamlConf):
   numberOfGenObjectsHistogram.Write()
   efficiencyFactorsFile.Close()
 
-def computeNonNormalisedRatePlots(yamlConf):
 
+def computeNonNormalisedRatePlots(yamlConf):
   saveFolder = yamlConf["saveFolder"]
   genObject = yamlConf["genObject"]
   triggerObject = yamlConf["triggerObject"]
-  print "CREATING THE NON-NORMALISED PLOTS"
 
   moduleNameRatePlots = yamlConf["moduleNameRatePlots"]
   componentNameRatePlots = yamlConf["componentNameRatePlots"]
 
   componentRatePlots = [getattr(import_module(
-      moduleNameRatePlots), componentNameRatePlots, None)]
-
+    moduleNameRatePlots), componentNameRatePlots, None)]
+  
   if componentRatePlots[0] is None:
     print "Error:  component does not exist"
     raise ValueError('Component ' + componentNameRatePlots +
                      " has not been declared in module " + moduleNameRatePlots)
-                     
-  parser = create_parser()
-  (options,args) = parser.parse_args()
-  folderAndScriptName = [saveFolder, "genObjectToL1TObjectConvolutionCurves/l1tObjectTriggerRateMinBiasFromJets_cfg.py"]
-  convolutionFileName = saveFolder + "/" + genObject + "_" +  triggerObject + "_" + "convolutionCurves/histograms.root"
-  options.components = split(componentRatePlots)
-  for component in options.components:
-    component.splitFactor = 1
 
   # Getting the job index from the heppy extra options
   if "job" in yamlConf:
@@ -220,8 +211,35 @@ def computeNonNormalisedRatePlots(yamlConf):
   else:
     job = None
 
-  if job is not None: 
-    options.components = [options.components[job]]
+  componentChunksArray = split(componentRatePlots)
+  for component in componentChunksArray:
+    component.splitFactor = 1
+
+  if job is not None:
+    componentChunksArray = [componentChunksArray[job]]
+
+  if ("copyToLocal" in yamlConf) and (yamlConf["copyToLocal"] is True):
+    for comp in componentChunksArray:
+
+      hdfsCompliantFileList = [filePath.replace("/hdfs", "") for filePath in comp.files]
+
+      os.mkdir(saveFolder + "/__localSourceFiles")
+
+      for filePath in hdfsCompliantFileList:
+        os.system("/usr/bin/hdfs dfs -copyToLocal " + filePath +
+                  "  " + saveFolder + "/__localSourceFiles/")
+      
+      heppyLocalFileList = os.listdir(saveFolder + "/__localSourceFiles/")
+      heppyLocalFileList = [saveFolder + "/__localSourceFiles/" + filePath for filePath in heppyLocalFileList]
+      comp.files = heppyLocalFileList  
+
+  print "CREATING THE NON-NORMALISED PLOTS"
+
+  parser = create_parser()
+  (options,args) = parser.parse_args()
+  folderAndScriptName = [saveFolder, "genObjectToL1TObjectConvolutionCurves/l1tObjectTriggerRateMinBiasFromJets_cfg.py"]
+  convolutionFileName = saveFolder + "/" + genObject + "_" +  triggerObject + "_" + "convolutionCurves/histograms.root"
+  options.components = componentChunksArray
 
   #options.extraOptions.append("sample=" + yamlConf["sampleRateEstimation"])
   options.extraOptions.append("convolutionFileName=" + convolutionFileName)
@@ -262,6 +280,9 @@ def computeNonNormalisedRatePlots(yamlConf):
     options.nevents = yamlConf["numberOfDelphesEvents"]
 
   loop = main(options, folderAndScriptName, parser)
+  
+  if ("copyToLocal" in yamlConf) and (yamlConf["copyToLocal"] is True):
+    os.system("rm -r " + saveFolder + "/__localSourceFiles/")
 
 def mergeNonNormalisedRatePlots(yamlConf):
 

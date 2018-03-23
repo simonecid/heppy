@@ -34,6 +34,7 @@ componentNameRateClosureTest: "cmsMatching_SingleNeutrinoPU140_BarrelOnly_Leadin
 
 moduleNameRatePlots: "heppy.samples.sample_MinimumBias_NoTau_100TeV_GenParticles_CMSSWTune_WPropagation_511Mevents"
 componentNameRatePlots: "MinimumBias_100TeV_GenParticles_CMSSWTune_WPropagation_511MEvents"
+copyToLocal: True
 averagePileUp: 140
 bunchCrossingFrequency: !!float 31.6e6 # 2808 bunches
 genJetCollection: "nonPropagatedGenJets"
