@@ -198,6 +198,9 @@ def computeNonNormalisedRatePlots(yamlConf):
   componentNameRatePlots = yamlConf["componentNameRatePlots"]
 
   componentRatePlots = [getattr(import_module(
+
+  print "CREATING THE NON-NORMALISED PLOTS"
+
     moduleNameRatePlots), componentNameRatePlots, None)]
   
   if componentRatePlots[0] is None:
@@ -211,20 +214,15 @@ def computeNonNormalisedRatePlots(yamlConf):
   else:
     job = None
 
-  componentChunksArray = split(componentRatePlots)
-  for component in componentChunksArray:
-    component.splitFactor = 1
-
-  if job is not None:
-    componentChunksArray = [componentChunksArray[job]]
-
   if ("copyToLocal" in yamlConf) and (yamlConf["copyToLocal"] is True):
-    for comp in componentChunksArray:
+    os.mkdir(saveFolder + "/__localSourceFiles")
+    for comp in componentRatePlots:
 
       hdfsCompliantFileList = [filePath.replace("/hdfs", "") for filePath in comp.files]
 
-      os.mkdir(saveFolder + "/__localSourceFiles")
+      import pdb; pdb.set_trace()
 
+      print "COPYING FILES LOCALLY"
       for filePath in hdfsCompliantFileList:
         os.system("/usr/bin/hdfs dfs -copyToLocal " + filePath +
                   "  " + saveFolder + "/__localSourceFiles/")
@@ -233,7 +231,12 @@ def computeNonNormalisedRatePlots(yamlConf):
       heppyLocalFileList = [saveFolder + "/__localSourceFiles/" + filePath for filePath in heppyLocalFileList]
       comp.files = heppyLocalFileList  
 
-  print "CREATING THE NON-NORMALISED PLOTS"
+  componentChunksArray = split(componentRatePlots)
+  for component in componentChunksArray:
+    component.splitFactor = 1
+
+  if job is not None:
+    componentChunksArray = [componentChunksArray[job]]
 
   parser = create_parser()
   (options,args) = parser.parse_args()

@@ -432,14 +432,43 @@ def computeNonNormalisedRatePlots(yamlConf):
     raise ValueError('Component ' + componentNameRatePlots +
                      " has not been declared in module " + moduleNameRatePlots)
 
+  # Getting the job index from the heppy extra options
+  if "job" in yamlConf:
+    job = int(yamlConf["job"])
+  else:
+    job = None
+
+  if ("copyToLocal" in yamlConf) and (yamlConf["copyToLocal"] is True):
+    os.mkdir(saveFolder + "/__localSourceFiles")
+    for comp in componentRatePlots:
+
+      hdfsCompliantFileList = [filePath.replace("/hdfs", "") for filePath in comp.files]
+
+      import pdb; pdb.set_trace()
+
+      print "COPYING FILES LOCALLY"
+      for filePath in hdfsCompliantFileList:
+        os.system("/usr/bin/hdfs dfs -copyToLocal " + filePath +
+                  "  " + saveFolder + "/__localSourceFiles/")
+      
+      heppyLocalFileList = os.listdir(saveFolder + "/__localSourceFiles/")
+      heppyLocalFileList = [saveFolder + "/__localSourceFiles/" + filePath for filePath in heppyLocalFileList]
+      comp.files = heppyLocalFileList  
+
+  componentChunksArray = split(componentRatePlots)
+  for component in componentChunksArray:
+    component.splitFactor = 1
+
+  if job is not None:
+    componentChunksArray = [componentChunksArray[job]]
+
   parser = create_parser()
   (options, args) = parser.parse_args()
   folderAndScriptName = [
       saveFolder, "muonTriggerRateEstimationWorkflow/muonFCCTriggerRates_cfg.py"]
   convolutionFileName = saveFolder + "/binnedDistributions.root"
-  options.components = split(componentRatePlots)
-  for component in options.components:
-    component.splitFactor = 1
+  options.components = componentChunksArray
+  
 
   #options.extraOptions.append("sample=" + yamlConf["componentNameRatePlots"])
   options.extraOptions.append("convolutionFileName=" + convolutionFileName)
