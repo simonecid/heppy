@@ -196,11 +196,11 @@ def computeNonNormalisedRatePlots(yamlConf):
 
   moduleNameRatePlots = yamlConf["moduleNameRatePlots"]
   componentNameRatePlots = yamlConf["componentNameRatePlots"]
-
-  componentRatePlots = [getattr(import_module(
-
   print "CREATING THE NON-NORMALISED PLOTS"
 
+
+
+  componentRatePlots = [getattr(import_module(
     moduleNameRatePlots), componentNameRatePlots, None)]
   
   if componentRatePlots[0] is None:
