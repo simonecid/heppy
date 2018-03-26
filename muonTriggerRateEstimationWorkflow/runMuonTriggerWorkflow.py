@@ -327,20 +327,27 @@ def obtainEfficiencies(yamlConf):
   efficiencyFactorsFile = TFile(
       "" + saveFolder + "/efficiencyFactors.root", "RECREATE")
   efficiencyFactorsFile.cd()
-  efficiencyHistogram = TH1F("efficiencyHistogram", "Trigger efficiency", len(
-      binningArray) - 1, binningArray)
   numberOfMatchedObjectsHistogram = TH1F(
       "numberOfMatchedObjectsHistogram", "numberOfMatchedObjectsHistogram", len(binningArray) - 1, binningArray)
   numberOfGenObjectsHistogram = TH1F(
       "numberOfGenObjectsHistogram", "numberOfGenObjectsHistogram", len(binningArray) - 1, binningArray)
 
-  for x in xrange(0, len(efficiencyFactors)):
+  for x in xrange(0, len(numberOfMatchedObjects)):
     #Excluding overflow bin
-    if x != len(efficiencyFactors) - 1:
-      efficiencyHistogram.SetBinContent(x + 1, efficiencyFactors[x])
+    if x != len(numberOfMatchedObjects) - 1:
       numberOfMatchedObjectsHistogram.SetBinContent(
           x + 1, numberOfMatchedObjects[x])
       numberOfGenObjectsHistogram.SetBinContent(x + 1, numberOfGenObjects[x])
+
+  numberOfGenObjectsHistogram.Sumw2()
+  numberOfMatchedObjectsHistogram.Sumw2()
+
+  efficiencyHistogram = numberOfMatchedObjectsHistogram.Clone("efficiencyHistogram")
+  efficiencyHistogram.Divide(numberOfGenObjectsHistogram)
+
+  for x in xrange(0, len(numberOfMatchedObjects)):
+    if efficiencyHistogram.GetBinContent(x + 1) > 1:
+      efficiencyHistogram.SetBinContent(x + 1, 1)
 
   efficiencyHistogram.Write()
   numberOfMatchedObjectsHistogram.Write()
@@ -366,7 +373,7 @@ def obtainEfficienciesJetToMuon(yamlConf):
     GenObjFileFolder=yamlConf["efficiencySourceFolderJetToMuon"],
     MatchTree=yamlConf["efficiencyMatchTreeJetToMuon"],
     MatchFileFolder=yamlConf["efficiencySourceFolderJetToMuon"],
-    binning=yamlConf["binning"],
+    binning=binningStr,
     eta=1400,
     quality=yamlConf["qualityThreshold"],
     barrelEta=1000,
@@ -379,9 +386,6 @@ def obtainEfficienciesJetToMuon(yamlConf):
   numberOfMatchedObjects = numberOfMatchedObjects_jetToMuon
   numberOfGenObjects = numberOfGenObjects_jetToMuon
 
-  if "jetToMuonEfficiencyScaleFactor" in yamlConf:
-    numberOfMatchedObjects = numberOfMatchedObjects * yamlConf["jetToMuonEfficiencyScaleFactor"]
-
   efficiencyFactors = numberOfMatchedObjects / numberOfGenObjects
   for binIdx in xrange(0, len(efficiencyFactors)):
     efficiencyFactors[binIdx] = 0 if isnan(
@@ -393,8 +397,6 @@ def obtainEfficienciesJetToMuon(yamlConf):
   efficiencyFactorsFile = TFile(
       "" + saveFolder + "/efficiencyFactors_JetToMuon.root", "RECREATE")
   efficiencyFactorsFile.cd()
-  efficiencyHistogram = TH1F("efficiencyHistogram", "Trigger efficiency", len(
-      binningArray) - 1, binningArray)
   numberOfMatchedObjectsHistogram = TH1F(
       "numberOfMatchedObjectsHistogram", "numberOfMatchedObjectsHistogram", len(binningArray) - 1, binningArray)
   numberOfGenObjectsHistogram = TH1F(
@@ -403,10 +405,23 @@ def obtainEfficienciesJetToMuon(yamlConf):
   for x in xrange(0, len(efficiencyFactors)):
     #Excluding overflow bin
     if x != len(efficiencyFactors) - 1:
-      efficiencyHistogram.SetBinContent(x + 1, efficiencyFactors[x])
       numberOfMatchedObjectsHistogram.SetBinContent(
           x + 1, numberOfMatchedObjects[x])
       numberOfGenObjectsHistogram.SetBinContent(x + 1, numberOfGenObjects[x])
+
+  numberOfGenObjectsHistogram.Sumw2()
+  numberOfMatchedObjectsHistogram.Sumw2()
+
+  efficiencyHistogram = numberOfMatchedObjectsHistogram.Clone(
+      "efficiencyHistogram")
+  efficiencyHistogram.Divide(numberOfGenObjectsHistogram)
+  
+  if "jetToMuonEfficiencyScaleFactor" in yamlConf:
+    numberOfMatchedObjects = efficiencyHistogram.Scale("jetToMuonEfficiencyScaleFactor")
+
+  for x in xrange(0, len(numberOfMatchedObjects)):
+    if efficiencyHistogram.GetBinContent(x + 1) > 1:
+      efficiencyHistogram.SetBinContent(x + 1, 1)
 
   efficiencyHistogram.Write()
   numberOfMatchedObjectsHistogram.Write()
