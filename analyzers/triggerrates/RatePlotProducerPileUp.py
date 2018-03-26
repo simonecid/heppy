@@ -61,7 +61,7 @@ class RatePlotProducerPileUp(Analyzer):
                             'recreate')
 
     bins = array("f", self.cfg_ana.bins)
-    self.histogram = TH1F(self.cfg_ana.plot_name+"Hist", self.cfg_ana.plot_title, len(bins) - 1 , bins)
+    self.histogram = TH1F(self.cfg_ana.plot_name, self.cfg_ana.plot_title, len(bins) - 1 , bins)
     self.numberOfEvents = self.cfg_comp.nGenEvents
 
   def process(self, event):
