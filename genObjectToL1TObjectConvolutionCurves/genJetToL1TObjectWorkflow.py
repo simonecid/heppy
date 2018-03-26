@@ -220,10 +220,17 @@ def computeNonNormalisedRatePlots(yamlConf):
     job = int(yamlConf["job"])
   else:
     job = None
+  
+  componentChunksArray = split(componentRatePlots)
+  for component in componentChunksArray:
+    component.splitFactor = 1
+
+  if job is not None:
+    componentChunksArray = [componentChunksArray[job]]
 
   if ("copyToLocal" in yamlConf) and (yamlConf["copyToLocal"] is True):
     os.mkdir(saveFolder + "/__localSourceFiles")
-    for comp in componentRatePlots:
+    for comp in componentChunksArray:
 
       hdfsCompliantFileList = [filePath.replace("/hdfs", "") for filePath in comp.files]
 
@@ -236,12 +243,6 @@ def computeNonNormalisedRatePlots(yamlConf):
       heppyLocalFileList = [saveFolder + "/__localSourceFiles/" + filePath for filePath in heppyLocalFileList]
       comp.files = heppyLocalFileList  
 
-  componentChunksArray = split(componentRatePlots)
-  for component in componentChunksArray:
-    component.splitFactor = 1
-
-  if job is not None:
-    componentChunksArray = [componentChunksArray[job]]
 
   parser = create_parser()
   (options,args) = parser.parse_args()
@@ -489,7 +490,13 @@ def normaliseRatePlots(yamlConf):
   passProbabilityFile.Close()
   
   print "COMPUTING THE TRIGGER PASS PROBABILITY IN LINEAR SCALING APPROXIMATION AND WITH FULL FORMULA"
+  nonNormalisedRatePlotFile = TFile("" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + componentNameRatePlots + "_RatePlots_NotNormalised.root")
   
+  numberOfEventInDetector = nonNormalisedRatePlotFile.Get("mergedTotalSimL1TObjectTriggerRate")
+  numberOfEventInBarrel = nonNormalisedRatePlotFile.Get("mergedBarrelSimL1TObjectRate")
+  numberOfEventInEndcap = nonNormalisedRatePlotFile.Get("mergedEndcapSimL1TObjectRate")
+  numberOfEventInForward = nonNormalisedRatePlotFile.Get("mergedForwardSimL1TObjectRate")
+
   passProbabilityFile = TFile("" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + componentNameRatePlots + "_RatePlots_TriggerPassProbability.root")
   ppPassProbabilityHistogram = passProbabilityFile.Get("ppPassProbabilityHistogram")
   ppPassProbabilityHistogramInBarrel = passProbabilityFile.Get("ppPassProbabilityHistogramInBarrel")
@@ -530,17 +537,41 @@ def normaliseRatePlots(yamlConf):
 
   #Estimating the error. The idea is to compute the base rate unit and use it to get the stat error.
 
-  baseRate = bunchCrossingFrequency/((1. * numberOfDelphesEvents)/(1. * averagePileUp))
+  baseRate = (1. * interactionFrequency)/(1. * numberOfDelphesEvents)
 
   for index in xrange(0, fullPURatePlotErrors.GetN()):
-    approxNumberOfEvents = fullPURatePlotErrors.GetY()[index]/baseRate
-    approxNumberOfEventsInBarrel = fullPURatePlotInBarrelErrors.GetY()[index]/baseRate
-    approxNumberOfEventsInEndcap = fullPURatePlotInEndcapErrors.GetY()[index]/baseRate
-    approxNumberOfEventsInForward = fullPURatePlotInForwardErrors.GetY()[index]/baseRate
-    error = sqrt(approxNumberOfEvents) * baseRate
-    errorInBarrel = sqrt(approxNumberOfEventsInBarrel) * baseRate
-    errorInEndcap = sqrt(approxNumberOfEventsInEndcap) * baseRate
-    errorInForward = sqrt(approxNumberOfEventsInForward) * baseRate
+    # Getting the number of pu 0
+    numberOfEventsInBin = numberOfEventInDetector.GetBinContent(index+1)
+    numberOfEventsInBinInBarrel = numberOfEventInBarrel.GetBinContent(index+1)
+    numberOfEventsInBinInEndcap = numberOfEventInEndcap.GetBinContent(index+1)
+    numberOfEventsInBinInForward = numberOfEventInForward.GetBinContent(index+1)
+    #Computing the fractional error
+    if numberOfEventsInBin > 0:
+      relativeError = sqrt(1. * numberOfEventsInBin)/(1. * numberOfEventsInBin)
+    else:
+      relativeError = 0
+
+    if numberOfEventsInBinInBarrel > 0:
+      relativeErrorInBarrel = sqrt(1. * numberOfEventsInBinInBarrel)/(1. * numberOfEventsInBinInBarrel)
+    else:
+      relativeErrorInBarrel = 0
+
+    if numberOfEventsInBinInEndcap > 0:
+      relativeErrorInEndcap = sqrt(1. * numberOfEventsInBinInEndcap)/(1. * numberOfEventsInBinInEndcap)
+    else:
+      relativeErrorInEndcap = 0
+
+    if numberOfEventsInBinInForward > 0:
+      relativeErrorInForward = sqrt(1. * numberOfEventsInBinInForward)/(1. * numberOfEventsInBinInForward)
+    else:
+      relativeErrorInForward = 0
+
+    #Reapplying the same fractional error to my rate plot
+    error = relativeError * fullPURatePlotErrors.GetY()[index]
+    errorInBarrel = relativeErrorInBarrel * fullPURatePlotInBarrelErrors.GetY()[index]
+    errorInEndcap = relativeErrorInEndcap * fullPURatePlotInEndcapErrors.GetY()[index]
+    errorInForward = relativeErrorInForward * fullPURatePlotInForwardErrors.GetY()[index]
+    #Trasferring the error to the plot
     fullPURatePlotErrors.GetEY()[index] = error
     fullPURatePlotInBarrelErrors.GetEY()[index] = errorInBarrel
     fullPURatePlotInEndcapErrors.GetEY()[index] = errorInEndcap
@@ -558,6 +589,7 @@ def normaliseRatePlots(yamlConf):
   fullPURatePlotInEndcapErrors.Write()
   fullPURatePlotInForwardErrors.Write()
   
+  nonNormalisedRatePlotFile.Close()
   pileupRatePlotFile.Close()
 
 def applyFinalScaling(yamlConf):
