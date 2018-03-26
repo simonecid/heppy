@@ -417,7 +417,7 @@ def obtainEfficienciesJetToMuon(yamlConf):
   efficiencyHistogram.Divide(numberOfGenObjectsHistogram)
   
   if "jetToMuonEfficiencyScaleFactor" in yamlConf:
-    numberOfMatchedObjects = efficiencyHistogram.Scale("jetToMuonEfficiencyScaleFactor")
+    numberOfMatchedObjects = efficiencyHistogram.Scale(yamlConf["jetToMuonEfficiencyScaleFactor"])
 
   for x in xrange(0, len(numberOfMatchedObjects)):
     if efficiencyHistogram.GetBinContent(x + 1) > 1:
