@@ -94,6 +94,9 @@ def ptRatioWithMatched (ptc):
 def deltaR (ptc):
   return sqrt(ptc.deltaR2)
 
+def deltaEta (ptc):
+  return ptc.eta() - ptc.match.eta()
+
 def isMatched(ptc):
   return ptc.match is not None
 
@@ -286,6 +289,24 @@ deltaRDistributionBinnedInMatchedObject = cfg.Analyzer(
   y_label = "# events"
 )
 
+deltaEtaDistributionBinnedInMatchedObject = cfg.Analyzer(
+  MatchedObjectBinnedDistributions,
+  instance_label = 'deltaEtaDistributionBinnedInMatchedObject',
+  histo_name = 'deltaEtaDistributionBinnedInMatchedObject',
+  histo_title = '#Delta#eta distribution binned in p^{' + matchedObjectName +'}_{t}',
+  matched_collection = 'matched_trigger_object',
+  binning = ptBins,
+  nbins = 500,
+  min = -1,
+  max = 1,
+  file_label = "tfile1",
+  plot_func = deltaEta,
+  bin_func = pt,
+  log_y = False,
+  x_label = "#Delta#eta",
+  y_label = "# events"
+)
+
 objectPtDistribution = cfg.Analyzer(
   Histogrammer,
   'objectPtDistribution',
@@ -344,6 +365,7 @@ sequence = cfg.Sequence( [
   matchedObjectEtaDistributionBinnedInMatchedObject,
   deltaRDistributionBinnedInMatchedObject,
   deltaPtDistributionBinnedInMatchedObject,
+  deltaEtaDistributionBinnedInMatchedObject,
   objectPtDistribution,
   objectQualityDistribution,
   matchedObjectPtDistribution,
