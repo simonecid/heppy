@@ -452,13 +452,21 @@ def computeNonNormalisedRatePlots(yamlConf):
     job = int(yamlConf["job"])
   else:
     job = None
+  
+
+  componentChunksArray = split(componentRatePlots)
+  for component in componentChunksArray:
+    component.splitFactor = 1
+  
+  if job is not None:
+    componentChunksArray = [componentChunksArray[job]]
 
   if ("copyToLocal" in yamlConf) and (yamlConf["copyToLocal"] is True):
     os.mkdir(saveFolder + "/__localSourceFiles")
-    for comp in componentRatePlots:
+    for comp in componentChunksArray:
 
       hdfsCompliantFileList = [filePath.replace("/hdfs", "") for filePath in comp.files]
-
+      
       print "COPYING FILES LOCALLY"
       for filePath in hdfsCompliantFileList:
         os.system("/usr/bin/hdfs dfs -copyToLocal " + filePath +
@@ -467,13 +475,6 @@ def computeNonNormalisedRatePlots(yamlConf):
       heppyLocalFileList = os.listdir(saveFolder + "/__localSourceFiles/")
       heppyLocalFileList = [saveFolder + "/__localSourceFiles/" + filePath for filePath in heppyLocalFileList]
       comp.files = heppyLocalFileList  
-
-  componentChunksArray = split(componentRatePlots)
-  for component in componentChunksArray:
-    component.splitFactor = 1
-
-  if job is not None:
-    componentChunksArray = [componentChunksArray[job]]
 
   parser = create_parser()
   (options, args) = parser.parse_args()
@@ -655,12 +656,38 @@ def normaliseMinimumBiasRate(yamlConf):
   linearPURatePlot.Scale(interactionFrequency)
   fullPURatePlot.Scale(bunchCrossingFrequency)
 
+  fullPURatePlotErrors = TGraphErrors(fullPURatePlot)
+  fullPURatePlotErrors.SetName("fullPURatePlotErrors")
+
+  #Estimating the error. The idea is to compute the base rate unit and use it to get the stat error.
+
+  baseRate = (1. * interactionFrequency) / (1. * numberOfDelphesEvents)
+
+  nonNormalisedRatePlotFile = TFile("" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + componentNameRatePlots + "_RatePlots_NotNormalised.root")
+  numberOfEventInDetector = nonNormalisedRatePlotFile.Get("mergedTotalSimL1TObjectTriggerRate")
+
+  for index in xrange(0, fullPURatePlotErrors.GetN()):
+    # Getting the number of pu 0
+    numberOfEventsInBin = numberOfEventInDetector.GetBinContent(index + 1)
+    # Computing the fractional error
+    if numberOfEventsInBin > 0:
+      relativeError = sqrt(1. * numberOfEventsInBin) / \
+          (1. * numberOfEventsInBin)
+    else:
+      relativeError = 0
+
+    # Reapplying the same fractional error to my rate plot
+    error = relativeError * fullPURatePlotErrors.GetY()[index]
+    # Trasferring the error to the plot
+    fullPURatePlotErrors.GetEY()[index] = error
+
   pileupRatePlotFile = TFile("" + saveFolder + "/" + componentNameRatePlots + "_RatePlots_PU" + str(averagePileUp) + "RatePlot.root", "RECREATE")
   pileupRatePlotFile.cd()
   linearPURatePlot.Write()
   fullPURatePlot.Write()
-
+  fullPURatePlotErrors.Write()
   pileupRatePlotFile.Close()
+  nonNormalisedRatePlotFile.Close()
 
 def normalisePileUpRate(yamlConf):
 
