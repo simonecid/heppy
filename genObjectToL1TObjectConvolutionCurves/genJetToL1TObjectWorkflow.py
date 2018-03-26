@@ -172,17 +172,24 @@ def obtainEfficiencies(yamlConf):
 
   efficiencyFactorsFile = TFile("" + saveFolder + "/efficiencyFactors.root", "RECREATE")
   efficiencyFactorsFile.cd()
-  efficiencyHistogram = TH1F("efficiencyHistogram", "Trigger efficiency", len(binningArray)-1, binningArray)
   numberOfMatchedObjectsHistogram = TH1F("numberOfMatchedObjectsHistogram", "numberOfMatchedObjectsHistogram", len(binningArray)-1, binningArray)
   numberOfGenObjectsHistogram = TH1F("numberOfGenObjectsHistogram", "numberOfGenObjectsHistogram", len(binningArray)-1, binningArray)
 
   for x in xrange(0, len(efficiencyFactors)): 
     #Excluding overflow bin
     if x != len(efficiencyFactors) - 1:
-      efficiencyHistogram.SetBinContent(x + 1, efficiencyFactors[x])
       numberOfMatchedObjectsHistogram.SetBinContent(x + 1, numberOfMatchedObjects[x])
       numberOfGenObjectsHistogram.SetBinContent(x + 1, numberOfGenObjects[x])
 
+  numberOfGenObjectsHistogram.Sumw2()
+  numberOfMatchedObjectsHistogram.Sumw2()
+  efficiencyHistogram = numberOfMatchedObjectsHistogram.Clone("efficiencyHistogram")
+  efficiencyHistogram.Divide(numberOfGenObjectsHistogram)
+  
+  for x in xrange(0, len(numberOfMatchedObjects)):
+    if efficiencyHistogram.GetBinContent(x + 1) > 1:
+      efficiencyHistogram.SetBinContent(x + 1, 1)
+      
   efficiencyHistogram.Write()
   numberOfMatchedObjectsHistogram.Write()
   numberOfGenObjectsHistogram.Write()
@@ -553,6 +560,59 @@ def normaliseRatePlots(yamlConf):
   
   pileupRatePlotFile.Close()
 
+def applyFinalScaling(yamlConf):
+
+  saveFolder = yamlConf["saveFolder"]
+  genObject = yamlConf["genObject"]
+  triggerObject = yamlConf["triggerObject"]
+  moduleNameRatePlots = yamlConf["moduleNameRatePlots"]
+  componentNameRatePlots = yamlConf["componentNameRatePlots"]
+  averagePileUp = yamlConf["averagePileUp"]
+  bunchCrossingFrequency = yamlConf["bunchCrossingFrequency"]
+  scalingFactorsFileName = yamlConf["scalingFactorsFileName"]
+  scalingFactorsPlotName = yamlConf["scalingFactorsPlotName"]
+
+  pileupRatePlotFile = TFile("" + saveFolder + "/" + genObject + "_" + triggerObject + "_" +
+                             componentNameRatePlots + "_RatePlots_PU" + str(averagePileUp) + "RatePlot.root")
+
+  pileupRatePlotFile.cd()
+
+  fullPURatePlotErrors = pileupRatePlotFile.Get("fullPURatePlotErrors")
+
+  scalingFactorsFile = TFile(scalingFactorsFileName)
+  scalingFactorsPlot = scalingFactorsFile.Get(scalingFactorsPlotName)
+
+  fullPURatePlotErrorsIdx = 0
+  scalingFactorsPlotIdx = 0
+
+  for scalingFactorsPlotIdx in xrange(0, scalingFactorsPlot.GetN()): 
+    xPoint = fullPURatePlotErrors.GetX()[fullPURatePlotErrorsIdx]
+    eXPoint = fullPURatePlotErrors.GetEX()[fullPURatePlotErrorsIdx]
+    yPoint = fullPURatePlotErrors.GetY()[fullPURatePlotErrorsIdx]
+    eYPoint = fullPURatePlotErrors.GetEY()[fullPURatePlotErrorsIdx]
+
+    while (xPoint < scalingFactorsPlot.GetX()[scalingFactorsPlotIdx] - scalingFactorsPlot.GetEX()[scalingFactorsPlotIdx]):
+      fullPURatePlotErrorsIdx += 1
+      xPoint = fullPURatePlotErrors.GetX()[fullPURatePlotErrorsIdx]
+      eXPoint = fullPURatePlotErrors.GetEX()[fullPURatePlotErrorsIdx]
+      yPoint = fullPURatePlotErrors.GetY()[fullPURatePlotErrorsIdx]
+      eYPoint = fullPURatePlotErrors.GetEY()[fullPURatePlotErrorsIdx]
+    while ((fullPURatePlotErrorsIdx < fullPURatePlotErrors.GetN()) and (xPoint < scalingFactorsPlot.GetX()[scalingFactorsPlotIdx] + scalingFactorsPlot.GetEX()[scalingFactorsPlotIdx]) and (xPoint > scalingFactorsPlot.GetX()[scalingFactorsPlotIdx] - scalingFactorsPlot.GetEX()[scalingFactorsPlotIdx])):
+      fullPURatePlotErrors.GetY()[fullPURatePlotErrorsIdx] *= scalingFactorsPlot.GetY()[scalingFactorsPlotIdx]
+      fullPURatePlotErrors.GetEY()[fullPURatePlotErrorsIdx] = sqrt((eYPoint*scalingFactorsPlot.GetY()[scalingFactorsPlotIdx])**2 + (yPoint*scalingFactorsPlot.GetEY()[scalingFactorsPlotIdx])**2)
+      fullPURatePlotErrorsIdx += 1
+      xPoint = fullPURatePlotErrors.GetX()[fullPURatePlotErrorsIdx]
+      eXPoint = fullPURatePlotErrors.GetEX()[fullPURatePlotErrorsIdx]
+      yPoint = fullPURatePlotErrors.GetY()[fullPURatePlotErrorsIdx]
+      eYPoint = fullPURatePlotErrors.GetEY()[fullPURatePlotErrorsIdx]
+
+  scaledPileupRatePlotFile = TFile("" + saveFolder + "/" + genObject + "_" + triggerObject + "_" +
+                             componentNameRatePlots + "_RatePlots_PU" + str(averagePileUp) + "RatePlot_Scaled.root", "RECREATE")
+
+  scaledPileupRatePlotFile.cd()
+  fullPURatePlotErrors.Write()
+  scaledPileupRatePlotFile.Close()
+
 
 def runClosureTest1(yamlConf):
 
@@ -747,6 +807,16 @@ def buildRateComparisonPlot(yamlConf):
   moduleNameRateClosureTest = yamlConf["moduleNameRateClosureTest"]
   componentNameRateClosureTest = yamlConf["componentNameRateClosureTest"]
   componentNameRatePlots = yamlConf["componentNameRatePlots"]
+
+  if "simplifiedRatioPlotXRangeBinning" in yamlConf:
+    simplifiedRatioPlotXRangeBinning = array(
+        "f", ast.literal_eval(yamlConf["simplifiedRatioPlotXRangeBinning"]))
+
+  ratePlotFilePath = "" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + componentNameRatePlots + \
+      "_RatePlots_PU" + str(averagePileUp) + "RatePlot.root"
+  if "scalingFactorsPlotName" in yamlConf:
+    ratePlotFilePath = "" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + componentNameRatePlots + \
+        "_RatePlots_PU" + str(averagePileUp) + "RatePlot_Scaled.root"
   
   print "CREATING RATIO PLOT FOR CMS VS DELPHES RATE"
   
@@ -755,9 +825,10 @@ def buildRateComparisonPlot(yamlConf):
   #  #Files here
       ["" + saveFolder + "/" + componentNameRateClosureTest + \
        "_CMSTriggerRate/ratePlots.root", "triggerRate", "CMS " + triggerObject],
-    ["" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + componentNameRatePlots + \
-     "_RatePlots_PU" + str(averagePileUp) + "RatePlot.root", "fullPURatePlotErrors", "Sim " + triggerObject]
+      [ratePlotFilePath, "fullPURatePlotErrors", "Sim " + triggerObject]
   ]
+  if "simplifiedRatioPlotXRangeBinning" in yamlConf and "scalingFactorsPlotName" not in yamlConf:
+    cfg.simplifiedRatioPlotXRangeBinning = simplifiedRatioPlotXRangeBinning
   cfg.saveFileName = "" + saveFolder + "/rateClosureTest.root"
   plotDistributionComparisonPlot(cfg)
 
@@ -771,6 +842,16 @@ def buildRateComparisonPlotFromHDFS(yamlConf):
   moduleNameRateClosureTest = yamlConf["moduleNameRateClosureTest"]
   componentNameRateClosureTest = yamlConf["componentNameRateClosureTest"]
   componentNameRatePlots = yamlConf["componentNameRatePlots"]
+  if "simplifiedRatioPlotXRangeBinning" in yamlConf:
+    simplifiedRatioPlotXRangeBinning = array("f", ast.literal_eval(yamlConf["simplifiedRatioPlotXRangeBinning"]))
+
+
+  ratePlotFilePath = "" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + componentNameRatePlots + \
+          "_RatePlots_PU" + str(averagePileUp) + "RatePlot.root"
+  if "scalingFactorsPlotName" in yamlConf:
+    ratePlotFilePath = "" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + componentNameRatePlots + \
+          "_RatePlots_PU" + str(averagePileUp) + "RatePlot_Scaled.root"
+    
 
   print "CREATING RATIO PLOT FOR CMS VS DELPHES RATE"
 
@@ -780,10 +861,11 @@ def buildRateComparisonPlotFromHDFS(yamlConf):
       ["/hdfs/FCC-hh/" + componentNameRateClosureTest + \
        "_CMSTriggerRate/ratePlots.root",
        "triggerRate", "CMS " + triggerObject],
-      ["" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + componentNameRatePlots + \
-          "_RatePlots_PU" + str(averagePileUp) + "RatePlot.root", "fullPURatePlotErrors", "Sim " + triggerObject]
+      [ratePlotFilePath, "fullPURatePlotErrors", "Sim " + triggerObject]
   ]
   cfg.saveFileName = "" + saveFolder + "/rateClosureTest.root"
+  if "simplifiedRatioPlotXRangeBinning" in yamlConf and "scalingFactorsPlotName" not in yamlConf:
+    cfg.simplifiedRatioPlotXRangeBinning = simplifiedRatioPlotXRangeBinning
   plotDistributionComparisonPlot(cfg)
 #
 #print "CREATING THE SIM-" + triggerObject + "PT DISTRIBUTION PLOT"
