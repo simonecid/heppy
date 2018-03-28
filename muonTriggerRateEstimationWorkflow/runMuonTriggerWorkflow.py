@@ -510,6 +510,20 @@ def computeNonNormalisedRatePlots(yamlConf):
     options.nevents = numberOfDelphesEvents
   loop = main(options, folderAndScriptName, parser)
 
+  if ("copyToLocal" in yamlConf) and (yamlConf["copyToLocal"] is True):
+    os.system("rm -r " + saveFolder + "/__localSourceFiles/")
+
+
+def mergeNonNormalisedRatePlots(yamlConf):
+
+  saveFolder = yamlConf["saveFolder"]
+  genObject = yamlConf["genObject"]
+  triggerObject = yamlConf["triggerObject"]
+  print "CREATING THE NON-NORMALISED PLOTS"
+
+  moduleNameRatePlots = yamlConf["moduleNameRatePlots"]
+  componentNameRatePlots = yamlConf["componentNameRatePlots"]
+
   print "MERGING LOCAL HEPPY CHUNKS"
 
   #Merging the histograms and treesR 
