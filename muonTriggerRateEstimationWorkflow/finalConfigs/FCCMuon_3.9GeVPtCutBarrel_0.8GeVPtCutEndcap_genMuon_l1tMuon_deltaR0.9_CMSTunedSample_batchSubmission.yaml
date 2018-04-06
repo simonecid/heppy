@@ -38,7 +38,7 @@ efficiencySourceFolderJetToMuon: "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_NoP
 efficiencyMatchTreeJetToMuon: "MatchLeadingGenJetWithL1Objects/matchedLeadingGenJetL1TMuonTree"
 efficiencyGenTreeJetToMuon: "MatchLeadingGenJetWithL1Objects/leadingGenJetTree"
 numberOfEfficiencyFilesJetToMuon: -1
-jetToMuonEfficiencyScaleFactor: 3.4
+jetToMuonEfficiencyScaleFactor: 6.3
 
 moduleNameClosureTest1: "heppy.samples.mySamples"
 componentNameClosureTest1: "l1tMuonGenMuonMatching_QCD_15_3000_NoPU_Phase1_WQualityBranch"
