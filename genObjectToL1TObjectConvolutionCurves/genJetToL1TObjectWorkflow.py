@@ -321,8 +321,8 @@ def mergeNonNormalisedRatePlots(yamlConf):
   mergedForwardRateHist.SetDirectory(0)
   
   
-  treeChain = TChain("genJetSimL1TObjectTree")
-  treeChain.Add(filesToMerge[0])
+  #treeChain = TChain("genJetSimL1TObjectTree")
+  #treeChain.Add(filesToMerge[0])
   nonNormalisedRatePlotFile.Close()
   # First file has been handled, so it is removed from the list
   filesToMerge.pop(0)
@@ -333,14 +333,14 @@ def mergeNonNormalisedRatePlots(yamlConf):
     barrelRateHist = nonNormalisedRatePlotFile.Get("barrelSimL1TObjectRate")
     endcapRateHist = nonNormalisedRatePlotFile.Get("endcapSimL1TObjectRate")
     forwardRateHist = nonNormalisedRatePlotFile.Get("forwardSimL1TObjectRate")
-    treeChain.Add(fileName)
+    #treeChain.Add(fileName)
     mergedTotalRateHist.Add(totalRateHist)
     mergedBarrelRateHist.Add(barrelRateHist)
     mergedEndcapRateHist.Add(endcapRateHist)
     mergedForwardRateHist.Add(forwardRateHist)
     nonNormalisedRatePlotFile.Close()
   
-  treeChain.Merge(saveFolder + "/" + genObject + "_" + triggerObject + "_" + componentNameRatePlots + "_" + genObject + "_Sim" + triggerObject + "_Tree.root")
+  #treeChain.Merge(saveFolder + "/" + genObject + "_" + triggerObject + "_" + componentNameRatePlots + "_" + genObject + "_Sim" + triggerObject + "_Tree.root")
   
   #Saving everything
   mergedHistogramsFile = TFile(saveFolder + "/" + genObject + "_" + triggerObject + "_" + componentNameRatePlots + "_RatePlots_NotNormalised.root", "RECREATE")
@@ -613,9 +613,18 @@ def applyFinalScaling(yamlConf):
 
   scalingFactorsFile = TFile(scalingFactorsFileName)
   scalingFactorsPlot = scalingFactorsFile.Get(scalingFactorsPlotName)
+  
+  simplifiedRatioPlotXRangeBinning = array(
+      "f", ast.literal_eval(yamlConf["simplifiedRatioPlotXRangeBinning"]))
+
+  simplifiedFullPURatePlotErrors = TGraphErrors(len(simplifiedRatioPlotXRangeBinning)) # +1 for the initial/final point
+  simplifiedFullPURatePlotErrors.SetName("simplifiedFullPURatePlotErrors")
+
 
   fullPURatePlotErrorsIdx = 0
   scalingFactorsPlotIdx = 0
+
+  maxFractionalEY = 0
 
   for scalingFactorsPlotIdx in xrange(0, scalingFactorsPlot.GetN()): 
     xPoint = fullPURatePlotErrors.GetX()[fullPURatePlotErrorsIdx]
@@ -632,17 +641,52 @@ def applyFinalScaling(yamlConf):
     while ((fullPURatePlotErrorsIdx < fullPURatePlotErrors.GetN()) and (xPoint < scalingFactorsPlot.GetX()[scalingFactorsPlotIdx] + scalingFactorsPlot.GetEX()[scalingFactorsPlotIdx]) and (xPoint > scalingFactorsPlot.GetX()[scalingFactorsPlotIdx] - scalingFactorsPlot.GetEX()[scalingFactorsPlotIdx])):
       fullPURatePlotErrors.GetY()[fullPURatePlotErrorsIdx] *= scalingFactorsPlot.GetY()[scalingFactorsPlotIdx]
       fullPURatePlotErrors.GetEY()[fullPURatePlotErrorsIdx] = sqrt((eYPoint*scalingFactorsPlot.GetY()[scalingFactorsPlotIdx])**2 + (yPoint*scalingFactorsPlot.GetEY()[scalingFactorsPlotIdx])**2)
+      if maxFractionalEY < fullPURatePlotErrors.GetEY()[fullPURatePlotErrorsIdx]/fullPURatePlotErrors.GetY()[fullPURatePlotErrorsIdx]: 
+        maxIdx = fullPURatePlotErrorsIdx
+        maxFractionalEY = fullPURatePlotErrors.GetEY()[fullPURatePlotErrorsIdx]/fullPURatePlotErrors.GetY()[fullPURatePlotErrorsIdx]
       fullPURatePlotErrorsIdx += 1
       xPoint = fullPURatePlotErrors.GetX()[fullPURatePlotErrorsIdx]
       eXPoint = fullPURatePlotErrors.GetEX()[fullPURatePlotErrorsIdx]
       yPoint = fullPURatePlotErrors.GetY()[fullPURatePlotErrorsIdx]
-      eYPoint = fullPURatePlotErrors.GetEY()[fullPURatePlotErrorsIdx]
+      eYPoint = fullPURatePlotErrors.GetEY()[fullPURatePlotErrorsIdx]      
+    
+  simplifiedFullPURatePlotErrorsIdx = 0
+  for fullPURatePlotErrorsIdx in xrange(0, fullPURatePlotErrors.GetN()):
+    xPoint = fullPURatePlotErrors.GetX()[fullPURatePlotErrorsIdx]
+    eXPoint = fullPURatePlotErrors.GetEX()[fullPURatePlotErrorsIdx]
+    yPoint = fullPURatePlotErrors.GetY()[fullPURatePlotErrorsIdx]
+    eYPoint = fullPURatePlotErrors.GetEY()[fullPURatePlotErrorsIdx]
+    if (xPoint > simplifiedRatioPlotXRangeBinning[simplifiedFullPURatePlotErrorsIdx]): 
+        if simplifiedFullPURatePlotErrorsIdx < len(simplifiedRatioPlotXRangeBinning) - 1:
+          simplifiedFullPURatePlotErrors.GetX()[simplifiedFullPURatePlotErrorsIdx] = xPoint
+          simplifiedFullPURatePlotErrors.GetEX()[simplifiedFullPURatePlotErrorsIdx] = eXPoint
+          simplifiedFullPURatePlotErrors.GetY()[simplifiedFullPURatePlotErrorsIdx] = yPoint
+          simplifiedFullPURatePlotErrors.GetEY()[simplifiedFullPURatePlotErrorsIdx] = eYPoint
+          simplifiedFullPURatePlotErrorsIdx += 1
+        else: 
+          # for the last point we want the previous one, not the next, as it is out-of-range
+          xPoint = fullPURatePlotErrors.GetX()[fullPURatePlotErrorsIdx - 1]
+          eXPoint = fullPURatePlotErrors.GetEX()[fullPURatePlotErrorsIdx - 1]
+          yPoint = fullPURatePlotErrors.GetY()[fullPURatePlotErrorsIdx - 1]
+          eYPoint = fullPURatePlotErrors.GetEY()[fullPURatePlotErrorsIdx - 1]
+          simplifiedFullPURatePlotErrors.GetX()[simplifiedFullPURatePlotErrorsIdx] = xPoint
+          simplifiedFullPURatePlotErrors.GetEX()[simplifiedFullPURatePlotErrorsIdx] = eXPoint
+          simplifiedFullPURatePlotErrors.GetY()[simplifiedFullPURatePlotErrorsIdx] = yPoint
+          simplifiedFullPURatePlotErrors.GetEY()[simplifiedFullPURatePlotErrorsIdx] = eYPoint
+          #ending the loop 
+          break
+
+
+  # UNCOMMENT ME TO HAVE THE MAXIMUM FRACTIONAL ERROR APPLIED ALL OVER THE RANGE
+  #for idx in xrange(0, fullPURatePlotErrors.GetN()):
+  #  fullPURatePlotErrors.GetEY()[idx] = maxFractionalEY * fullPURatePlotErrors.GetY()[idx]
 
   scaledPileupRatePlotFile = TFile("" + saveFolder + "/" + genObject + "_" + triggerObject + "_" +
                              componentNameRatePlots + "_RatePlots_PU" + str(averagePileUp) + "RatePlot_Scaled.root", "RECREATE")
 
   scaledPileupRatePlotFile.cd()
   fullPURatePlotErrors.Write()
+  simplifiedFullPURatePlotErrors.Write()
   scaledPileupRatePlotFile.Close()
 
 
@@ -896,9 +940,17 @@ def buildRateComparisonPlotFromHDFS(yamlConf):
       [ratePlotFilePath, "fullPURatePlotErrors", "Sim " + triggerObject]
   ]
   cfg.saveFileName = "" + saveFolder + "/rateClosureTest.root"
+  #cfg.xRange = (0, 50)
+  cfg.xRange = (0, 500)
+  cfg.xAxisLabel = "p_{t} [GeV]"
+  cfg.yAxisLabel = "Rate [Hz]"
+  cfg.yRange = (1e2, 4e7)
+  cfg.yRangeRatio = (0, 3)
+  cfg.logY = True
   if "simplifiedRatioPlotXRangeBinning" in yamlConf and "scalingFactorsPlotName" not in yamlConf:
     cfg.simplifiedRatioPlotXRangeBinning = simplifiedRatioPlotXRangeBinning
   plotDistributionComparisonPlot(cfg)
+
 #
 #print "CREATING THE SIM-" + triggerObject + "PT DISTRIBUTION PLOT"
 #parser = create_parser()
