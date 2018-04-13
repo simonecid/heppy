@@ -6,16 +6,17 @@ from heppy.genObjectToL1TObjectConvolutionCurves.computeEfficiencies import comp
 from ROOT import TH1F
 from ROOT import TFile
 from ROOT import TChain
+from ROOT import TGraphErrors
 import os
 from array import array
 import ast
 from heppy.myScripts.plotDistributionComparisonPlot import plotDistributionComparisonPlot
-from math import isnan
+from math import isnan, sqrt
 import yaml
 from importlib import import_module
 from glob import glob
 
-###################################################################################################
+############################fullPURatePlotErrorsfullPURatePlotErrors#######################################################################
 #################################### DO NOT TOUCH FROM DOWN ON ####################################
 ###################################################################################################
 #
@@ -678,7 +679,7 @@ def normaliseMinimumBiasRate(yamlConf):
   baseRate = (1. * interactionFrequency) / (1. * numberOfDelphesEvents)
 
   nonNormalisedRatePlotFile = TFile("" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + componentNameRatePlots + "_RatePlots_NotNormalised.root")
-  numberOfEventInDetector = nonNormalisedRatePlotFile.Get("mergedTotalSimL1TObjectTriggerRate")
+  numberOfEventInDetector = nonNormalisedRatePlotFile.Get("mergedTotalSimL1TMuonRate")
 
   for index in xrange(0, fullPURatePlotErrors.GetN()):
     # Getting the number of pu 0
@@ -759,6 +760,110 @@ def normalisePileUpRate(yamlConf):
   nonNormalisedRatePlotFile.Close()
 
 
+def applyFinalScaling(yamlConf):
+
+  saveFolder = yamlConf["saveFolder"]
+  genObject = yamlConf["genObject"]
+  triggerObject = yamlConf["triggerObject"]
+  moduleNameRatePlots = yamlConf["moduleNameRatePlots"]
+  componentNameRatePlots = yamlConf["componentNameRatePlots"]
+  averagePileUp = yamlConf["averagePileUp"]
+  bunchCrossingFrequency = yamlConf["bunchCrossingFrequency"]
+  scalingFactorsFileName = yamlConf["scalingFactorsFileName"]
+  scalingFactorsPlotName = yamlConf["scalingFactorsPlotName"]
+
+  pileupRatePlotFile = TFile("" + saveFolder + "/" + componentNameRatePlots + "_RatePlots_PU" + str(averagePileUp) + "RatePlot.root")
+
+  pileupRatePlotFile.cd()
+
+  fullPURatePlotErrors = pileupRatePlotFile.Get("fullPURatePlotErrors")
+
+  scalingFactorsFile = TFile(scalingFactorsFileName)
+  scalingFactorsPlot = scalingFactorsFile.Get(scalingFactorsPlotName)
+
+
+  simplifiedRatioPlotXRangeBinning = array(
+      "f", ast.literal_eval(yamlConf["simplifiedRatioPlotXRangeBinning"]))
+
+  simplifiedFullPURatePlotErrors = TGraphErrors(len(simplifiedRatioPlotXRangeBinning))  # +1 for the initial/final point
+  
+  simplifiedFullPURatePlotErrors.SetName("simplifiedFullPURatePlotErrors")
+  fullPURatePlotErrorsIdx = 0
+  scalingFactorsPlotIdx = 0
+
+  maxFractionalEY = 0
+
+  for scalingFactorsPlotIdx in xrange(0, scalingFactorsPlot.GetN()):
+    xPoint = fullPURatePlotErrors.GetX()[fullPURatePlotErrorsIdx]
+    eXPoint = fullPURatePlotErrors.GetEX()[fullPURatePlotErrorsIdx]
+    yPoint = fullPURatePlotErrors.GetY()[fullPURatePlotErrorsIdx]
+    eYPoint = fullPURatePlotErrors.GetEY()[fullPURatePlotErrorsIdx]
+
+    while (xPoint < scalingFactorsPlot.GetX()[scalingFactorsPlotIdx] - scalingFactorsPlot.GetEX()[scalingFactorsPlotIdx]):
+      fullPURatePlotErrorsIdx += 1
+      xPoint = fullPURatePlotErrors.GetX()[fullPURatePlotErrorsIdx]
+      eXPoint = fullPURatePlotErrors.GetEX()[fullPURatePlotErrorsIdx]
+      yPoint = fullPURatePlotErrors.GetY()[fullPURatePlotErrorsIdx]
+      eYPoint = fullPURatePlotErrors.GetEY()[fullPURatePlotErrorsIdx]
+    while ((fullPURatePlotErrorsIdx < fullPURatePlotErrors.GetN()) and (xPoint < scalingFactorsPlot.GetX()[scalingFactorsPlotIdx] + scalingFactorsPlot.GetEX()[scalingFactorsPlotIdx]) and (xPoint > scalingFactorsPlot.GetX()[scalingFactorsPlotIdx] - scalingFactorsPlot.GetEX()[scalingFactorsPlotIdx])):
+      fullPURatePlotErrors.GetY()[fullPURatePlotErrorsIdx] *= scalingFactorsPlot.GetY()[scalingFactorsPlotIdx]
+      fullPURatePlotErrors.GetEY()[fullPURatePlotErrorsIdx] = sqrt((eYPoint * scalingFactorsPlot.GetY()[scalingFactorsPlotIdx])**2 + (yPoint * scalingFactorsPlot.GetEY()[scalingFactorsPlotIdx])**2)
+      if maxFractionalEY < fullPURatePlotErrors.GetEY()[fullPURatePlotErrorsIdx] / fullPURatePlotErrors.GetY()[fullPURatePlotErrorsIdx]:
+        maxIdx = fullPURatePlotErrorsIdx
+        maxFractionalEY = fullPURatePlotErrors.GetEY(
+        )[fullPURatePlotErrorsIdx] / fullPURatePlotErrors.GetY()[fullPURatePlotErrorsIdx]
+      fullPURatePlotErrorsIdx += 1
+      if (fullPURatePlotErrorsIdx < fullPURatePlotErrors.GetN()):
+        xPoint = fullPURatePlotErrors.GetX()[fullPURatePlotErrorsIdx]
+        eXPoint = fullPURatePlotErrors.GetEX()[fullPURatePlotErrorsIdx]
+        yPoint = fullPURatePlotErrors.GetY()[fullPURatePlotErrorsIdx]
+        eYPoint = fullPURatePlotErrors.GetEY()[fullPURatePlotErrorsIdx]
+
+  simplifiedFullPURatePlotErrorsIdx = 0
+  for fullPURatePlotErrorsIdx in xrange(0, fullPURatePlotErrors.GetN()):
+    xPoint = fullPURatePlotErrors.GetX()[fullPURatePlotErrorsIdx]
+    eXPoint = fullPURatePlotErrors.GetEX()[fullPURatePlotErrorsIdx]
+    yPoint = fullPURatePlotErrors.GetY()[fullPURatePlotErrorsIdx]
+    eYPoint = fullPURatePlotErrors.GetEY()[fullPURatePlotErrorsIdx]
+    if (xPoint > simplifiedRatioPlotXRangeBinning[simplifiedFullPURatePlotErrorsIdx]):
+        if simplifiedFullPURatePlotErrorsIdx < len(simplifiedRatioPlotXRangeBinning) - 1:
+          simplifiedFullPURatePlotErrors.GetX(
+          )[simplifiedFullPURatePlotErrorsIdx] = xPoint
+          simplifiedFullPURatePlotErrors.GetEX(
+          )[simplifiedFullPURatePlotErrorsIdx] = eXPoint
+          simplifiedFullPURatePlotErrors.GetY(
+          )[simplifiedFullPURatePlotErrorsIdx] = yPoint
+          simplifiedFullPURatePlotErrors.GetEY(
+          )[simplifiedFullPURatePlotErrorsIdx] = eYPoint
+          simplifiedFullPURatePlotErrorsIdx += 1
+        else:
+          # for the last point we want the previous one, not the next, as it is out-of-range
+          xPoint = fullPURatePlotErrors.GetX()[fullPURatePlotErrorsIdx - 2]
+          eXPoint = fullPURatePlotErrors.GetEX()[fullPURatePlotErrorsIdx - 2]
+          yPoint = fullPURatePlotErrors.GetY()[fullPURatePlotErrorsIdx - 2]
+          eYPoint = fullPURatePlotErrors.GetEY()[fullPURatePlotErrorsIdx - 2]
+          simplifiedFullPURatePlotErrors.GetX(
+          )[simplifiedFullPURatePlotErrorsIdx] = xPoint
+          simplifiedFullPURatePlotErrors.GetEX(
+          )[simplifiedFullPURatePlotErrorsIdx] = eXPoint
+          simplifiedFullPURatePlotErrors.GetY(
+          )[simplifiedFullPURatePlotErrorsIdx] = yPoint
+          simplifiedFullPURatePlotErrors.GetEY(
+          )[simplifiedFullPURatePlotErrorsIdx] = eYPoint
+          #ending the loop
+          break
+
+  # UNCOMMENT ME TO HAVE THE MAXIMUM FRACTIONAL ERROR APPLIED ALL OVER THE RANGE
+  #for idx in xrange(0, fullPURatePlotErrors.GetN()):
+  #  fullPURatePlotErrors.GetEY()[idx] = maxFractionalEY * fullPURatePlotErrors.GetY()[idx]
+
+  scaledPileupRatePlotFile = TFile("" + saveFolder + "/" +
+                                   componentNameRatePlots + "_RatePlots_PU" + str(averagePileUp) + "RatePlot_Scaled.root", "RECREATE")
+
+  scaledPileupRatePlotFile.cd()
+  fullPURatePlotErrors.Write()
+  simplifiedFullPURatePlotErrors.Write()
+  scaledPileupRatePlotFile.Close()
 
 def runClosureTest1(yamlConf):
 
@@ -940,6 +1045,14 @@ def buildRateComparisonPlot(yamlConf):
   moduleNameRateClosureTest = yamlConf["moduleNameRateClosureTest"]
   componentNameRateClosureTest = yamlConf["componentNameRateClosureTest"]
   componentNameRatePlots = yamlConf["componentNameRatePlots"]
+  if "simplifiedRatioPlotXRangeBinning" in yamlConf:
+    simplifiedRatioPlotXRangeBinning = array("f", ast.literal_eval(yamlConf["simplifiedRatioPlotXRangeBinning"]))
+
+  ratePlotFilePath = saveFolder + "/" + componentNameRatePlots + \
+      "_RatePlots_PU" + str(averagePileUp) + "RatePlot.root"
+  if "scalingFactorsPlotName" in yamlConf:
+    ratePlotFilePath = saveFolder + "/" + componentNameRatePlots + \
+        "_RatePlots_PU" + str(averagePileUp) + "RatePlot_Scaled.root"
 
   print "CREATING RATIO PLOT FOR CMS VS DELPHES RATE"
   
@@ -948,12 +1061,18 @@ def buildRateComparisonPlot(yamlConf):
   #  #Files here
       ["" + saveFolder + "/" + componentNameRateClosureTest + \
        "_CMSTriggerRate/ratePlots.root", "triggerRate", "CMS " + triggerObject],
-      ["" + saveFolder + "/" + componentNameRatePlots + "_RatePlots_PU140RatePlot.root",
-       "fullPURatePlot", "Sim " + triggerObject]
+      [ratePlotFilePath, "fullPURatePlotErrors", "Sim " + triggerObject]
   ]
   cfg.saveFileName = "" + saveFolder + "/rateClosureTest.root"
+  cfg.xRange = (0, 200)
+  cfg.xAxisLabel = "p_{t} [GeV]"
+  cfg.yAxisLabel = "Rate [Hz]"
+  cfg.yRange = (1e2, 4e7)
+  cfg.yRangeRatio = (0, 3)
+  cfg.logY = True
+  if "simplifiedRatioPlotXRangeBinning" in yamlConf and "scalingFactorsPlotName" not in yamlConf:
+    cfg.simplifiedRatioPlotXRangeBinning = simplifiedRatioPlotXRangeBinning
   plotDistributionComparisonPlot(cfg)
-
 
 #  ["" + saveFolder + "/" + componentNameRatePlots + "_RatePlots_Normalised.root", "simL1TMuonTriggerRate", "Sim L1TMuon"]
 #]
