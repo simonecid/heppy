@@ -27,6 +27,7 @@ moduleNameClosureTest2: "heppy.samples.mySamples"
 componentNameClosureTest2: "cmsMatching_QCD_15_3000_CrossMatch_LeadingJetSample_genJet"
 moduleNameRateClosureTest: "heppy.samples.mySamples"
 componentNameRateClosureTest: "cmsMatching_SingleNeutrinoPU140_BarrelOnly_LeadingL1TJet"
+simplifiedRatioPlotXRangeBinning: "[80, 150, 200, 250, 350]"
 
 moduleNameRatePlots: "heppy.samples.sample_MinimumBias_NoTau_14TeV_GenParticles_CMSSWTune_WPropagation_111Mevents"
 componentNameRatePlots: "MinimumBias_14TeV_GenParticles_CMSSWTune_WPropagation_111MEvents"
@@ -34,6 +35,9 @@ averagePileUp: 140
 bunchCrossingFrequency: !!float 31.6e6 # 2808 bunches
 genJetCollection: "nonPropagatedGenJets"
 momentumShift: 0
+
+#scalingFactorsFileName: "jetRate_14TeV/rateClosureTest_WScalingFactors.root"
+#scalingFactorsPlotName: "simplifiedRatioPlot"
 
 steps: 
 #- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
@@ -50,7 +54,9 @@ steps:
 #  function: runClosureTest1
 #- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
 #  function: runClosureTest2
-- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
-  function: runRateClosureTest
 #- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
-#  function: buildRateComparisonPlotFromHDFS
+#  function: runRateClosureTest
+#- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+#  function: applyFinalScaling
+- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+  function: buildRateComparisonPlotFromHDFS
