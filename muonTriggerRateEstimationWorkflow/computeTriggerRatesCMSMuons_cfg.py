@@ -47,7 +47,7 @@ source = cfg.Analyzer(
 steps = []
 
 x = 0
-while x <= 100:
+while x <= 250:
   steps.append(x)
   x += 0.5
 
