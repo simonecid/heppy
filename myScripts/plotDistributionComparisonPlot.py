@@ -7,6 +7,7 @@ from ROOT import TPaveText
 from ROOT import TCanvas
 from ROOT import TPad
 from ROOT import TGraphErrors
+from ROOT import TMultiGraph
 from ROOT import TLegend
 from ROOT import TGaxis
 from ROOT import TLine
@@ -24,6 +25,9 @@ chiSquaredWarningThreshold = 1
 # From here on it works by magic, and I am the magician :P
 
 def plotDistributionComparisonPlot(cfg):
+
+  multiGraph = TMultiGraph()
+  multiGraph.SetName("triggerRateMultiGraph")
 
   tfiles = [
   ]
@@ -66,7 +70,12 @@ def plotDistributionComparisonPlot(cfg):
 
 
   #histograms[0].Scale(1./histograms[0].GetEntries())
-  histograms[0].Draw("SAME HIST")         # Draw histograms[1] on top of histograms[0]
+  if histograms[0].ClassName() == "TH1F":
+    histograms[0].Draw("SAME HIST")         # Draw histograms[1] on top of histograms[0]
+  else:
+    histograms[0].Draw("SAME APE")         # Draw histograms[1] on top of histograms[0]
+    #multiGraph.Add(histograms[0])
+
 
   if getattr(cfg, "xRange", None) is not None:
     histograms[0].GetXaxis().SetRangeUser(cfg.xRange[0], cfg.xRange[1])
@@ -88,15 +97,21 @@ def plotDistributionComparisonPlot(cfg):
     histograms[0].GetYaxis().SetRangeUser(1e-6, maximumY)
     
   if getattr(cfg, "logY", False):
-    pad1.SetLogy()
+    canvas.SetLogy()
 
   # histograms[1] settings
   histograms[1].SetMarkerColor(2)
   histograms[1].SetLineColor(2)
   histograms[1].SetLineWidth(1)
   #histograms[1].Scale(1./histograms[1].GetEntries())
-  histograms[1].Draw("SAME HIST")         # Draw histograms[1] on top of histograms[0]
+  if histograms[1].ClassName() == "TH1F":
+    histograms[1].Draw("SAME HIST")         # Draw histograms[1] on top of histograms[0]
+  else:
+    histograms[1].Draw("SAME PE")         # Draw histograms[1] on top of histograms[0]
+    #multiGraph.Add(histograms[1])
 
+  #if multiGraph.GetListOfGraphs() != None:
+  #  multiGraph.Draw("SAME PE")
 
   # Do not draw the Y axis label on the upper plot and redraw a small
   # axis instead, in order to avoid the first label (0) to be clipped.
@@ -141,9 +156,9 @@ def plotDistributionComparisonPlot(cfg):
         else:
           print "Bin", x, "-", histograms[0].GetBinCenter(x), "has a CS=", chiSquaredTerm
 
-  #chiSquareLabel = TPaveText(0.7, 0.6, 0.9, 0.4)
-  #chiSquareLabel.AddText("#chi^{2}/ndf = " + str(chiSquared) + "/" + str(numberOfDegreesOfFreedom) + " = " + str(chiSquared/numberOfDegreesOfFreedom))
-  #chiSquareLabel.Draw()
+  chiSquareLabel = TPaveText(0.7, 0.6, 0.9, 0.4)
+  chiSquareLabel.AddText("#chi^{2}/ndf = " + str(chiSquared) + "/" + str(numberOfDegreesOfFreedom) + " = " + str(chiSquared/numberOfDegreesOfFreedom))
+  chiSquareLabel.Draw()
   print "FINAL CS IS", format(chiSquared, ".2f") + "/" + str(numberOfDegreesOfFreedom) + " = " + format(chiSquared/numberOfDegreesOfFreedom, ".2f")
   legend.SetHeader("#chi^{2}/ndf = " + format(chiSquared, ".2f") + "/" + str(numberOfDegreesOfFreedom) + " = " + format(chiSquared/numberOfDegreesOfFreedom, ".2f"), "C")
   legend.Draw()
@@ -189,7 +204,7 @@ def plotDistributionComparisonPlot(cfg):
     ratioPlot.GetYaxis().SetRangeUser(cfg.yRangeRatio[0], cfg.yRangeRatio[1])
     gPad.RedrawAxis()
 
-  ratioPlot.Draw("EP")       # Draw the ratio plot
+  ratioPlot.Draw("APE")       # Draw the ratio plot
 
   line0 = TLine(ratioPlot.GetXaxis().GetXmin(), 1, ratioPlot.GetXaxis().GetXmax(), 1)
   line0.SetLineColor(2)
@@ -216,18 +231,50 @@ def plotDistributionComparisonPlot(cfg):
   ratioPlot.GetXaxis().SetLabelFont(43) # Absolute font size in pixel (precision 3)
   ratioPlot.GetXaxis().SetLabelSize(15)
 
-  if getattr(cfg, "draw", False):
-    import pdb; pdb.set_trace()
+  
+  xRangeBinning = getattr(cfg, "simplifiedRatioPlotXRangeBinning", None)
+  if xRangeBinning is not None:
+    simplifiedRatioPlot = TGraphErrors(len(xRangeBinning) - 1)
+    simplifiedRatioPlot.SetName("simplifiedRatioPlot")
+    ratioPlotIndex = 0
+    
+    for idx in xrange(0, simplifiedRatioPlot.GetN()):
+      yAverage = 0.
+      yMax = float("-inf")
+      yMin = float("+inf")
+
+      nPoints = 0.
+      simplifiedRatioPlot.GetX()[idx] = (xRangeBinning[idx] + xRangeBinning[idx + 1])/2.
+      simplifiedRatioPlot.GetEX()[idx] = (xRangeBinning[idx + 1] - xRangeBinning[idx])/2.
+      
+      while (ratioPlot.GetX()[ratioPlotIndex] < xRangeBinning[idx]):
+        ratioPlotIndex += 1
+      while ((ratioPlotIndex < ratioPlot.GetN()) and (ratioPlot.GetX()[ratioPlotIndex] < xRangeBinning[idx + 1]) and (ratioPlot.GetX()[ratioPlotIndex] >= xRangeBinning[idx])):
+        yAverage += ratioPlot.GetY()[ratioPlotIndex]
+        if (yMax < ratioPlot.GetY()[ratioPlotIndex] + ratioPlot.GetEY()[ratioPlotIndex]):
+          yMax = ratioPlot.GetY()[ratioPlotIndex] + ratioPlot.GetEY()[ratioPlotIndex]
+        if (yMin > ratioPlot.GetY()[ratioPlotIndex] - ratioPlot.GetEY()[ratioPlotIndex]):
+          yMin = ratioPlot.GetY()[ratioPlotIndex] - ratioPlot.GetEY()[ratioPlotIndex]
+        nPoints += 1.
+        ratioPlotIndex += 1
+      
+      simplifiedRatioPlot.GetY()[idx] = yAverage/nPoints
+      simplifiedRatioPlot.GetEY()[idx] = (yMax - yMin)/2.
 
   saveFile = TFile(cfg.saveFileName, "RECREATE")
   saveFile.cd()
   canvas.Write()
   histograms[0].Write()
   histograms[1].Write()
+  if multiGraph.GetListOfGraphs() != None:
+    multiGraph.Write()
   ratioPlot.Write()
+  if xRangeBinning is not None:
+    simplifiedRatioPlot.Write()
   saveFile.Close()
   for tfile in tfiles:
     tfile.Close()
+
 
 if __name__ == "__main__":
 
