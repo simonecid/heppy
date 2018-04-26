@@ -30,7 +30,7 @@ efficiencyLowPtGenTree: "MatchL1TMuonWithGenLevelMuons/genParticleTree"
 numberOfEfficiencyFiles: -1
 efficiencySourceFolderJetToMuon: "/hdfs/FCC-hh/l1tGenJetMatching_QCD_15_3000_NoPU_Phase1_MuonVeto_NoCrossMatchLeadingGenJetToMuon_CrossMatchGenJetToMuon/"
 efficiencyMatchTreeJetToMuon: "MatchLeadingGenJetWithL1Objects/matchedLeadingGenJetL1TMuonTree"
-efficiencyGenTreeJetToMuon: "MatchLeadingGenJetWithL1Objects/leadingGenJetTree"
+efficiencyGenTreeJetToMuon: "MatchLeadingGenJetWithL1Objects/_leadingGenJetInFourPiTree"
 numberOfEfficiencyFilesJetToMuon: -1
 
 moduleNameClosureTest1: "heppy.samples.mySamples"
