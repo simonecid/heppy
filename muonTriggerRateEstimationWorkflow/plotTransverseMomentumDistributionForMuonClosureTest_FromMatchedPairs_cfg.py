@@ -17,16 +17,18 @@ from heppy.analyzers.fcc.Reader import Reader
 from importlib import import_module
 from heppy.analyzers.triggerrates.CMSMatchingReader import CMSMatchingReader
 from heppy.analyzers.triggerrates.Smearer import Smearer
+from heppy.analyzers.triggerrates.Transformer import Transformer
 from heppy.analyzers.triggerrates.HistogrammerCumulative import HistogrammerCumulative
 from heppy.framework.heppy_loop import _heppyGlobalOptions
 from heppy.analyzers.Filter import Filter
 import ast
 
 quality = int(_heppyGlobalOptions["quality"])
-detectorEta= float(_heppyGlobalOptions["detectorEta"])
-minimumPtInBarrel= float(_heppyGlobalOptions["minimumPtInBarrel"])
-minimumPtInEndcap= float(_heppyGlobalOptions["minimumPtInEndcap"])
-barrelEta= float(_heppyGlobalOptions["barrelEta"])
+detectorEta = float(_heppyGlobalOptions["detectorEta"])
+minimumPtInBarrel = float(_heppyGlobalOptions["minimumPtInBarrel"])
+minimumPtInEndcap = float(_heppyGlobalOptions["minimumPtInEndcap"])
+barrelEta = float(_heppyGlobalOptions["barrelEta"])
+deltaR2Matching = float(_heppyGlobalOptions["deltaR2Matching"])
 
 #Object name
 triggerObjectName = "L1TMuon"
@@ -83,7 +85,7 @@ def goodGenMuonSelection(event):
   # But we want to check that the gen mu falls into the detector
   if not event.trigger_objects:
     return isGenMuonWithinDetectorAcceptance(event.gen_objects[0])
-  return (isGenMuonWithinDetectorAcceptance(event.gen_objects[0]) and (abs(event.trigger_objects[0].deltaR2) < 0.25)) #dr < 0.5
+  return (isGenMuonWithinDetectorAcceptance(event.gen_objects[0]) and (abs(event.trigger_objects[0].deltaR2) < deltaR2Matching)) 
 
 def qualityCut(event):
   if not event.trigger_objects:
@@ -100,6 +102,15 @@ qualityFilter = cfg.Analyzer(
   Filter,
   'qualityFilter',
   filter_func = qualityCut
+)
+
+def hasBeenSmeared(event):
+  return event.gen_objects[0].match is not None
+
+smearedFilter = cfg.Analyzer(
+  Filter,
+  'smearedFilter',
+  filter_func = hasBeenSmeared
 )
 
 cmsMatchingSource = cfg.Analyzer(
@@ -213,12 +224,12 @@ coarseBinnedPtDistribution = cfg.Analyzer(
 )
 
 muonSmearer = cfg.Analyzer(
-  Smearer,
+  Transformer,
   'muonSmearer',
   input_collection = 'gen_objects',
   output_collection = 'l1tMuons',
   convolution_file = convolutionFileName,
-  convolution_histogram_prefix = "deltaPtDistributionBinnedInMatchedObject",
+  convolution_histogram_prefix = "objectPtDistributionBinnedInMatchedObject",
   bins = muon_ptBins,
   object_x_range = (-100, 200),
   probability_file = probabilityFile,
@@ -233,6 +244,7 @@ sequence = cfg.Sequence( [
   goodGenMuonFilter,
   qualityFilter,
   muonSmearer,
+  smearedFilter,
   ptDistribution,
   coarseBinnedPtDistribution,
   smearedPtDistribution,
