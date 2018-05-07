@@ -8,7 +8,7 @@ from ROOT import TLegend
 
 #convolutionFile = TFile("_muonTriggerRate_BarrelCut5.5_EndcapCut1.5_Iteration2/binnedDistributions.root")
 convolutionFile = TFile(
-    "_muonTriggerStudies/cmsTunedSample/binnedDistributions.root")
+    "_muonTriggerStudies_NewJetToMuon/_jetToMuonStudy/genJet_l1tMuon_convolutionCurves_JetToMuon/histograms.root")
 
 '''List of every distribution to plot'''
 distributionNames = [
@@ -25,7 +25,7 @@ distributionNames = [
 #ptBins = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60]
 #ptBins = [3, 5, 10, 20, 30, 40]
 #ptBins = [1.5, 2.3, 3, 4, 5, 5.5]
-ptBins = [1.5, 2.3, 3, 4, 5, 5.5, 6, 7, 8, 11, 15, 20, 30, 40, 50, 70, 100, 140, 200]
+ptBins = [3, 3.5, 3.9, 5, 5.5, 6, 7, 8, 11, 15, 20]
 #ptBins = [20, 25, 30, 35, 40, 45, 50, 60, 70]
 
 # JET BINNING
