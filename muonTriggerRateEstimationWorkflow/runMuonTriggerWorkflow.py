@@ -209,31 +209,30 @@ def computeConvolutionCurvesJetToMuon(yamlConf):
   options.extraOptions.append("binning=" + binningArray)
   options.extraOptions.append("quality=" + str(yamlConf["qualityThreshold"]))
   options.extraOptions.append(
-      "minimumPtInBarrel=0")
+      "minimumPtInBarrel=" + str(yamlConf["minimumPtToReachBarrelJetToMuon"]))
   options.extraOptions.append(
-      "minimumPtInEndcap=0")
-  options.extraOptions.append("barrelEta=1000")
-  options.extraOptions.append("detectorEta=1000")
+      "minimumPtInEndcap=" + str(yamlConf["minimumPtToReachEndcapJetToMuon"]))
+  options.extraOptions.append("barrelEta=" + str(yamlConf["barrelEta"]))  
+  options.extraOptions.append("detectorEta=" + str(yamlConf["detectorEta"]))  
   options.extraOptions.append("triggerObjectName=" + yamlConf["triggerObject"])
   options.extraOptions.append("genObjectName=genJet")
   options.extraOptions.append(
-      "deltaR2Matching=100")
+      "deltaR2Matching=" + str(yamlConf["deltaR2MatchingJetToMuon"]))
   options.extraOptions.append(
-      "deltaEtaMatching=100")
+      "deltaEtaMatching=" + str(yamlConf["deltaEtaMatchingJetToMuon"]))
   #options.nevents=300000
   options.force = True
   loop = main(options, folderAndScriptName, parser)
   os.system("rm -r " + saveFolder + "/" + genObject +
             "_" + triggerObject + "_" + "convolutionCurves_JetToMuon")
-  os.system("mkdir " + saveFolder + "/" + genObject +
-            "_" + triggerObject + "_" + "convolutionCurves_JetToMuon")
   if componentConvolutionCurvesJetToMuon[0].splitFactor > 1:
     os.system("hadd " + saveFolder + "/" + genObject + "_" + triggerObject + "_" + "convolutionCurves_JetToMuon/histograms.root " +
               saveFolder + "/" + componentNameConvolutionCurvesJetToMuon + "_Chunk*/histograms.root")
+    os.system("rm -r " +
+              saveFolder + "/" + componentNameConvolutionCurvesJetToMuon + "_Chunk*")
   else:
-    os.system("mv " + saveFolder + "/" + componentNameConvolutionCurvesJetToMuon + "/histograms.root " +
-              saveFolder + "/" + genObject + "_" + triggerObject + "_" + "convolutionCurves_JetToMuon/histograms.root")
-
+    os.system("mv " + saveFolder + "/" + componentNameConvolutionCurvesJetToMuon + " " +
+              saveFolder + "/" + genObject + "_" + triggerObject + "_" + "convolutionCurves_JetToMuon")
 
 def mergeConvolutionCurves(yamlConf):
   saveFolder = yamlConf["saveFolder"]
@@ -375,15 +374,16 @@ def obtainEfficienciesJetToMuon(yamlConf):
     MatchTree=yamlConf["efficiencyMatchTreeJetToMuon"],
     MatchFileFolder=yamlConf["efficiencySourceFolderJetToMuon"],
     binning=binningStr,
-    eta=1400,
     quality=yamlConf["qualityThreshold"],
-    barrelEta=1000,
-    endcapEta=1200,
-    minPtInBarrel=0,
-    minPtInEndcap=0,
-    minPtInForward=0,
-    deltaR2Matching=100,
+    barrelEta=yamlConf["barrelEta"],
+    endcapEta=yamlConf["detectorEta"],
+    eta=yamlConf["detectorEta"],
+    minPtInBarrel=yamlConf["minimumPtToReachBarrelJetToMuon"],
+    minPtInEndcap=yamlConf["minimumPtToReachEndcapJetToMuon"],
+    minPtInForward=10000,
+    deltaR2Matching=yamlConf["deltaR2MatchingJetToMuon"],
   )
+
   numberOfMatchedObjects = numberOfMatchedObjects_jetToMuon
   numberOfGenObjects = numberOfGenObjects_jetToMuon
 
@@ -435,6 +435,12 @@ def computeNonNormalisedRatePlots(yamlConf):
   saveFolder = yamlConf["saveFolder"]
   genObject = yamlConf["genObject"]
   triggerObject = yamlConf["triggerObject"]
+
+  if "binningJet" in yamlConf:
+    jetBinningStr = yamlConf["binningJet"]
+  else:
+    jetBinningStr = yamlConf["binning"]
+
   print "CREATING THE NON-NORMALISED PLOTS"
 
   moduleNameRatePlots = yamlConf["moduleNameRatePlots"]
@@ -489,6 +495,7 @@ def computeNonNormalisedRatePlots(yamlConf):
   options.extraOptions.append("convolutionFileName=" + convolutionFileName)
   options.extraOptions.append("convolutionFileNameJetToMuon=" + saveFolder + "/genJet_" + triggerObject + "_" + "convolutionCurves_JetToMuon/histograms.root")
   options.extraOptions.append("binning=" + yamlConf["binning"])
+  options.extraOptions.append("binningJet=" + jetBinningStr)
   options.extraOptions.append(
       "probabilityFile=" + "" + yamlConf["saveFolder"] + "/efficiencyFactors.root")
   options.extraOptions.append("probabilityHistogram=efficiencyHistogram")
@@ -499,6 +506,10 @@ def computeNonNormalisedRatePlots(yamlConf):
       "minimumPtInBarrel=" + str(yamlConf["minimumPtToReachBarrel"]))
   options.extraOptions.append(
       "minimumPtInEndcap=" + str(yamlConf["minimumPtToReachEndcap"]))
+  options.extraOptions.append(
+      "minimumPtInBarrelJetToMuon=" + str(yamlConf["minimumPtToReachBarrelJetToMuon"]))
+  options.extraOptions.append(
+      "minimumPtInEndcapJetToMuon=" + str(yamlConf["minimumPtToReachEndcapJetToMuon"]))
   options.extraOptions.append("barrelEta=" + str(yamlConf["barrelEta"]))
   options.extraOptions.append("detectorEta=" + str(yamlConf["detectorEta"]))
   options.extraOptions.append("genJetCollection=" + str(yamlConf["genJetCollection"]))
@@ -979,6 +990,126 @@ def runClosureTest2(yamlConf):
   #  ["_closureTest/l1tMuonGenMuonMatching_QCD_15_3000_NoPU_Phase1_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtL1TMuonDistribution", "Original L1TMuon"],
   ]
   cfg.saveFileName = "" + saveFolder + "/closureTest2.root"
+  
+  plotDistributionComparisonPlot(cfg)
+
+def runJetToMuonClosureTest1(yamlConf):
+
+  #Taking the matched gen muons
+  #Applying the quality selection on the corresponding l1tmu to get only the gen mu matched to a quality l1tmu
+  #Applying the smearing without any probabilistic exclusion to see if resolution curve are accurate enough
+
+  saveFolder=yamlConf["saveFolder"]
+  genObject="genJet"
+  triggerObject=yamlConf["triggerObject"]
+
+  moduleNameClosureTest1=yamlConf["moduleNameJetToMuonClosureTest1"]
+  componentNameClosureTest1=yamlConf["componentNameJetToMuonClosureTest1"]
+
+  componentClosureTest1=[getattr(import_module(
+      moduleNameClosureTest1), componentNameClosureTest1, None)]
+
+  if componentClosureTest1[0] is None:
+    print "Error: component does not exist"
+    raise ValueError('Component ' + componentNameClosureTest1 +
+                     " has not been declared in module " + moduleNameClosureTest1)
+
+  parser = create_parser()
+  (options,args) = parser.parse_args()
+  folderAndScriptName = [saveFolder, "muonTriggerRateEstimationWorkflow/plotTransverseMomentumDistributionForMuonClosureTest_FromMatchedPairs_cfg.py"]
+  convolutionFileName = "" + saveFolder + "/genJet_" + \
+      triggerObject + "_" + "convolutionCurves_JetToMuon/histograms.root"
+  options.components = split(componentClosureTest1)
+  for component in options.components:
+    component.splitFactor = 1
+
+  options.extraOptions.append("convolutionFileName=" + convolutionFileName)
+  options.extraOptions.append("binning=" + yamlConf["binningJet"])
+  options.extraOptions.append("quality=" + str(yamlConf["qualityThreshold"]))
+  options.extraOptions.append("minimumPtInBarrel=" + str(yamlConf["minimumPtToReachBarrelJetToMuon"]))
+  options.extraOptions.append("minimumPtInEndcap=" + str(yamlConf["minimumPtToReachEndcapJetToMuon"]))
+  options.extraOptions.append("detectorEta=" + str(yamlConf["detectorEta"]))
+  options.extraOptions.append("barrelEta=" + str(yamlConf["barrelEta"]))
+  options.extraOptions.append("triggerObjectName=" + triggerObject)
+  options.extraOptions.append("genObjectName=" + genObject)
+  options.extraOptions.append("deltaR2Matching=" + str(yamlConf["deltaR2MatchingJetToMuon"]))
+  
+  #options.nevents=300000
+  options.force = True
+  loop = main(options, folderAndScriptName, parser)
+  os.system("mv " + saveFolder + "/" + componentNameClosureTest1 + " " + saveFolder + "/" + componentNameClosureTest1 + "_ClosureTestPlots_QualityCutOnGenObject")
+  cfg = lambda x: 1
+  cfg.plots = [
+  #  #Files here
+    [saveFolder + "/" + componentNameClosureTest1 + "_ClosureTestPlots_QualityCutOnGenObject/histograms.root", "coarseBinnedPt" + triggerObject + "Distribution", "CMS " + triggerObject],
+    [saveFolder + "/" + componentNameClosureTest1 + "_ClosureTestPlots_QualityCutOnGenObject/histograms.root", "coarseBinnedSmearedPt" + genObject + "Distribution", "Sim " + triggerObject + " from matched " + genObject],
+  #  ["_closureTest/l1tMuonGenMuonMatching_QCD_15_3000_NoPU_Phase1_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtSimL1TMuonDistribution", "SimL1TMuon"],
+  #  ["_closureTest/l1tMuonGenMuonMatching_QCD_15_3000_NoPU_Phase1_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtL1TMuonDistribution", "Original L1TMuon"],
+  ]
+  cfg.saveFileName = "" + saveFolder + "/closureTest_JetToMuon_1.root"
+  
+  plotDistributionComparisonPlot(cfg)
+
+
+def runJetToMuonClosureTest2(yamlConf):
+
+  ##We take every gen mu.
+  ##We check if they fall into the detector
+  ##If they do, we apply the probabilistic selection and the smearing
+
+  saveFolder=yamlConf["saveFolder"]
+  genObject="genJet"
+  triggerObject=yamlConf["triggerObject"]
+
+  moduleNameClosureTest2=yamlConf["moduleNameJetToMuonClosureTest2"]
+  moduleNameClosureTest1=yamlConf["moduleNameJetToMuonClosureTest1"]
+  componentNameClosureTest2=yamlConf["componentNameJetToMuonClosureTest2"]
+  componentNameClosureTest1=yamlConf["componentNameJetToMuonClosureTest1"]
+
+  componentClosureTest2=[getattr(import_module(
+      moduleNameClosureTest2), componentNameClosureTest2, None)]
+
+  if componentClosureTest2[0] is None:
+    print "Error: component does not exist"
+    raise ValueError('Component ' + componentNameClosureTest2 +
+                     " has not been declared in module " + moduleNameClosureTest2)
+
+  parser = create_parser()
+  (options,args) = parser.parse_args()
+  folderAndScriptName = [saveFolder, "muonTriggerRateEstimationWorkflow/plotTransverseMomentumDistributionForMuonClosureTest_FromMatchedPairs_cfg.py"]
+  convolutionFileName = "" + saveFolder + "/genJet_" + \
+      triggerObject + "_" + "convolutionCurves_JetToMuon/histograms.root"
+  options.components = split(componentClosureTest2)
+  for component in options.components:
+    component.splitFactor = 1
+
+  options.extraOptions.append("convolutionFileName=" + convolutionFileName)
+  options.extraOptions.append("binning=" + yamlConf["binningJet"])
+  options.extraOptions.append("quality=" + str(yamlConf["qualityThreshold"]))
+  options.extraOptions.append("minimumPtInBarrel=" + str(yamlConf["minimumPtToReachBarrelJetToMuon"]))
+  options.extraOptions.append("minimumPtInEndcap=" + str(yamlConf["minimumPtToReachEndcapJetToMuon"]))
+  options.extraOptions.append("detectorEta=" + str(yamlConf["detectorEta"]))
+  options.extraOptions.append("barrelEta=" + str(yamlConf["barrelEta"]))
+  options.extraOptions.append("triggerObjectName=" + triggerObject)
+  options.extraOptions.append("genObjectName=" + genObject)
+  options.extraOptions.append("deltaR2Matching=" + str(yamlConf["deltaR2MatchingJetToMuon"]))
+  options.extraOptions.append("probabilityFile=" + "" + saveFolder + "/efficiencyFactors_JetToMuon.root")
+  options.extraOptions.append("probabilityHistogram=" + "efficiencyHistogram")
+  #options.nevents=300000
+  options.force = True
+  loop = main(options, folderAndScriptName, parser)
+  os.system("mv " + saveFolder + "/" + componentNameClosureTest2 + " " + saveFolder + "/" + componentNameClosureTest2 + "_ClosureTestPlots_AllGenMuons")
+  
+  cfg = lambda x: 1
+  cfg.plots = [
+  #  #Files here
+    [saveFolder + "/" + componentNameClosureTest1 + "_ClosureTestPlots_QualityCutOnGenObject/histograms.root", "coarseBinnedPt" + triggerObject + "Distribution", "CMS " + triggerObject],
+    [saveFolder + "/" + componentNameClosureTest2 + "_ClosureTestPlots_AllGenMuons/histograms.root",
+     "coarseBinnedSmearedPt" + genObject + "Distribution", "Sim " + triggerObject + " from every " + genObject],
+  #  ["_closureTest/l1tMuonGenMuonMatching_QCD_15_3000_NoPU_Phase1_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtSimL1TMuonDistribution", "SimL1TMuon"],
+  #  ["_closureTest/l1tMuonGenMuonMatching_QCD_15_3000_NoPU_Phase1_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtL1TMuonDistribution", "Original L1TMuon"],
+  ]
+  cfg.saveFileName = "" + saveFolder + "/closureTest_JetToMuon_2.root"
   
   plotDistributionComparisonPlot(cfg)
 
