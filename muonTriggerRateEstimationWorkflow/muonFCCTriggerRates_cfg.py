@@ -34,6 +34,8 @@ sampleName = "NeutrinoGun_NoTau_13TeV_DelphesCMS_JetPTMin_5"
 convolutionFileName = "_binnedDistributions/distributionWithQuality8/histograms.root"
 muonMinimumPtInBarrel = float(_heppyGlobalOptions["minimumPtInBarrel"])
 muonMinimumPtInEndcap = float(_heppyGlobalOptions["minimumPtInEndcap"])
+muonMinimumPtInBarrelJetToMuon = float(_heppyGlobalOptions["minimumPtInBarrelJetToMuon"])
+muonMinimumPtInEndcapJetToMuon = float(_heppyGlobalOptions["minimumPtInEndcapJetToMuon"])
 barrelEta = float(_heppyGlobalOptions["barrelEta"])
 
 muon_ptBins = [0, 1.5, 3, 5, 8, 11, 15, 20, 30, 40, 50, 70, 100, 140, 200]
@@ -41,6 +43,11 @@ muon_ptBins = [0, 1.5, 3, 5, 8, 11, 15, 20, 30, 40, 50, 70, 100, 140, 200]
 if "binning" in _heppyGlobalOptions:
   import ast
   muon_ptBins = ast.literal_eval(_heppyGlobalOptions["binning"])
+  jet_ptBins = ast.literal_eval(_heppyGlobalOptions["binning"])
+
+if "binningJet" in _heppyGlobalOptions:
+  import ast
+  jet_ptBins = ast.literal_eval(_heppyGlobalOptions["binningJet"])
 
 #if specified in sample, a specific set will be used, otherwise the full set will be employed
 if "sample" in _heppyGlobalOptions:
@@ -125,6 +132,16 @@ def genMuonInDetector(ptc):
     #Otherwise, check if is in endcap
       return (ptc.pt() > muonMinimumPtInEndcap)
 
+def genJetInDetector(ptc):
+  #Check if jet in detector
+  #Check if in barrel
+  if (abs(ptc.eta()) < barrelEta):
+    #It is OK if the momentum is high enough to not start spiralling
+    return (ptc.pt() > muonMinimumPtInBarrelJetToMuon)
+  elif (abs(ptc.eta()) < float(_heppyGlobalOptions["detectorEta"])):
+  #Otherwise, check if is in endcap
+    return (ptc.pt() > muonMinimumPtInBarrelJetToMuon)
+
 
 def muonInDetector(ptc):
   if (abs(ptc.eta()) < barrelEta):
@@ -143,6 +160,14 @@ goodMuonSelector = cfg.Analyzer(
   filter_func = genMuonInDetector 
 )
 
+goodJetSelector = cfg.Analyzer(
+  Selector,
+  'goodJetSelector',
+  output = 'good_gen_jets',
+  input_objects = 'gen_jets',
+  filter_func = genJetInDetector 
+)
+
 muonSmearer = cfg.Analyzer(
   Smearer,
   'muonSmearer',
@@ -159,7 +184,7 @@ muonSmearer = cfg.Analyzer(
 steps = []
 
 x = 0
-while x <= 100:
+while x <= 250:
   steps.append(x)
   x += 0.5
 
@@ -295,22 +320,14 @@ endcapMuonRate = cfg.Analyzer(
   normalise = False
 )
 
-leadingPtGenJetFinder = cfg.Analyzer(
-  LeadingObjectFinder ,
-  "leadingPtGenJetFinder",
-  input_collection = "gen_jets",
-  output_collection = "leading_gen_jet",
-  key_func = pt
-)
-
 smearJetToTriggerObject = cfg.Analyzer(
   Transformer,
   'transformJetToTriggerObject',
-  input_collection='leading_gen_jet',
-  output_collection = 'leading_fake_muon',
+  input_collection='good_gen_jets',
+  output_collection = 'fake_l1t_muon',
   convolution_file = convolutionFileNameJetToMuon,
   convolution_histogram_prefix = "objectPtDistributionBinnedInMatchedObject",
-  bins = muon_ptBins,
+  bins = jet_ptBins,
   object_x_range = (-300, 300),
   probability_file = jetToMuonProbabilityFile,
   probability_histogram = jetToMuonProbabilityHistogram
@@ -327,10 +344,10 @@ mergeMuonCollections = cfg.Analyzer(
 sequence = cfg.Sequence( [
   source,
   goodMuonSelector,
+  goodJetSelector,
   muonSmearer,
-  smearedSelector,
-  leadingPtGenJetFinder,
   smearJetToTriggerObject,
+  smearedSelector,
   mergeMuonCollections,
   leadingPtMuonFinder,
   barrelSelector,
