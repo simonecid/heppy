@@ -57,6 +57,8 @@ MinimumBias_14TeV_GenParticles_full_CMSSWTune_WPropagation_1MEvents = cfg.Compon
   nGenEvents=1000000
 )
 
+MinimumBias_14TeV_GenParticles_full_CMSSWTune_WPropagation_1MEvents.splitFactor = 4
+
 MinimumBias_14TeV_GenParticles_full_CMSSWTune_WPropagation_11MEvents = cfg.Component(
   'MinimumBias_14TeV_GenParticles_full_CMSSWTune_WPropagation_11MEvents',
   files = [
