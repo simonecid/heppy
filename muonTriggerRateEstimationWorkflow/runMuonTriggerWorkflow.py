@@ -715,6 +715,147 @@ def normaliseMinimumBiasRate(yamlConf):
   pileupRatePlotFile.Close()
   nonNormalisedRatePlotFile.Close()
 
+def normaliseMinimumBiasRate2(yamlConf):
+
+  saveFolder = yamlConf["saveFolder"]
+  genObject = yamlConf["genObject"]
+  triggerObject = yamlConf["triggerObject"]
+  bunchCrossingFrequency = yamlConf["bunchCrossingFrequency"]
+  componentNameRatePlots = yamlConf["componentNameRatePlots"]
+  averagePileUp = yamlConf["averagePileUp"]
+  interactionFrequency = averagePileUp * bunchCrossingFrequency
+  print "CREATING THE NON-NORMALISED PLOTS"
+
+  moduleNameRatePlots = yamlConf["moduleNameRatePlots"]
+  componentNameRatePlots = yamlConf["componentNameRatePlots"]
+
+  componentRatePlots = [getattr(import_module(
+      moduleNameRatePlots), componentNameRatePlots, None)]
+
+  if componentRatePlots[0] is None:
+    print "Error:  component does not exist"
+    raise ValueError('Component ' + componentNameRatePlots +
+                     " has not been declared in module " + moduleNameRatePlots)
+
+  numberOfDelphesEvents = -1
+  if "numberOfDelphesEvents" in yamlConf:
+    numberOfDelphesEvents = yamlConf["numberOfDelphesEvents"] * \
+        componentRatePlots[0].splitFactor
+
+  if (numberOfDelphesEvents < 0) or (numberOfDelphesEvents > componentRatePlots[0].nGenEvents):
+    numberOfDelphesEvents = componentRatePlots[0].nGenEvents
+
+  print "OBTAINING THE RATE IN THE LINEAR SCALING APPROXIMATION"
+
+  nonNormalisedRatePlotFile = TFile("" + saveFolder + "/" + genObject + "_" + triggerObject +
+                                    "_" + componentNameRatePlots + "_RatePlots_NotNormalised.root")
+  totalRateHist = nonNormalisedRatePlotFile.Get(
+      "mergedTotalSimL1TMuonRate")
+  barrelRateHist = nonNormalisedRatePlotFile.Get("mergedBarrelSimL1TMuonRate")
+  endcapRateHist = nonNormalisedRatePlotFile.Get("mergedEndcapSimL1TMuonRate")
+
+  totalRateHist.Scale(interactionFrequency / numberOfDelphesEvents)
+  barrelRateHist.Scale(interactionFrequency / numberOfDelphesEvents)
+  endcapRateHist.Scale(interactionFrequency / numberOfDelphesEvents)
+
+  totalRateHist.GetXaxis().SetTitle("p_{t}")
+  totalRateHist.GetYaxis().SetTitle("Rate [Hz]")
+  barrelRateHist.GetXaxis().SetTitle("p_{t}")
+  barrelRateHist.GetYaxis().SetTitle("Rate [Hz]")
+  endcapRateHist.GetXaxis().SetTitle("p_{t}")
+  endcapRateHist.GetYaxis().SetTitle("Rate [Hz]")
+
+  normalisedRatePlotFile = TFile(
+      "" + saveFolder + "/" + componentNameRatePlots + "_RatePlots_Normalised.root", "RECREATE")
+  normalisedRatePlotFile.cd()
+  totalRateHist.Write()
+  barrelRateHist.Write()
+  endcapRateHist.Write()
+  normalisedRatePlotFile.Close()
+  nonNormalisedRatePlotFile.Close()
+
+  print "NORMALISING THE RATE PLOT TO OBTAIN THE TRIGGER PASS PROBABILITY FOR MINBIAS AND PU140 EVENTS"
+
+  nonNormalisedRatePlotFile = TFile("" + saveFolder + "/" + genObject + "_" + triggerObject +
+                                    "_" + componentNameRatePlots + "_RatePlots_NotNormalised.root")
+  passProbabilityFile = TFile("" + saveFolder + "/" + componentNameRatePlots +
+                              "_RatePlots_TriggerPassProbability.root", "RECREATE")
+  totalRateHist = nonNormalisedRatePlotFile.Get(
+      "mergedTotalSimL1TMuonRate")
+  ppPassProbabilityHistogram = totalRateHist.Clone(
+      "ppPassProbabilityHistogram")
+  ppPassProbabilityHistogram.Scale(1. / numberOfDelphesEvents)
+  passProbabilityFile.cd()
+  eventPassProbabilityHistogram = ppPassProbabilityHistogram.Clone(
+      "eventPassProbabilityHistogram")
+
+  for x in xrange(1, eventPassProbabilityHistogram.GetNbinsX() + 1):
+    ppPassProbability = ppPassProbabilityHistogram.GetBinContent(x)
+    eventPassProbability = 1. - (1. - ppPassProbability)**averagePileUp
+    eventPassProbabilityHistogram.SetBinContent(x, eventPassProbability)
+
+  probabilityRatioHistogram = eventPassProbabilityHistogram.Clone(
+      "probabilityRatioHistogram")
+  probabilityRatioHistogram.Divide(ppPassProbabilityHistogram)
+
+  probabilityRatioHistogram.Write()
+  ppPassProbabilityHistogram.Write()
+  eventPassProbabilityHistogram.Write()
+
+  nonNormalisedRatePlotFile.Close()
+  passProbabilityFile.Close()
+
+  print "COMPUTING THE TRIGGER PASS PROBABIITY IN LINEAR SCALING APPROXIMATION AND WITH FULL FORMULA"
+
+  passProbabilityFile = TFile(
+      "" + saveFolder + "/" + componentNameRatePlots + "_RatePlots_TriggerPassProbability.root")
+  ppPassProbabilityHistogram = passProbabilityFile.Get(
+      "ppPassProbabilityHistogram")
+  eventPassProbabilityHistogram = passProbabilityFile.Get(
+      "eventPassProbabilityHistogram")
+
+  linearPURatePlot = ppPassProbabilityHistogram.Clone("linearPURatePlot")
+  fullPURatePlot = eventPassProbabilityHistogram.Clone("fullPURatePlot")
+  linearPURatePlot.Scale(interactionFrequency)
+  fullPURatePlot.Scale(bunchCrossingFrequency)
+
+  fullPURatePlotErrors = TGraphErrors(fullPURatePlot)
+  fullPURatePlotErrors.SetName("fullPURatePlotErrors")
+
+  #Estimating the error. The idea is to compute the base rate unit and use it to get the stat error.
+
+  baseRate = (1. * interactionFrequency) / (1. * numberOfDelphesEvents)
+
+  nonNormalisedRatePlotFile = TFile("" + saveFolder + "/" + genObject + "_" +
+                                    triggerObject + "_" + componentNameRatePlots + "_RatePlots_NotNormalised.root")
+  numberOfEventInDetector = nonNormalisedRatePlotFile.Get(
+      "mergedTotalSimL1TMuonRate")
+
+  for index in xrange(0, fullPURatePlotErrors.GetN()):
+    # Getting the number of pu 0
+    numberOfEventsInBin = numberOfEventInDetector.GetBinContent(index + 1)
+    # Computing the fractional error
+    if numberOfEventsInBin > 0:
+      relativeError = sqrt(1. * numberOfEventsInBin) / \
+          (1. * numberOfEventsInBin)
+    else:
+      relativeError = 0
+
+    # Reapplying the same fractional error to my rate plot
+    #error = relativeError * fullPURatePlotErrors.GetY()[index]
+    error = averagePileUp * (1. - (1. * numberOfEventsInBin)/(1. * numberOfDelphesEvents)) ** (averagePileUp - 1.) * (1./numberOfDelphesEvents) * bunchCrossingFrequency * sqrt(1. * numberOfEventsInBin)
+    # Trasferring the error to the plot
+    fullPURatePlotErrors.GetEY()[index] = error
+
+  pileupRatePlotFile = TFile("" + saveFolder + "/" + componentNameRatePlots +
+                             "_RatePlots_PU" + str(averagePileUp) + "RatePlot.root", "RECREATE")
+  pileupRatePlotFile.cd()
+  linearPURatePlot.Write()
+  fullPURatePlot.Write()
+  fullPURatePlotErrors.Write()
+  pileupRatePlotFile.Close()
+  nonNormalisedRatePlotFile.Close()
+
 def normalisePileUpRate(yamlConf):
 
   saveFolder=yamlConf["saveFolder"]
