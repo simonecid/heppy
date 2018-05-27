@@ -1,4 +1,4 @@
-saveFolder: "_muonTriggerStudies_NewJetToMuon/_jetToMuonStudy_noJetToMuon"
+saveFolder: "_muonTriggerStudies_NewJetToMuon/_jetToMuonStudy_ptCut20_muonContribution_updatedErrors/"
 
 binning: "[0.8, 1.1, 1.4, 1.7, 2.5, 3, 3.5, 4, 5, 5.5, 6, 7, 8, 11, 15, 20, 30, 40, 50, 70, 100, 140, 200]"
 binningJet: "[0.8, 1.1, 1.4, 1.7, 2.5, 3, 3.5, 3.9, 5, 5.5, 6, 7, 8, 11, 15, 20, 30, 40, 50, 70, 100, 140, 200, 250, 300, 350, 400]"
@@ -12,8 +12,8 @@ deltaEtaMatching: 0.3
 deltaEtaMatchingJetToMuon: 100
 minimumPtToReachBarrel: 2.5 # Some cut
 minimumPtToReachEndcap: 0.8 # disabling endcap with high pt threshold
-minimumPtToReachBarrelJetToMuon: 1000 # Some cut
-minimumPtToReachEndcapJetToMuon: 1000 # disabling endcap with high pt threshold
+minimumPtToReachBarrelJetToMuon: 20 # Some cut
+minimumPtToReachEndcapJetToMuon: 20 # disabling endcap with high pt threshold
 genObject: "genMuon"
 triggerObject: "l1tMuon"
 genJetCollection: "nonPropagatedGenJets"
@@ -68,12 +68,12 @@ steps:
 #    function: obtainEfficiencies
 #  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
 #    function: obtainEfficienciesJetToMuon
+#  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
+#    function: computeNonNormalisedRatePlots
+#  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
+#    function: mergeNonNormalisedRatePlots
   - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-    function: computeNonNormalisedRatePlots
-  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-    function: mergeNonNormalisedRatePlots
-  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-    function: normaliseMinimumBiasRate
+    function: normaliseMinimumBiasRate2
 #  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
 #    function: runClosureTest1
 #  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
