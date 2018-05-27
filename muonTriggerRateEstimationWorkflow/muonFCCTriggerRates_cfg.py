@@ -21,7 +21,9 @@ from heppy.analyzers.triggerrates.Histogrammer import Histogrammer
 from heppy.analyzers.triggerrates.CollectionMerger import CollectionMerger
 from heppy.analyzers.triggerrates.LeadingQuantityHistogrammer import LeadingQuantityHistogrammer
 from heppy.analyzers.triggerrates.LeadingObjectFinder import LeadingObjectFinder  
-
+from heppy.particles.fcc.particle import Particle
+from heppy.particles.fcc.jet import Jet
+from heppy.analyzers.Matcher import Matcher
 
 
 #logging.shutdown()
@@ -197,6 +199,13 @@ tfile_service_1 = cfg.Service(
   option='recreate'
 )
 
+tfile_service_2 = cfg.Service(
+  TFileService,
+  'objectDistributionsFile',
+  fname='objectDistributions.root',
+  option='recreate'
+)
+
 l1tMuonRate = cfg.Analyzer(
   RatePlotProducerPileUp,
   instance_label = 'l1tMuonRate',
@@ -204,7 +213,7 @@ l1tMuonRate = cfg.Analyzer(
   plot_name = 'simL1TMuonRate',
   plot_title = 'Muon trigger rate',
   zerobias_rate = mySettings.bunchCrossingFrequency,
-  input_objects = 'l1tMuons',
+  input_objects='leading_l1tMuon_fromGenMuon',
   bins = steps,
   yscale = mySettings.yScale,
   normalise = False
@@ -256,8 +265,8 @@ muonSimL1TMuonTree = cfg.Analyzer(
 leadingPtMuonFinder = cfg.Analyzer(
   LeadingObjectFinder ,
   "leadingPtMuonFinder",
-  input_collection = 'l1tMuonsFromGenMuons',
-  output_collection = 'leading_l1tMuonFromGenMuon',
+  input_collection = 'l1tMuons',
+  output_collection = 'leading_l1tMuon',
   key_func = pt
 )
 
@@ -271,7 +280,7 @@ barrelSelector = cfg.Analyzer(
   Selector,
   'barrelSelector',
   output = 'leading_muon_barrel',
-  input_objects = 'leading_l1tMuonFromGenMuon',
+  input_objects = 'leading_l1tMuon',
   filter_func = barrelCut 
 )
 
@@ -279,19 +288,46 @@ endcapSelector = cfg.Analyzer(
   Selector,
   'endcapSelector',
   output = 'leading_muon_endcap',
-  input_objects = 'leading_l1tMuonFromGenMuon',
+  input_objects = 'leading_l1tMuon',
   filter_func = endcapCut
 )
 
-def isSmeared(ptc):
+def hasMatch(ptc):
   return ptc.match is not None
+
+def hasNotMatch(ptc):
+  return ptc.match is None
+
+
+def isL1TMuonFromGenMuon(ptc):
+  return isinstance(ptc, Particle)
+
+
+def isL1TMuonFromGenJet(ptc):
+  return isinstance(ptc, Jet)
 
 smearedSelector = cfg.Analyzer(
   Selector,
   'smearedSelector',
   output = 'smeared_good_muons',
   input_objects = 'good_muons',
-  filter_func = isSmeared
+  filter_func = hasMatch
+)
+
+l1tMuonFromGenMuonSelector = cfg.Analyzer(
+  Selector,
+  'l1tMuonFromGenMuonSelector',
+  output = 'leading_l1tMuon_fromGenMuon',
+  input_objects = 'leading_l1tMuon',
+  filter_func = isL1TMuonFromGenMuon
+)
+
+l1tMuonFromGenJetSelector = cfg.Analyzer(
+  Selector,
+  'l1tMuonFromGenJetSelector',
+  output = 'leading_l1tMuon_fromGenJet',
+  input_objects = 'leading_l1tMuon',
+  filter_func = isL1TMuonFromGenJet
 )
 
 barrelMuonRate = cfg.Analyzer(
@@ -335,9 +371,54 @@ smearJetToTriggerObject = cfg.Analyzer(
 
 mergeMuonCollections = cfg.Analyzer(
     CollectionMerger,
-    input_collections = ["l1tMuonsFromGenMuons", "leading_fake_muon"],
+    input_collections = ["l1tMuonsFromGenMuons", "fake_l1t_muon"],
+    #input_collections = ["l1tMuonsFromGenMuons"],
     output_collection = 'l1tMuons'
-  )
+)
+
+l1tMuonFromGenMuonsPtDistribution = cfg.Analyzer(
+  Histogrammer,
+  file_label = 'objectDistributionsFile',
+  histo_name = 'l1tMuonFromGenMuonsPtDistribution',
+  histo_title = '#mu^{L1T} from #mu^{gen} p_{t} distribution',
+  min = 0,
+  max = 300,
+  nbins = 600,
+  input_objects = 'l1tMuonsFromGenMuons',
+  value_func = pt,
+  x_label = "pt [GeV]",
+  y_label = "\# events"
+)
+
+l1tMuonFromGenJetsPtDistribution = cfg.Analyzer(
+  Histogrammer,
+  file_label = 'objectDistributionsFile',
+  histo_name = 'l1tMuonFromGenJetsPtDistribution',
+  histo_title = '#mu^{L1T} from gen-jet p_{t} distribution',
+  min = 0,
+  max = 300,
+  nbins = 600,
+  input_objects = 'fake_l1t_muon',
+  value_func = pt,
+  x_label = "pt [GeV]",
+  y_label = "\# events"
+)
+
+matchGenJetToGenMuon = cfg.Analyzer(
+    Matcher,
+    instance_label='matchGenJetToGenMuon',
+    delta_r=0.4,
+    particles='gen_jets',
+    match_particles='muons',
+)
+
+genJetWithoutGenMuonSelector = cfg.Analyzer(
+  Selector,
+  'genJetWithoutGenMuonSelector',
+  output = 'good_gen_jets',
+  input_objects = 'good_gen_jets',
+  filter_func = hasMatch
+)
 
 # definition of a sequence of analyzers,
 # the analyzers will process each event in this order
@@ -345,6 +426,8 @@ sequence = cfg.Sequence( [
   source,
   goodMuonSelector,
   goodJetSelector,
+  matchGenJetToGenMuon,
+  genJetWithoutGenMuonSelector,
   muonSmearer,
   smearJetToTriggerObject,
   smearedSelector,
@@ -354,17 +437,21 @@ sequence = cfg.Sequence( [
   endcapSelector,
   muonLeadingPtDistribution,
   muonSimL1TMuonTree,
+  l1tMuonFromGenMuonSelector,
+  l1tMuonFromGenJetSelector,
   l1tMuonRate,
   muonRate,
   barrelMuonRate,
   endcapMuonRate,
+  l1tMuonFromGenMuonsPtDistribution,
+  l1tMuonFromGenJetsPtDistribution,
 ] )
 
 
 config = cfg.Config(
   components = selectedComponents,
   sequence = sequence,
-  services = [tfile_service_1],
+  services=[tfile_service_1, tfile_service_2],
   events_class = Events
 )
 
