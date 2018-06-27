@@ -258,6 +258,7 @@ def computeNonNormalisedRatePlots(yamlConf):
   options.extraOptions.append("minimumPtInBarrel=" + str(yamlConf["minimumPtToReachBarrel"]))
   options.extraOptions.append("minimumPtInEndcap=" + str(yamlConf["minimumPtToReachEndcap"]))
   options.extraOptions.append("minimumPtInForward=" + str(yamlConf["minimumPtToReachForward"]))
+  options.extraOptions.append("minimumTriggerPt=" + str(yamlConf["minimumTriggerPt"]))
   options.extraOptions.append("barrelEta=" + str(yamlConf["barrelEta"]))
   options.extraOptions.append("endcapEta=" + str(yamlConf["endcapEta"]))
   options.extraOptions.append("detectorEta=" + str(yamlConf["detectorEta"]))
@@ -284,6 +285,107 @@ def computeNonNormalisedRatePlots(yamlConf):
     options.extraOptions.append(
         "useOnlyLeadingGenJet=False")
   options.force = True
+
+  if "numberOfDelphesEvents" in yamlConf:
+    options.nevents = yamlConf["numberOfDelphesEvents"]
+
+  loop = main(options, folderAndScriptName, parser)
+  
+  if ("copyToLocal" in yamlConf) and (yamlConf["copyToLocal"] is True):
+    os.system("rm -r " + saveFolder + "/__localSourceFiles/")
+
+def computeNonNormalisedMHTRatePlots(yamlConf):
+  saveFolder = yamlConf["saveFolder"]
+  genObject = yamlConf["genObject"]
+  triggerObject = yamlConf["triggerObject"]
+
+  moduleNameRatePlots = yamlConf["moduleNameRatePlots"]
+  componentNameRatePlots = yamlConf["componentNameRatePlots"]
+  print "CREATING THE NON-NORMALISED PLOTS (MHT VERSION)"
+
+
+  componentRatePlots = [getattr(import_module(
+    moduleNameRatePlots), componentNameRatePlots, None)]
+  
+  if componentRatePlots[0] is None:
+    print "Error:  component does not exist"
+    raise ValueError('Component ' + componentNameRatePlots +
+                     " has not been declared in module " + moduleNameRatePlots)
+
+  # Getting the job index from the heppy extra options
+  if "job" in yamlConf:
+    job = int(yamlConf["job"])
+  else:
+    job = None
+  
+  componentChunksArray = split(componentRatePlots)
+  for component in componentChunksArray:
+    component.splitFactor = 1
+
+  if job is not None:
+    componentChunksArray = [componentChunksArray[job]]
+
+  if ("copyToLocal" in yamlConf) and (yamlConf["copyToLocal"] is True):
+    os.mkdir(saveFolder + "/__localSourceFiles")
+    for comp in componentChunksArray:
+
+      hdfsCompliantFileList = [filePath.replace("/hdfs", "") for filePath in comp.files]
+
+      print "COPYING FILES LOCALLY"
+      for filePath in hdfsCompliantFileList:
+        os.system("/usr/bin/hdfs dfs -copyToLocal " + filePath +
+                  "  " + saveFolder + "/__localSourceFiles/")
+      
+      heppyLocalFileList = os.listdir(saveFolder + "/__localSourceFiles/")
+      heppyLocalFileList = [saveFolder + "/__localSourceFiles/" + filePath for filePath in heppyLocalFileList]
+      comp.files = heppyLocalFileList  
+
+
+  parser = create_parser()
+  (options,args) = parser.parse_args()
+  folderAndScriptName = [saveFolder, "genObjectToL1TObjectConvolutionCurves/computeMHTTriggerRate_cfg.py"]
+  convolutionFileName = saveFolder + "/" + genObject + "_" +  triggerObject + "_" + "convolutionCurves/histograms.root"
+  options.components = componentChunksArray
+
+  #options.extraOptions.append("sample=" + yamlConf["sampleRateEstimation"])
+  options.extraOptions.append("convolutionFileName=" + convolutionFileName)
+  options.extraOptions.append("binning=" + yamlConf["binning"])
+  options.extraOptions.append("probabilityFile=" + "" + yamlConf["saveFolder"] + "/efficiencyFactors.root")
+  options.extraOptions.append("probabilityHistogram=efficiencyHistogram")
+  options.extraOptions.append("minimumPtInBarrel=" + str(yamlConf["minimumPtToReachBarrel"]))
+  options.extraOptions.append("minimumPtInEndcap=" + str(yamlConf["minimumPtToReachEndcap"]))
+  options.extraOptions.append("minimumPtInForward=" + str(yamlConf["minimumPtToReachForward"]))
+  options.extraOptions.append("minimumTriggerPt=" + str(yamlConf["minimumTriggerPt"]))
+  options.extraOptions.append("barrelEta=" + str(yamlConf["barrelEta"]))
+  options.extraOptions.append("endcapEta=" + str(yamlConf["endcapEta"]))
+  options.extraOptions.append("detectorEta=" + str(yamlConf["detectorEta"]))
+  options.extraOptions.append("triggerObjectName=" + str(yamlConf["triggerObject"]))
+  options.extraOptions.append(
+      "genJetCollection=" + str(yamlConf["genJetCollection"]))
+  if "momentumShift" in yamlConf:
+    options.extraOptions.append(
+        "momentumShift=" + str(yamlConf["momentumShift"]))
+  else:
+    options.extraOptions.append(
+        "momentumShift=0")
+  if "usePtTransformer" in yamlConf:
+    options.extraOptions.append(
+        "usePtTransformer=" + str(yamlConf["usePtTransformer"]))
+  else:
+    options.extraOptions.append(
+        "usePtTransformer=False")
+  
+  if "useOnlyLeadingGenJet" in yamlConf:
+    options.extraOptions.append(
+        "useOnlyLeadingGenJet=" + str(yamlConf["useOnlyLeadingGenJet"]))
+  else:
+    options.extraOptions.append(
+        "useOnlyLeadingGenJet=False")
+  options.force = True
+
+  if "computeHTRate" in yamlConf:
+    options.extraOptions.append(
+        "computeHTRate=" + str(yamlConf["computeHTRate"]))
 
   if "numberOfDelphesEvents" in yamlConf:
     options.nevents = yamlConf["numberOfDelphesEvents"]
@@ -373,7 +475,7 @@ def normaliseRatePlots(yamlConf):
                      " has not been declared in module " + moduleNameRatePlots)
 
   print "OBTAINING THE RATE IN THE LINEAR SCALING APPROXIMATION"
-
+  
   saveFolder = yamlConf["saveFolder"]
   genObject = yamlConf["genObject"]
   triggerObject = yamlConf["triggerObject"]
@@ -389,40 +491,40 @@ def normaliseRatePlots(yamlConf):
     componentRatePlots = [getattr(import_module(
       moduleNameRatePlots), componentNameRatePlots, None)]
     numberOfDelphesEvents = componentRatePlots[0].nGenEvents
-  
-  
-  nonNormalisedRatePlotFile = TFile("" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + componentNameRatePlots + "_RatePlots_NotNormalised.root")
-  totalRateHist = nonNormalisedRatePlotFile.Get("mergedTotalSimL1TObjectTriggerRate")
-  barrelRateHist = nonNormalisedRatePlotFile.Get("mergedBarrelSimL1TObjectRate")
-  endcapRateHist = nonNormalisedRatePlotFile.Get("mergedEndcapSimL1TObjectRate")
-  forwardRateHist = nonNormalisedRatePlotFile.Get("mergedForwardSimL1TObjectRate")
-  
-  totalRateHist.Scale(interactionFrequency/numberOfDelphesEvents)
-  barrelRateHist.Scale(interactionFrequency/numberOfDelphesEvents)
-  endcapRateHist.Scale(interactionFrequency/numberOfDelphesEvents)
-  forwardRateHist.Scale(interactionFrequency/numberOfDelphesEvents)
-  
-  totalRateHist.GetXaxis().SetTitle("p_{t}")
-  totalRateHist.GetXaxis().SetRangeUser(5, 200)
-  totalRateHist.GetYaxis().SetTitle("Rate [Hz]")
-  barrelRateHist.GetXaxis().SetTitle("p_{t}")
-  barrelRateHist.GetXaxis().SetRangeUser(5, 200)
-  barrelRateHist.GetYaxis().SetTitle("Rate [Hz]")
-  endcapRateHist.GetXaxis().SetTitle("p_{t}")
-  endcapRateHist.GetXaxis().SetRangeUser(5, 200)
-  endcapRateHist.GetYaxis().SetTitle("Rate [Hz]")
-  forwardRateHist.GetXaxis().SetTitle("p_{t}")
-  forwardRateHist.GetXaxis().SetRangeUser(5, 200)
-  forwardRateHist.GetYaxis().SetTitle("Rate [Hz]")
-  
-  normalisedRatePlotFile = TFile("" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + componentNameRatePlots + "_RatePlots_Normalised.root", "RECREATE")
-  normalisedRatePlotFile.cd()
-  totalRateHist.Write()
-  barrelRateHist.Write()
-  endcapRateHist.Write()
-  forwardRateHist.Write()
-  normalisedRatePlotFile.Close()
-  nonNormalisedRatePlotFile.Close()
+  #
+  #
+  #nonNormalisedRatePlotFile = TFile("" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + componentNameRatePlots + "_RatePlots_NotNormalised.root")
+  #totalRateHist = nonNormalisedRatePlotFile.Get("mergedTotalSimL1TObjectTriggerRate")
+  #barrelRateHist = nonNormalisedRatePlotFile.Get("mergedBarrelSimL1TObjectRate")
+  #endcapRateHist = nonNormalisedRatePlotFile.Get("mergedEndcapSimL1TObjectRate")
+  #forwardRateHist = nonNormalisedRatePlotFile.Get("mergedForwardSimL1TObjectRate")
+  #
+  #totalRateHist.Scale(interactionFrequency/numberOfDelphesEvents)
+  #barrelRateHist.Scale(interactionFrequency/numberOfDelphesEvents)
+  #endcapRateHist.Scale(interactionFrequency/numberOfDelphesEvents)
+  #forwardRateHist.Scale(interactionFrequency/numberOfDelphesEvents)
+  #
+  #totalRateHist.GetXaxis().SetTitle("p_{t}")
+  #totalRateHist.GetXaxis().SetRangeUser(5, 200)
+  #totalRateHist.GetYaxis().SetTitle("Rate [Hz]")
+  #barrelRateHist.GetXaxis().SetTitle("p_{t}")
+  #barrelRateHist.GetXaxis().SetRangeUser(5, 200)
+  #barrelRateHist.GetYaxis().SetTitle("Rate [Hz]")
+  #endcapRateHist.GetXaxis().SetTitle("p_{t}")
+  #endcapRateHist.GetXaxis().SetRangeUser(5, 200)
+  #endcapRateHist.GetYaxis().SetTitle("Rate [Hz]")
+  #forwardRateHist.GetXaxis().SetTitle("p_{t}")
+  #forwardRateHist.GetXaxis().SetRangeUser(5, 200)
+  #forwardRateHist.GetYaxis().SetTitle("Rate [Hz]")
+  #
+  #normalisedRatePlotFile = TFile("" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + componentNameRatePlots + "_RatePlots_Normalised.root", "RECREATE")
+  #normalisedRatePlotFile.cd()
+  #totalRateHist.Write()
+  #barrelRateHist.Write()
+  #endcapRateHist.Write()
+  #forwardRateHist.Write()
+  #normalisedRatePlotFile.Close()
+  #nonNormalisedRatePlotFile.Close()
   
   print "NORMALISING THE RATE PLOT TO OBTAIN THE TRIGGER PASS PROBABILITY FOR MINBIAS AND PU140 EVENTS"
   
@@ -432,6 +534,10 @@ def normaliseRatePlots(yamlConf):
   barrelRateHist = nonNormalisedRatePlotFile.Get("mergedBarrelSimL1TObjectRate")
   endcapRateHist = nonNormalisedRatePlotFile.Get("mergedEndcapSimL1TObjectRate")
   forwardRateHist = nonNormalisedRatePlotFile.Get("mergedForwardSimL1TObjectRate")
+  totalRateHist.Sumw2()
+  barrelRateHist.Sumw2()
+  endcapRateHist.Sumw2()
+  forwardRateHist.Sumw2()
   #ppPassProbabilityHistogram = TGraphErrors(totalRateHist)
   #ppPassProbabilityHistogramInBarrel = TGraphErrors(totalRateHist)
   #ppPassProbabilityHistogramInEndcap = TGraphErrors(totalRateHist)
@@ -897,6 +1003,12 @@ def buildRateComparisonPlot(yamlConf):
   print "CREATING RATIO PLOT FOR CMS VS DELPHES RATE"
   
   cfg = lambda x: 1
+  cfg.xRange = (0, 500)
+  cfg.xAxisLabel = "p_{t} [GeV]"
+  cfg.yAxisLabel = "Rate [Hz]"
+  cfg.yRange = (1e2, 4e7)
+  cfg.yRangeRatio = (0, 3)
+  cfg.logY = True
   cfg.plots = [
   #  #Files here
       ["" + saveFolder + "/" + componentNameRateClosureTest + \
@@ -929,6 +1041,87 @@ def buildRateComparisonPlotFromHDFS(yamlConf):
           "_RatePlots_PU" + str(averagePileUp) + "RatePlot_Scaled.root"
     
 
+  print "CREATING RATIO PLOT FOR CMS VS DELPHES RATE"
+
+  def cfg(x): return 1
+  cfg.plots = [
+      #  #Files here
+      ["/hdfs/FCC-hh/" + componentNameRateClosureTest + \
+       "_CMSTriggerRate/ratePlots.root",
+       "triggerRate", "CMS " + triggerObject],
+      [ratePlotFilePath, "linearPURatePlot", "Sim " + triggerObject]
+  ]
+  cfg.saveFileName = "" + saveFolder + "/rateClosureTest.root"
+  #cfg.xRange = (0, 50)
+  cfg.xRange = (0, 500)
+  cfg.xAxisLabel = "p_{t} [GeV]"
+  cfg.yAxisLabel = "Rate [Hz]"
+  cfg.yRange = (1e2, 4e7)
+  cfg.yRangeRatio = (0, 3)
+  cfg.logY = True
+  if "simplifiedRatioPlotXRangeBinning" in yamlConf and "scalingFactorsPlotName" not in yamlConf:
+    cfg.simplifiedRatioPlotXRangeBinning = simplifiedRatioPlotXRangeBinning
+  plotDistributionComparisonPlot(cfg)
+
+def buildRateComparisonPlotUsingLinearExtrapolation(yamlConf):
+  saveFolder = yamlConf["saveFolder"]
+  genObject = yamlConf["genObject"]
+  triggerObject = yamlConf["triggerObject"]
+  averagePileUp = yamlConf["averagePileUp"]
+  bunchCrossingFrequency = yamlConf["bunchCrossingFrequency"]
+  moduleNameRateClosureTest = yamlConf["moduleNameRateClosureTest"]
+  componentNameRateClosureTest = yamlConf["componentNameRateClosureTest"]
+  componentNameRatePlots = yamlConf["componentNameRatePlots"]
+
+  if "simplifiedRatioPlotXRangeBinning" in yamlConf:
+    simplifiedRatioPlotXRangeBinning = array(
+        "f", ast.literal_eval(yamlConf["simplifiedRatioPlotXRangeBinning"]))
+
+  ratePlotFilePath = "" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + componentNameRatePlots + \
+      "_RatePlots_PU" + str(averagePileUp) + "RatePlot.root"
+  if "scalingFactorsPlotName" in yamlConf:
+    ratePlotFilePath = "" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + componentNameRatePlots + \
+        "_RatePlots_PU" + str(averagePileUp) + "RatePlot_Scaled.root"
+  
+  print "CREATING RATIO PLOT FOR CMS VS DELPHES RATE"
+  
+  cfg = lambda x: 1
+  cfg.xRange = (0, 500)
+  cfg.xAxisLabel = "p_{t} [GeV]"
+  cfg.yAxisLabel = "Rate [Hz]"
+  cfg.yRange = (1e2, 4e7)
+  cfg.yRangeRatio = (0, 3)
+  cfg.logY = True
+  cfg.plots = [
+  #  #Files here
+      ["" + saveFolder + "/" + componentNameRateClosureTest + \
+       "_CMSTriggerRate/ratePlots.root", "triggerRate", "CMS " + triggerObject],
+      [ratePlotFilePath, "linearPURatePlot", "Sim " + triggerObject]
+  ]
+  if "simplifiedRatioPlotXRangeBinning" in yamlConf and "scalingFactorsPlotName" not in yamlConf:
+    cfg.simplifiedRatioPlotXRangeBinning = simplifiedRatioPlotXRangeBinning
+  cfg.saveFileName = "" + saveFolder + "/rateClosureTest.root"
+  plotDistributionComparisonPlot(cfg)
+
+
+def buildRateComparisonPlotFromHDFSUsingLinearExtrapolation(yamlConf):
+  saveFolder = yamlConf["saveFolder"]
+  genObject = yamlConf["genObject"]
+  triggerObject = yamlConf["triggerObject"]
+  averagePileUp = yamlConf["averagePileUp"]
+  bunchCrossingFrequency = yamlConf["bunchCrossingFrequency"]
+  moduleNameRateClosureTest = yamlConf["moduleNameRateClosureTest"]
+  componentNameRateClosureTest = yamlConf["componentNameRateClosureTest"]
+  componentNameRatePlots = yamlConf["componentNameRatePlots"]
+  if "simplifiedRatioPlotXRangeBinning" in yamlConf:
+    simplifiedRatioPlotXRangeBinning = array("f", ast.literal_eval(yamlConf["simplifiedRatioPlotXRangeBinning"]))
+
+  ratePlotFilePath = "" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + componentNameRatePlots + \
+          "_RatePlots_PU" + str(averagePileUp) + "RatePlot.root"
+  if "scalingFactorsPlotName" in yamlConf:
+    ratePlotFilePath = "" + saveFolder + "/" + genObject + "_" + triggerObject + "_" + componentNameRatePlots + \
+          "_RatePlots_PU" + str(averagePileUp) + "RatePlot_Scaled.root"
+    
   print "CREATING RATIO PLOT FOR CMS VS DELPHES RATE"
 
   def cfg(x): return 1
