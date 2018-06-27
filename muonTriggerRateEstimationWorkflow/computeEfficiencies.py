@@ -66,6 +66,10 @@ def computeEfficiencies(**kwargs):
     # There are two different pt threshold based on the muon eta
     # If in barrel and the momentum is higher than the threshold, muon is good
     isGoodMuon = False
+    
+    if (genObj_pt < 0): # Rejecting non-matches
+      continue
+      
     if ((abs(genObj_eta) < barrelEta) and (genObj_pt > minPtInBarrel)):
       isGoodMuon = True
     # If not in barrel check if it is in the endcap acceptance
