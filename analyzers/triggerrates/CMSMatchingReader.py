@@ -49,9 +49,14 @@ class CMSMatchingReader(Analyzer):
     tree = event.input
     if hasattr(self.cfg_comp, "gen_object"):
 #      gen_object.id = getattr(tree, self.cfg_comp.gen_object + "_id")
-      gen_object_pt = getattr(tree, self.cfg_comp.gen_object + "_pt")
-      gen_object_eta = getattr(tree, self.cfg_comp.gen_object + "_eta")
-      gen_object_phi = getattr(tree, self.cfg_comp.gen_object + "_phi")
+      if hasattr(tree, self.cfg_comp.gen_object):
+        gen_object_pt = getattr(tree, self.cfg_comp.gen_object)
+        gen_object_eta = 0
+        gen_object_phi = 0
+      else: 
+        gen_object_pt = getattr(tree, self.cfg_comp.gen_object + "_pt")
+        gen_object_eta = getattr(tree, self.cfg_comp.gen_object + "_eta")
+        gen_object_phi = getattr(tree, self.cfg_comp.gen_object + "_phi")
       gen_object = Particle()
       gen_object._tlv = TLorentzVector()
       gen_object._pid = 0
@@ -60,10 +65,15 @@ class CMSMatchingReader(Analyzer):
       gen_object._tlv.SetPtEtaPhiE(gen_object_pt, gen_object_eta, gen_object_phi, 0)
       event.gen_objects = [gen_object]
     if hasattr(self.cfg_comp, "trigger_object"):
+      if hasattr(tree, self.cfg_comp.gen_object):
+        trigger_object_pt = getattr(tree, self.cfg_comp.trigger_object, None)
+        trigger_object_eta = 0
+        trigger_object_phi = 0
+      else: 
+        trigger_object_pt = getattr(tree, self.cfg_comp.trigger_object + "_pt", None)
+        trigger_object_eta = getattr(tree, self.cfg_comp.trigger_object + "_eta", None)
+        trigger_object_phi = getattr(tree, self.cfg_comp.trigger_object + "_phi", None)
 #      trigger_object.id = getattr(tree, self.cfg_comp.trigger_object + "_id")
-      trigger_object_pt = getattr(tree, self.cfg_comp.trigger_object + "_pt", None)
-      trigger_object_eta = getattr(tree, self.cfg_comp.trigger_object + "_eta", None)
-      trigger_object_phi = getattr(tree, self.cfg_comp.trigger_object + "_phi", None)
       if trigger_object_pt is not None:
         trigger_object = Particle()
         trigger_object._tlv = TLorentzVector()
