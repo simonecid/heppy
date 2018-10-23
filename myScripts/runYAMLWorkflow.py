@@ -13,7 +13,11 @@ def runYAMLWorkflow(yamlConf):
   saveFolder = yamlConf["saveFolder"]
 
   os.system("mkdir -p " + saveFolder)
-  os.system("cp " + yamlConf["ConfigFile"] + " " + saveFolder)
+  #os.system("cp " + yamlConf["ConfigFile"] + " " + saveFolder)
+  saveTo = saveFolder + "/" + os.path.split(yamlConf["ConfigFile"])[1]
+  with open(saveTo, 'w+') as dest_yaml_file:
+    dump = yaml.dump(yamlConf, default_flow_style = False, allow_unicode = True, encoding = None)
+    dest_yaml_file.write( dump )
 
   steps = yamlConf["steps"]
   for step in steps:
@@ -43,7 +47,7 @@ if __name__ == "__main__":
 
   options, other = parser.parse_args()
 
-  # Getting the config file from the hreppy extra options
+  # Getting the config file from the heppy extra options
   for opt in options.extraOptions:
         if "=" in opt:
             (key, val) = opt.split("=", 1)
@@ -55,4 +59,6 @@ if __name__ == "__main__":
         if "=" in opt:
             (key, val) = opt.split("=", 1)
             yamlConf[key] = val
+
+  
   runYAMLWorkflow(yamlConf)
