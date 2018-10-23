@@ -4,6 +4,7 @@ from heppy.framework.analyzer import Analyzer
 from heppy.statistics.tree import Tree
 from ROOT import TFile
 from heppy.analyzers.ntuple import *
+from math import sqrt
 
 class MatchedParticlesTreeProducer(Analyzer):
   '''Analyser creating a tree containing info about two matched particles.
@@ -42,7 +43,6 @@ class MatchedParticlesTreeProducer(Analyzer):
     bookParticle(self.tree, self.cfg_ana.particle_name)
     bookParticle(self.tree, self.cfg_ana.matched_particle_name)
     var(self.tree, 'dr')
-    var(self.tree, 'number_of_matched_' + self.cfg_ana.particle_name)
   def process(self, event):
     '''Process the event.
       
@@ -54,7 +54,7 @@ class MatchedParticlesTreeProducer(Analyzer):
     for ptc in particle_collection:
       fillParticle(self.tree, self.cfg_ana.particle_name, ptc)
       fillParticle(self.tree, self.cfg_ana.matched_particle_name, ptc.match)
-      fill(self.tree, 'dr', ptc.dr)
-      fill(self.tree, 'number_of_matched_' + self.cfg_ana.particle_name, len(ptc.match.matches))
+      dr = getattr(ptc, "dr", sqrt(getattr(ptc, "deltaR2")))
+      fill(self.tree, 'dr', dr)
       self.tree.tree.Fill()
       
