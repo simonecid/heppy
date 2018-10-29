@@ -1,0 +1,21 @@
+saveFolder: "<<SETME>>"
+
+binning: "[3, 4, 5, 7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 80, 90, 100, 110, 125, 150, 175, 200, 250, 300, 400, 500]"
+qualityThreshold: 0
+barrelEta: 1.44 # 0-1.44 barrel
+endcapEta: 3 #1.44 - 3 endcap
+detectorEta: 5.05 # 3 - 1.44 forward
+magneticField: 3.8 # Tesla
+deltaR2Matching: 0.09 #dR = 0.3
+minimumPtToReachBarrel: "<<SETME>>" # Some cut
+minimumPtToReachEndcap: "<<SETME>>" # disabling endcap with high pt threshold
+minimumPtToReachForward: "<<SETME>>" # killing forward
+genObject: "genJet"
+triggerObject: "l1tJet"
+
+moduleNameConvolutionCurves: "<<SETME>>"
+componentNameConvolutionCurves: "<<SETME>>"
+
+steps: 
+- module: heppy.jetMETStudies.genJetToL1TObjectWorkflow
+  function: computeConvolutionCurves
