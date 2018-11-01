@@ -78,11 +78,17 @@ tfile_service_1 = cfg.Service(
 def deltaPt(ptc):
   return ptc.pt() - ptc.match.pt()
 
+def deltaPtRatio(ptc):
+  return (ptc.pt() - ptc.match.pt())/ptc.match.pt()
+
 def pt(ptc):
   return ptc.pt()
 
 def deltaEta (ptc):
   return ptc.eta() - ptc.match.eta()
+
+def eta (ptc):
+  return ptc.eta()
 
 def deltaPhi (ptc):
   return ptc.phi() - ptc.match.phi()
@@ -153,11 +159,29 @@ deltaPtDistributionBinnedInMatchedObject = cfg.Analyzer(
   y_label = "# events",
 )
 
+deltaPtRatioDistributionBinnedInMatchedObject = cfg.Analyzer(
+  MatchedObjectBinnedDistributions,
+  instance_label = 'deltaPtRatioDistributionBinnedInMatchedObject',
+  histo_name = 'deltaPtRatioDistributionBinnedInMatchedObject',
+  histo_title = '#frac{#Delta p_{t}}{p_{t}^{' + matchedObjectName +  '}} distribution binned in p^{' + matchedObjectName +'}_{t}',
+  matched_collection = 'trigger_objects',
+  binning = ptBins,
+  nbins = 1600,
+  min = -400,
+  max = 400,
+  file_label = "tfile1",
+  plot_func = deltaPtRatio,
+  bin_func = pt,
+  log_y = False,
+  x_label = "p_{t}^{" + objectName + "} - p_{t}^{" + matchedObjectName + "} [GeV]",
+  y_label = "# events",
+)
+
 deltaEtaDistributionBinnedInMatchedObject = cfg.Analyzer(
   MatchedObjectBinnedDistributions,
   instance_label = 'deltaEtaDistributionBinnedInMatchedObject',
   histo_name = 'deltaEtaDistributionBinnedInMatchedObject',
-  histo_title = '#eta^{' + objectName + '} distribution binned in p^{' + matchedObjectName +'}_{t}',
+  histo_title = '#Delta #eta distribution binned in p^{' + matchedObjectName +'}_{t}',
   matched_collection = 'trigger_objects',
   binning = ptBins,
   nbins = 400,
@@ -168,6 +192,24 @@ deltaEtaDistributionBinnedInMatchedObject = cfg.Analyzer(
   bin_func = pt,
   log_y = False,
   x_label = "#eta^{" + objectName + "} - #eta^{" + matchedObjectName + "}",
+  y_label = "# events"
+)
+
+etaDistributionBinnedInMatchedObject = cfg.Analyzer(
+  MatchedObjectBinnedDistributions,
+  instance_label = 'etaDistributionBinnedInMatchedObject',
+  histo_name = 'etaDistributionBinnedInMatchedObject',
+  histo_title = '#eta^{' + objectName + '} distribution binned in p^{' + matchedObjectName +'}_{t}',
+  matched_collection = 'trigger_objects',
+  binning = ptBins,
+  nbins = 400,
+  min = -2,
+  max = +2,
+  file_label = "tfile1",
+  plot_func = eta,
+  bin_func = pt,
+  log_y = False,
+  x_label = "#eta^{" + objectName + "}",
   y_label = "# events"
 )
 
@@ -206,9 +248,10 @@ sequence = cfg.Sequence( [
   source,
   goodGenObjectFilter,
   qualityFilter,
+  etaDistributionBinnedInMatchedObject,
   deltaEtaDistributionBinnedInMatchedObject,
   deltaPhiDistributionBinnedInMatchedObject,
-  deltaPtDistributionBinnedInMatchedObject,
+  deltaPtRatioDistributionBinnedInMatchedObject,
   genJetL1TObjectTree
 ] )
 
