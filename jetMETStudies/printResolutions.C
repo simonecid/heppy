@@ -1,15 +1,15 @@
 void printResolutions() 
 {
 
-  TFile* _file_MatchAK4GenJetWithAK4JetFromPfCandidates_Barrel = new TFile("jetMETStudies/PU200_Puppi/MatchAK4GenJetWithAK4JetFromPfCandidates_Barrel_PU200_Puppi/genJet_l1tJet_convolutionCurves/histograms.root");
-  TFile* _file_MatchAK4GenJetWithAK4JetFromPfClusters_Barrel = new TFile("jetMETStudies/PU200_Puppi/MatchAK4GenJetWithAK4JetFromPfClusters_Barrel_PU200_Puppi/genJet_l1tJet_convolutionCurves/histograms.root");
-  TFile* _file_MatchAK4GenJetWithPhase1L1TJetFromPfCandidates_Barrel = new TFile("jetMETStudies/PU200_Puppi/MatchAK4GenJetWithPhase1L1TJetFromPfCandidates_Barrel_PU200_Puppi/genJet_l1tJet_convolutionCurves/histograms.root");
-  TFile* _file_MatchAK4GenJetWithPhase1L1TJetFromPfClusters_Barrel = new TFile("jetMETStudies/PU200_Puppi/MatchAK4GenJetWithPhase1L1TJetFromPfClusters_Barrel_PU200_Puppi/genJet_l1tJet_convolutionCurves/histograms.root");
+  TFile* _file_MatchAK4GenJetWithAK4JetFromPfCandidates_Barrel = new TFile("jetMETStudies/PU200_PF_PUSubtraction/MatchAK4GenJetWithAK4JetFromPfCandidates_Barrel_PU200_PF_PUSubtraction/genJet_l1tJet_convolutionCurves/histograms.root");
+  TFile* _file_MatchAK4GenJetWithAK4JetFromPfClusters_Barrel = new TFile("jetMETStudies/PU200_PF_PUSubtraction/MatchAK4GenJetWithAK4JetFromPfClusters_Barrel_PU200_PF_PUSubtraction/genJet_l1tJet_convolutionCurves/histograms.root");
+  TFile* _file_MatchAK4GenJetWithPhase1L1TJetFromPfCandidates_Barrel = new TFile("jetMETStudies/PU200_PF_PUSubtraction/MatchAK4GenJetWithPhase1L1TJetFromPfCandidates_Barrel_PU200_PF_PUSubtraction/genJet_l1tJet_convolutionCurves/histograms.root");
+  TFile* _file_MatchAK4GenJetWithPhase1L1TJetFromPfClusters_Barrel = new TFile("jetMETStudies/PU200_PF_PUSubtraction/MatchAK4GenJetWithPhase1L1TJetFromPfClusters_Barrel_PU200_PF_PUSubtraction/genJet_l1tJet_convolutionCurves/histograms.root");
 
-  TFile* _file_MatchAK4GenJetWithAK4JetFromPfCandidates_Endcap = new TFile("jetMETStudies/PU200_Puppi/MatchAK4GenJetWithAK4JetFromPfCandidates_Endcap_PU200_Puppi/genJet_l1tJet_convolutionCurves/histograms.root");
-  TFile* _file_MatchAK4GenJetWithAK4JetFromPfClusters_Endcap = new TFile("jetMETStudies/PU200_Puppi/MatchAK4GenJetWithAK4JetFromPfClusters_Endcap_PU200_Puppi/genJet_l1tJet_convolutionCurves/histograms.root");
-  TFile* _file_MatchAK4GenJetWithPhase1L1TJetFromPfCandidates_Endcap = new TFile("jetMETStudies/PU200_Puppi/MatchAK4GenJetWithPhase1L1TJetFromPfCandidates_Endcap_PU200_Puppi/genJet_l1tJet_convolutionCurves/histograms.root");
-  TFile* _file_MatchAK4GenJetWithPhase1L1TJetFromPfClusters_Endcap = new TFile("jetMETStudies/PU200_Puppi/MatchAK4GenJetWithPhase1L1TJetFromPfClusters_Endcap_PU200_Puppi/genJet_l1tJet_convolutionCurves/histograms.root");
+  TFile* _file_MatchAK4GenJetWithAK4JetFromPfCandidates_Endcap = new TFile("jetMETStudies/PU200_PF_PUSubtraction/MatchAK4GenJetWithAK4JetFromPfCandidates_Endcap_PU200_PF_PUSubtraction/genJet_l1tJet_convolutionCurves/histograms.root");
+  TFile* _file_MatchAK4GenJetWithAK4JetFromPfClusters_Endcap = new TFile("jetMETStudies/PU200_PF_PUSubtraction/MatchAK4GenJetWithAK4JetFromPfClusters_Endcap_PU200_PF_PUSubtraction/genJet_l1tJet_convolutionCurves/histograms.root");
+  TFile* _file_MatchAK4GenJetWithPhase1L1TJetFromPfCandidates_Endcap = new TFile("jetMETStudies/PU200_PF_PUSubtraction/MatchAK4GenJetWithPhase1L1TJetFromPfCandidates_Endcap_PU200_PF_PUSubtraction/genJet_l1tJet_convolutionCurves/histograms.root");
+  TFile* _file_MatchAK4GenJetWithPhase1L1TJetFromPfClusters_Endcap = new TFile("jetMETStudies/PU200_PF_PUSubtraction/MatchAK4GenJetWithPhase1L1TJetFromPfClusters_Endcap_PU200_PF_PUSubtraction/genJet_l1tJet_convolutionCurves/histograms.root");
 
   std::vector<std::string> _histogramPrefix;
   _histogramPrefix.push_back("deltaPtDistributionBinnedInMatchedObject");
@@ -37,14 +37,14 @@ void printResolutions()
   _titles.push_back("AK4GenJet With Phase1L1TJetFromPfClusters - Endcap");
 
   std::vector<std::string> _outputFilenames;
-  _outputFilenames.push_back("jetMETStudies/PU200_Puppi/MatchAK4GenJetWithAK4JetFromPfCandidates_Barrel");
-  _outputFilenames.push_back("jetMETStudies/PU200_Puppi/MatchAK4GenJetWithAK4JetFromPfClusters_Barrel");
-  _outputFilenames.push_back("jetMETStudies/PU200_Puppi/MatchAK4GenJetWithPhase1L1TJetFromPfCandidates_Barrel");
-  _outputFilenames.push_back("jetMETStudies/PU200_Puppi/MatchAK4GenJetWithPhase1L1TJetFromPfClusters_Barrel");
-  _outputFilenames.push_back("jetMETStudies/PU200_Puppi/MatchAK4GenJetWithAK4JetFromPfCandidates_Endcap");
-  _outputFilenames.push_back("jetMETStudies/PU200_Puppi/MatchAK4GenJetWithAK4JetFromPfClusters_Endcap");
-  _outputFilenames.push_back("jetMETStudies/PU200_Puppi/MatchAK4GenJetWithPhase1L1TJetFromPfCandidates_Endcap");
-  _outputFilenames.push_back("jetMETStudies/PU200_Puppi/MatchAK4GenJetWithPhase1L1TJetFromPfClusters_Endcap");
+  _outputFilenames.push_back("jetMETStudies/PU200_PF_PUSubtraction/MatchAK4GenJetWithAK4JetFromPfCandidates_Barrel");
+  _outputFilenames.push_back("jetMETStudies/PU200_PF_PUSubtraction/MatchAK4GenJetWithAK4JetFromPfClusters_Barrel");
+  _outputFilenames.push_back("jetMETStudies/PU200_PF_PUSubtraction/MatchAK4GenJetWithPhase1L1TJetFromPfCandidates_Barrel");
+  _outputFilenames.push_back("jetMETStudies/PU200_PF_PUSubtraction/MatchAK4GenJetWithPhase1L1TJetFromPfClusters_Barrel");
+  _outputFilenames.push_back("jetMETStudies/PU200_PF_PUSubtraction/MatchAK4GenJetWithAK4JetFromPfCandidates_Endcap");
+  _outputFilenames.push_back("jetMETStudies/PU200_PF_PUSubtraction/MatchAK4GenJetWithAK4JetFromPfClusters_Endcap");
+  _outputFilenames.push_back("jetMETStudies/PU200_PF_PUSubtraction/MatchAK4GenJetWithPhase1L1TJetFromPfCandidates_Endcap");
+  _outputFilenames.push_back("jetMETStudies/PU200_PF_PUSubtraction/MatchAK4GenJetWithPhase1L1TJetFromPfClusters_Endcap");
 
   
   for (TFile* _file: _files) {
@@ -67,7 +67,7 @@ void printResolutions()
   
   TCanvas* c1 = new TCanvas();
 
-  c1 -> SetLogy();
+  //c1 -> SetLogy();
 
   /////////////////////////////////////////////////// 
   /////////////////////////////////////////////////// 
@@ -136,10 +136,10 @@ void printResolutions()
   _titles.push_back("Phase1L1TJetFromPfClusters Barrel Vs Endcap 100 < p_{t}^{gen-jet} < 110");
 
   _outputFilenames.clear();
-  _outputFilenames.push_back("jetMETStudies/PU200_Puppi/AK4_PfCandidates_resolution_Barrel_vs_Endcap");
-  _outputFilenames.push_back("jetMETStudies/PU200_Puppi/AK4_PfClusters_resolution_Barrel_vs_Endcap");
-  _outputFilenames.push_back("jetMETStudies/PU200_Puppi/Phase1L1TJet_PfCandidates_resolution_Barrel_vs_Endcap");
-  _outputFilenames.push_back("jetMETStudies/PU200_Puppi/Phase1L1TJet_PfClusters_resolution_Barrel_vs_Endcap");
+  _outputFilenames.push_back("jetMETStudies/PU200_PF_PUSubtraction/AK4_PfCandidates_resolution_Barrel_vs_Endcap");
+  _outputFilenames.push_back("jetMETStudies/PU200_PF_PUSubtraction/AK4_PfClusters_resolution_Barrel_vs_Endcap");
+  _outputFilenames.push_back("jetMETStudies/PU200_PF_PUSubtraction/Phase1L1TJet_PfCandidates_resolution_Barrel_vs_Endcap");
+  _outputFilenames.push_back("jetMETStudies/PU200_PF_PUSubtraction/Phase1L1TJet_PfClusters_resolution_Barrel_vs_Endcap");
 
   for (const std::string & _prefix: _histogramPrefix) {
     for (int x = 0; x < _files.size()/2; x++) {
@@ -202,10 +202,10 @@ void printResolutions()
   _titles.push_back("PfClusters AK4 vs Phase-1 100 < p_{t}^{gen-jet} < 110 - Endcap");
 
   _outputFilenames.clear();
-  _outputFilenames.push_back("jetMETStudies/PU200_Puppi/AK4_vs_Phase1_PfCandidates_resolution_Barrel");
-  _outputFilenames.push_back("jetMETStudies/PU200_Puppi/AK4_vs_Phase1_PfClusters_resolution_Barrel");
-  _outputFilenames.push_back("jetMETStudies/PU200_Puppi/AK4_vs_Phase1_PfCandidates_resolution_Endcap");
-  _outputFilenames.push_back("jetMETStudies/PU200_Puppi/AK4_vs_Phase1_PfClusters_resolution_Endcap");
+  _outputFilenames.push_back("jetMETStudies/PU200_PF_PUSubtraction/AK4_vs_Phase1_PfCandidates_resolution_Barrel");
+  _outputFilenames.push_back("jetMETStudies/PU200_PF_PUSubtraction/AK4_vs_Phase1_PfClusters_resolution_Barrel");
+  _outputFilenames.push_back("jetMETStudies/PU200_PF_PUSubtraction/AK4_vs_Phase1_PfCandidates_resolution_Endcap");
+  _outputFilenames.push_back("jetMETStudies/PU200_PF_PUSubtraction/AK4_vs_Phase1_PfClusters_resolution_Endcap");
 
   for (const std::string & _prefix: _histogramPrefix) {
     for (int x = 0; x < _files.size()/2; x++) {
