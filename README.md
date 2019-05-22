@@ -21,9 +21,14 @@ Support & feedback: [https://github.com/cbernet]()
 New CONDOR batch :
 -----------------
 submit example :
-heppy_batch.py -o Outdir FCChhAnalyses/FCChh/tttt/analysis.py -b 'run_condor.sh --bulk Outdir -f microcentury' --nevent 1000
--> in this example, CONDOR will look at all directories (could be Chunk too) in Outdir (--bulk Outdir) and run jobs for all of them into a single job. For example here, 10 jobs are coming from FCChhAnalyses/FCChh/tttt/analysis.py. And each job wii be run on 1000 evenmts.
 
+```
+heppy_batch.py -o Outdir FCChhAnalyses/FCChh/tttt/analysis.py -b 'run_condor.sh --bulk Outdir -f microcentury' --nevent 1000
+```
+
+In this example, CONDOR will look at all directories (could be Chunk too) in `Outdir` (`--bulk Outdir`) and run jobs for all of them into a single job. For example here, 10 jobs are coming from `FCChhAnalyses/FCChh/tttt/analysis.py`. And each job will be run on 1000 evenmts.
+
+```
 [djamin@lxplus037 heppy]$ condor_q
 
 
@@ -33,10 +38,12 @@ djamin CMD: batchScri   3/5  15:05      4      6      _     10 594302.1-9
 
 
 run_condor.sh has been added in the new script/ directory
+```
 
-Instead of flavour (-f), it is possible to use maxruntime (unit = minute) : -t 60
+Instead of flavour (`-f`), it is possible to use `maxruntime` (unit = minute) : `-t 60`
 
 Predefined timing jobs are done from flavour :
+
  20 mins -> espresso
  1h -> microcentury
  2h -> longlunch
@@ -46,12 +53,19 @@ Predefined timing jobs are done from flavour :
  1w -> nextweek
 
 If job fails, can resubmit each failed job with :
+
+```
 heppy_check.py Outdir/*Chunk* -b 'run_condor.sh -f microcentury'
+```
 
 FCC actually have their own quota. To use it, you need to get yourself added to the egroup:
  
+```
 fcc-experiments-comp
+```
  
 Then you can add the following to your submit file:
  
+```
 +AccountingGroup = "group_u_FCC.local_gen"
+```
