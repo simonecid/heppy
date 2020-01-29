@@ -283,19 +283,19 @@ if __name__ == "__main__":
     #Files here
     # ["MinBiasDistribution_13TeV_DelphesCMS_CMSJets_GenJetPTDistribution/genJetPtDistribution_Normalised.root", "ptSimL1TMuonDistribution", "MinBias"],
     #["_closureTest/l1tMuonGenMuonMatching_SingleMu_FlatPt_8to100_QualityCut_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtSimL1TMuonDistribution", "SimL1TMuon"],
-    ["_MinBias_CMSSWTune/distributions_fromcmssw.root",
-     "genJetPtDistribution_CMSSW", "CMSSW"],
-    ["_MinBias_CMSSWTune/distributions_fromdelphes.root",
-     "genJetPtDistribution_Delphes", "DELPHES"],
+    ["/six/sb17498/FCC/heppy/_objectDistributions/QCD_Pt_15to3000_Tune4C_14TeV_OnlyGenParticleClassification_JetPTMin_3_CMSSWtune_500kevents/distributions_compare.root",
+     "genJetPtDistribution", "delphes"],
+    ["/six/sb17498/FCC/heppy/_objectDistributions/QCD_Pt_15to3000_Tune4C_14TeV_OnlyGenParticleClassification_JetPTMin_3_CMSSWtune_500kevents/distributions_compare.root",
+     "b", "CMSSW"],
     #["_closureTest/l1tMuonGenMuonMatching_SingleMu_FlatPt_8to100_QualityCut_WQualityBranch_L1TMuon_vs_SimL1TMuon_PtDistribution/histograms.root", "coarseBinnedPtL1TMuonDistribution", "Original L1TMuon"],
   ]
   cfg.saveFileName = "comparisonResult.root"
   cfg.draw = True
   #cfg.xRange = (0, 50)
-  cfg.xRange = (0, 500)
+  cfg.xRange = (0, 2000)
   cfg.xAxisLabel = "p_{t} [GeV]"
   cfg.yAxisLabel = "# events"
-  cfg.yRange = (2e-1, 1e6)
+  cfg.yRange = (2e-1, 1e7)
   cfg.yRangeRatio = (0, 2)
   cfg.logY = True
   

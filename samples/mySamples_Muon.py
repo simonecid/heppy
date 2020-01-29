@@ -522,5 +522,15 @@ l1tMuonGenMuonMatching_SingleMu_FlatPt_8to100_QualityCut_WQualityBranch_WPropaga
   trigger_object = "l1tMuon"
 )
 
+l1tMuonGenMuonMatching_SingleMu_FlatPt_2to100_QualityCut_WQualityBranch_WPropagation = cfg.MCComponent(
+    'l1tMuonGenMuonMatching_SingleMu_FlatPt_2to100_QualityCut_WQualityBranch_WPropagation',
+  tree_name="MatchL1TMuonWithGenLevelMuons/matchedL1TMuonGenParticleTree",
+  files = [
+    "/hdfs/FCC-hh/l1tMuonGenMuonMatching_SingleMu_FlatPt_2to100_QualityCut4_WPropagation/MatchL1TMuonWithGenLevelMuons_SingleMu.root"
+  ],
+  gen_object = "genParticle",
+  trigger_object = "l1tMuon"
+)
+
 cmsMatching_QCD_15_3000_CrossMatch_genJet_l1tMuon.splitFactor = 5
 cmsMatching_QCD_15_3000_CrossMatch_LeadingJetSample_genJet_l1tMuon.splitFactor = 4

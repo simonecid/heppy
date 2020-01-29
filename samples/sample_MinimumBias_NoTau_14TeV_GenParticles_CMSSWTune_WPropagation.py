@@ -617,4 +617,4 @@ MinimumBias_14TeV_GenParticles_full_CMSSWTune_WPropagation_11MEvents = cfg.Compo
 )
 
 
-MinimumBias_14TeV_GenParticles_full_CMSSWTune_WPropagation_11MEvents.splitFactor = 4
+MinimumBias_14TeV_GenParticles_full_CMSSWTune_WPropagation_11MEvents.splitFactor = 10

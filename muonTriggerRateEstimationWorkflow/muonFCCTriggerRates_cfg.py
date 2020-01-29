@@ -417,7 +417,7 @@ genJetWithoutGenMuonSelector = cfg.Analyzer(
   'genJetWithoutGenMuonSelector',
   output = 'good_gen_jets',
   input_objects = 'good_gen_jets',
-  filter_func = hasMatch
+  filter_func = hasNotMatch
 )
 
 # definition of a sequence of analyzers,

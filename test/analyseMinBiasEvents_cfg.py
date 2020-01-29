@@ -1,7 +1,6 @@
 import os
 import copy
 import heppy.framework.config as cfg
-from heppy.samples.sample_MinimumBias_NoTau_100TeV_GenParticles_CMSSWTune_WPropagation import MinimumBias_100TeV_GenParticles_full_CMSSWTune_WPropagation_1MEvents
 import logging
 from ROOT import gSystem
 #from heppy.framework.chain import Chain as Events
@@ -19,7 +18,10 @@ from heppy.analyzers.fcc.Reader import Reader
 from heppy.analyzers.triggerrates.ObjectFinder import ObjectFinder
 from heppy.analyzers.triggerrates.HistogrammerCumulative import HistogrammerCumulative
 from heppy.analyzers.triggerrates.ParticleTreeProducer import ParticleTreeProducer
+from heppy.samples.sample_MinimumBias_NoTau_14TeV_GenParticles_CMSSWTune_WPropagation import MinimumBias_14TeV_GenParticles_full_CMSSWTune_WPropagation_1MEvents
 from heppy.framework.heppy_loop import _heppyGlobalOptions
+#from heppy.samples.sample_NeutrinoGun_PU140_14TeV_OnlyGenParticleClassification_JetPTMin_3_CMSSWTune import NeutrinoGun_PU140_14TeV_OnlyGenParticleClassification_JetPTMin_3_CMSSWTune
+from heppy.samples.sample_QCD_Pt_15to3000_Tune4C_14TeV_OnlyGenParticleClassification_JetPTMin_3_CMSSWtune import QCD_Pt_15to3000_Tune4C_14TeV_OnlyGenParticleClassification_JetPTMin_3_CMSSWtune_Pythia_8_223_v2_400kevents
 from math import sqrt
 
 gSystem.Load("libdatamodelDict")
@@ -52,8 +54,47 @@ sampleName = "cmsMatching_SingleNeutrinoPU140_GenJet"
 #  ]
 
 #sample = globals()[sampleName]
+
+#MBtest = cfg.MCComponent(
+#  'testpileup_PU140_14TeV_300events',
+#  files=["/six/sb17498/FCC/FCCSW/testpileup_PU140_14TeV_300events.root"]
+#)
+
+MBtest = cfg.MCComponent(
+  'testpileup_PU140_14TeV_12events_2',
+  files=["/hdfs/FCC-hh/NeutrinoGun_PU140_14TeV_OnlyGenParticleClassification_CMSSWTune/events_NeutrinoGun_PU140_NoTau_100events_14TeV_CMSSWTune_3662892.0.root"]
+)
+
+#MBtest = cfg.MCComponent(
+#  'testpileup_MB_14TeV_50kevents_fromHEPMC',
+#  files=["/six/sb17498/FCC/FCCSW/testpileup_MB_14TeV_50000events_fromhepmc.root"]
+#)
+
+#MBtest = cfg.MCComponent(
+#    'testpileup_PU0_14TeV_7000events',
+#  files=["/six/sb17498/FCC/FCCSW/testpileup_PU0_14TeV_7000events.root"]
+#)
+
+#MBtest = cfg.MCComponent(
+#  'MBSample_14TeV',
+#  files=[
+#    "/hdfs/FCC-hh/MinimumBias_14TeV_OnlyGenParticleClassification_JetPTMin_3_CMSSWtune_WPropagation/events_MinimumBias_14TeV_OnlyGenParticleClassification_JetPTMin_3_CMSSWtune_PropagatedJets_3572668.0.root",
+#    "/hdfs/FCC-hh/MinimumBias_14TeV_OnlyGenParticleClassification_JetPTMin_3_CMSSWtune_WPropagation/events_MinimumBias_14TeV_OnlyGenParticleClassification_JetPTMin_3_CMSSWtune_PropagatedJets_3572668.10.root",
+#    "/hdfs/FCC-hh/MinimumBias_14TeV_OnlyGenParticleClassification_JetPTMin_3_CMSSWtune_WPropagation/events_MinimumBias_14TeV_OnlyGenParticleClassification_JetPTMin_3_CMSSWtune_PropagatedJets_3572668.11.root",
+#  ],
+#)
+
+
+#selectedComponents = [
+#    NeutrinoGun_PU140_14TeV_OnlyGenParticleClassification_JetPTMin_3_CMSSWTune
+#]
+
+#selectedComponents = [
+#  MinimumBias_14TeV_GenParticles_full_CMSSWTune_WPropagation_1MEvents
+#]
+
 selectedComponents = [
-    MinimumBias_100TeV_GenParticles_full_CMSSWTune_WPropagation_1MEvents
+    QCD_Pt_15to3000_Tune4C_14TeV_OnlyGenParticleClassification_JetPTMin_3_CMSSWtune_Pythia_8_223_v2_400kevents
 ]
 
 ''' Returns pt'''

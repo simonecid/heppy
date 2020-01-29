@@ -69,6 +69,10 @@ class Transformer  (Analyzer):
       jetEta = jet.eta()
       jetPhi = jet.phi()
       jetE = jet.e()
+
+      jet.match = None
+
+
       factorIndex = bisect_right(self.cfg_ana.bins, jetPt) - 1
       if factorIndex >= len(self.cfg_ana.bins) - 1:
         jet.match = None

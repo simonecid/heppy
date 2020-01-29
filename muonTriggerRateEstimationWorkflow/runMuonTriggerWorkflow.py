@@ -225,6 +225,8 @@ def computeConvolutionCurvesJetToMuon(yamlConf):
   loop = main(options, folderAndScriptName, parser)
   os.system("rm -r " + saveFolder + "/" + genObject +
             "_" + triggerObject + "_" + "convolutionCurves_JetToMuon")
+  os.system("mkdir " + saveFolder + "/" + genObject +
+            "_" + triggerObject + "_" + "convolutionCurves_JetToMuon")
   if componentConvolutionCurvesJetToMuon[0].splitFactor > 1:
     os.system("hadd " + saveFolder + "/" + genObject + "_" + triggerObject + "_" + "convolutionCurves_JetToMuon/histograms.root " +
               saveFolder + "/" + componentNameConvolutionCurvesJetToMuon + "_Chunk*/histograms.root")
