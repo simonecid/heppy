@@ -52,7 +52,7 @@ def computeConvolutionCurvesHighPtMuons(yamlConf):
   parser = create_parser()
   (options, args) = parser.parse_args()
   folderAndScriptName = [
-      saveFolder, "muonTriggerRateEstimationWorkflow/binnedDistributionsCMS_L1TMuon_cfg.py"]
+      saveFolder, "heppy/muonTriggerRateEstimationWorkflow/binnedDistributionsCMS_L1TMuon_cfg.py"]
   options.components = split(componentConvolutionCurvesHighPt)
   for component in options.components:
     component.splitFactor = 1
@@ -123,7 +123,7 @@ def computeConvolutionCurvesLowPtMuons(yamlConf):
   parser = create_parser()
   (options, args) = parser.parse_args()
   folderAndScriptName = [
-      saveFolder, "muonTriggerRateEstimationWorkflow/binnedDistributionsCMS_L1TMuon_cfg.py"]
+      saveFolder, "heppy/muonTriggerRateEstimationWorkflow/binnedDistributionsCMS_L1TMuon_cfg.py"]
   options.components = split(componentConvolutionCurvesLowPt)
   for component in options.components:
     component.splitFactor = 1
@@ -195,7 +195,7 @@ def computeConvolutionCurvesJetToMuon(yamlConf):
   parser = create_parser()
   (options, args) = parser.parse_args()
   folderAndScriptName = [
-      saveFolder, "muonTriggerRateEstimationWorkflow/binnedDistributionsCMS_L1TMuon_cfg.py"]
+      saveFolder, "heppy/muonTriggerRateEstimationWorkflow/binnedDistributionsCMS_L1TMuon_cfg.py"]
   options.components = split(componentConvolutionCurvesJetToMuon)
   for component in options.components:
     component.splitFactor = 1
@@ -480,7 +480,7 @@ def computeNonNormalisedRatePlots(yamlConf):
   parser = create_parser()
   (options, args) = parser.parse_args()
   folderAndScriptName = [
-      saveFolder, "muonTriggerRateEstimationWorkflow/muonFCCTriggerRates_cfg.py"]
+      saveFolder, "heppy/muonTriggerRateEstimationWorkflow/muonFCCTriggerRates_cfg.py"]
   convolutionFileName = saveFolder + "/binnedDistributions.root"
   options.components = componentChunksArray
   
@@ -888,7 +888,7 @@ def runClosureTest1(yamlConf):
 
   parser = create_parser()
   (options,args) = parser.parse_args()
-  folderAndScriptName = [saveFolder, "muonTriggerRateEstimationWorkflow/plotTransverseMomentumDistributionForMuonClosureTest_FromMatchedPairs_cfg.py"]
+  folderAndScriptName = [saveFolder, "heppy/muonTriggerRateEstimationWorkflow/plotTransverseMomentumDistributionForMuonClosureTest_FromMatchedPairs_cfg.py"]
   convolutionFileName = "" + saveFolder + "/binnedDistributions.root"
   options.components = split(componentClosureTest1)
   for component in options.components:
@@ -946,7 +946,7 @@ def runClosureTest2(yamlConf):
 
   parser = create_parser()
   (options,args) = parser.parse_args()
-  folderAndScriptName = [saveFolder, "muonTriggerRateEstimationWorkflow/plotTransverseMomentumDistributionForMuonClosureTest_FromMatchedPairs_cfg.py"]
+  folderAndScriptName = [saveFolder, "heppy/muonTriggerRateEstimationWorkflow/plotTransverseMomentumDistributionForMuonClosureTest_FromMatchedPairs_cfg.py"]
   convolutionFileName = "" + saveFolder + "/binnedDistributions.root"
   options.components = split(componentClosureTest2)
   for component in options.components:
@@ -1004,7 +1004,7 @@ def runCMSRateCalculation(yamlConf):
   
   parser = create_parser()
   (options,args) = parser.parse_args()
-  folderAndScriptName = [saveFolder, "muonTriggerRateEstimationWorkflow/computeTriggerRatesCMSMuons_cfg.py"]
+  folderAndScriptName = [saveFolder, "heppy/muonTriggerRateEstimationWorkflow/computeTriggerRatesCMSMuons_cfg.py"]
   #options.extraOptions.append("sample=" + sampleClosureTest3)
   options.components = split(componentRateClosureTest)
   for component in options.components:

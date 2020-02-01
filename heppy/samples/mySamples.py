@@ -5895,7 +5895,15 @@ cmsMatching_QCD_15_3000_CrossMatch_genJet_l1tJet_Smaller = cfg.MCComponent(
   trigger_object = "l1tJet"
 )
 
-
+cmsMatching_SingleMu_0_8_GENSIMDIGIRAW = cfg.MCComponent(
+    'cmsMatching_SingleMu_0_8_GENSIMDIGIRAW',
+  tree_name = "MatchGenMuonToL1Muon/matchedL1TMuonGenMuonTree",
+  files = [
+    "/storage/sb17498/FCC/CMSSW_9_0_0/src/MatchMuons.root",
+  ],
+  gen_object = "genMuon",
+  trigger_object = "l1tMuon"
+)
 
 # Max 4 jobs
 MBtest.splitFactor = len(MBtest.files)

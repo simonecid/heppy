@@ -35,8 +35,8 @@ def computeEfficiencies(**kwargs):
     if entryIndex % 1000 == 0:
       print entryIndex, "/", nEntries
     chainGenObj.GetEntry(entryIndex)
-    genObj_pt = chainGenObj.genParticle_pt
-    genObj_eta = chainGenObj.genParticle_eta
+    genObj_pt = getattr(chainGenObj, "genParticle_pt", getattr(chainGenObj, "genMuon_pt", None))
+    genObj_eta = getattr(chainGenObj, "genParticle_eta", getattr(chainGenObj, "genMuon_eta", None))
     isGoodMuon = False
     if ((abs(genObj_eta) < barrelEta) and (genObj_pt > minPtInBarrel)):
       isGoodMuon = True
@@ -56,8 +56,8 @@ def computeEfficiencies(**kwargs):
     if entryIndex % 1000 == 0:
       print entryIndex, "/", nEntries
     chainL1TObjGenObj.GetEntry(entryIndex)
-    genObj_pt = chainL1TObjGenObj.genParticle_pt
-    genObj_eta = chainL1TObjGenObj.genParticle_eta
+    genObj_pt = getattr(chainL1TObjGenObj, "genParticle_pt", getattr(chainL1TObjGenObj, "genMuon_pt", None))
+    genObj_eta = getattr(chainL1TObjGenObj, "genParticle_eta", getattr(chainL1TObjGenObj, "genMuon_eta", None))
     l1tMuon_eta = chainL1TObjGenObj.l1tMuon_eta
     deltaR2 = chainL1TObjGenObj.deltaR2
     #Checking if the gen and l1t objects are enough close
