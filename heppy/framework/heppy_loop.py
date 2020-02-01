@@ -193,7 +193,8 @@ def main( options, args, parser ):
         # when running only one loop, do not use multiprocessor module.
         # then, the exceptions are visible -> use only one sample for testing
         global loop
-        loop = runLoop( comp, outDir, cfg.config, cfgFileName, options)
+        # import pdb ; pdb.set_trace()
+        loop = runLoop( selComps[0], outDir, cfg.config, cfgFileName, options)
     return loop
 
 
