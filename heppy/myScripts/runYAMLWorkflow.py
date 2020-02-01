@@ -21,6 +21,7 @@ def runYAMLWorkflow(yamlConf):
     functionName = step["function"]
     print ">>>>> Executing", functionName, "..."
     try:
+      # import pdb ; pdb.set_trace()
       function = getattr(import_module(moduleName), functionName)
     except AttributeError:
       print ">>>>> Error: can not find function", functionName, "in module", moduleName
