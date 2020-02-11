@@ -217,7 +217,7 @@ def computeConvolutionCurvesJetToMuon(yamlConf):
   options.extraOptions.append("triggerObjectName=" + yamlConf["triggerObject"])
   options.extraOptions.append("genObjectName=genJet")
   options.extraOptions.append(
-      "deltaR2Matching=100")
+      "deltaR2Matching=" + str(yamlConf["deltaR2MatchingJetToMuon"]))
   options.extraOptions.append(
       "deltaEtaMatching=100")
   #options.nevents=300000
@@ -382,7 +382,7 @@ def obtainEfficienciesJetToMuon(yamlConf):
     minPtInBarrel=0,
     minPtInEndcap=0,
     minPtInForward=0,
-    deltaR2Matching=100,
+    deltaR2Matching=yamlConf["deltaR2MatchingJetToMuon"],
   )
   numberOfMatchedObjects = numberOfMatchedObjects_jetToMuon
   numberOfGenObjects = numberOfGenObjects_jetToMuon

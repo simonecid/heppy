@@ -5899,10 +5899,49 @@ cmsMatching_SingleMu_0_8_GENSIMDIGIRAW = cfg.MCComponent(
     'cmsMatching_SingleMu_0_8_GENSIMDIGIRAW',
   tree_name = "MatchGenMuonToL1Muon/matchedL1TMuonGenMuonTree",
   files = [
-    "/storage/sb17498/FCC/CMSSW_9_0_0/src/MatchMuons.root",
+    "/hdfs/FCC-hh/MatchMuon_SingleMu_0_8_GENSIMDIGIRAW/MatchMuons.root",
   ],
   gen_object = "genMuon",
   trigger_object = "l1tMuon"
+)
+
+cmsMatching_QCD_15_3000_PU200_CrossMatch_genJet_l1tJet = cfg.MCComponent(
+  'cmsMatching_QCD_15_3000_PU200_CrossMatch_genJet_l1tJet',
+  tree_name="MatchAK4GenJetWithPhase1L1TJetFromPfInputs/matchedCaloJetGenJetTree",
+  files = [
+    "/hdfs/user/sb17498/CMS_Phase_2/jetMETStudies/ComputePhase1AndAK4L1TJetsFromPfCandidates_10_0_4_MTD/ComputeCalibratedPhase1AndAK4L1TJetsFromPfCandidates_10_0_4_MTD_7x7Jets/ComputeCalibratedPhase1AndAK4L1TJetsFromPfCandidates_10_0_4_MTD_7x7Jets_Histograms.root",
+  ],
+  gen_object = "genJet",
+  trigger_object = "caloJet"
+)
+
+cmsMatching_QCD_15_3000_PU200_CrossMatch_genJet = cfg.MCComponent(
+  'cmsMatching_QCD_15_3000_PU200_CrossMatch_genJet',
+  tree_name="MatchAK4GenJetWithPhase1L1TJetFromPfInputs/genJetTree",
+  files = [
+    "/hdfs/user/sb17498/CMS_Phase_2/jetMETStudies/ComputePhase1AndAK4L1TJetsFromPfCandidates_10_0_4_MTD/ComputeCalibratedPhase1AndAK4L1TJetsFromPfCandidates_10_0_4_MTD_7x7Jets/ComputeCalibratedPhase1AndAK4L1TJetsFromPfCandidates_10_0_4_MTD_7x7Jets_Histograms.root",
+  ],
+  gen_object = "genJet"
+)
+
+cmsMatching_SingleNeutrinoPU200_BarrelOnly_LeadingL1TJet = cfg.MCComponent ( 
+ "cmsMatching_SingleNeutrinoPU200_BarrelOnly_LeadingL1TJet",
+  tree_name = "MatchAK4GenJetWithPhase1L1TJetFromPfInputs/caloLeadingJetTree",
+  files = [
+    "/hdfs/user/sb17498/CMS_Phase_2/jetMETStudies/SingleNeutrino_PU200_104XMTD/ComputeCalibratedPhase1AndAK4L1TJetsFromPfCandidates_10_0_4_MTD_7x7Jets_Histograms.root"
+  ],
+  gen_object = "caloJet",
+  nGenEvents = 91300
+)
+
+cmsMatching_SingleNeutrinoPU200_LeadingL1TJet = cfg.MCComponent ( 
+ "cmsMatching_SingleNeutrinoPU200_LeadingL1TJet",
+  tree_name = "MatchAK4GenJetWithPhase1L1TJetFromPfInputs/caloLeadingJetTree",
+  files = [
+    "/hdfs/user/sb17498/CMS_Phase_2/jetMETStudies/SingleNeutrino_PU200_104XMTD/ComputeCalibratedPhase1AndAK4L1TJetsFromPfCandidates_10_0_4_MTD_7x7Jets_Histograms_FullDetector.root"
+  ],
+  gen_object = "caloJet",
+  nGenEvents = 91300
 )
 
 # Max 4 jobs

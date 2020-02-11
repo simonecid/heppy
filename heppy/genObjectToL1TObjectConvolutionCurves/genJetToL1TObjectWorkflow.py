@@ -54,7 +54,7 @@ def computeConvolutionCurves(yamlConf):
 
   parser = create_parser()
   (options,args) = parser.parse_args()
-  folderAndScriptName = [saveFolder, "genObjectToL1TObjectConvolutionCurves/binnedDistributionsCMS_cfg.py"]
+  folderAndScriptName = [saveFolder, "heppy/genObjectToL1TObjectConvolutionCurves/binnedDistributionsCMS_cfg.py"]
   options.components = split(componentConvolutionCurves)
   for component in options.components:
     component.splitFactor = 1
@@ -246,7 +246,7 @@ def computeNonNormalisedRatePlots(yamlConf):
 
   parser = create_parser()
   (options,args) = parser.parse_args()
-  folderAndScriptName = [saveFolder, "genObjectToL1TObjectConvolutionCurves/l1tObjectTriggerRateMinBiasFromJets_cfg.py"]
+  folderAndScriptName = [saveFolder, "heppy/genObjectToL1TObjectConvolutionCurves/l1tObjectTriggerRateMinBiasFromJets_cfg.py"]
   convolutionFileName = saveFolder + "/" + genObject + "_" +  triggerObject + "_" + "convolutionCurves/histograms.root"
   options.components = componentChunksArray
 
@@ -258,7 +258,7 @@ def computeNonNormalisedRatePlots(yamlConf):
   options.extraOptions.append("minimumPtInBarrel=" + str(yamlConf["minimumPtToReachBarrel"]))
   options.extraOptions.append("minimumPtInEndcap=" + str(yamlConf["minimumPtToReachEndcap"]))
   options.extraOptions.append("minimumPtInForward=" + str(yamlConf["minimumPtToReachForward"]))
-  options.extraOptions.append("minimumTriggerPt=" + str(yamlConf["minimumTriggerPt"]))
+  # options.extraOptions.append("minimumTriggerPt=" + str(yamlConf["minimumTriggerPt"]))
   options.extraOptions.append("barrelEta=" + str(yamlConf["barrelEta"]))
   options.extraOptions.append("endcapEta=" + str(yamlConf["endcapEta"]))
   options.extraOptions.append("detectorEta=" + str(yamlConf["detectorEta"]))
@@ -343,7 +343,7 @@ def computeNonNormalisedMHTRatePlots(yamlConf):
 
   parser = create_parser()
   (options,args) = parser.parse_args()
-  folderAndScriptName = [saveFolder, "genObjectToL1TObjectConvolutionCurves/computeMHTTriggerRate_cfg.py"]
+  folderAndScriptName = [saveFolder, "heppy/genObjectToL1TObjectConvolutionCurves/computeMHTTriggerRate_cfg.py"]
   convolutionFileName = saveFolder + "/" + genObject + "_" +  triggerObject + "_" + "convolutionCurves/histograms.root"
   options.components = componentChunksArray
 
@@ -820,7 +820,7 @@ def runClosureTest1(yamlConf):
 
   parser = create_parser()
   (options,args) = parser.parse_args()
-  folderAndScriptName = [saveFolder, "genObjectToL1TObjectConvolutionCurves/plotTransverseMomentumDistributionForClosureTest_cfg.py"]
+  folderAndScriptName = [saveFolder, "heppy/genObjectToL1TObjectConvolutionCurves/plotTransverseMomentumDistributionForClosureTest_cfg.py"]
   convolutionFileName = saveFolder + "/" + genObject + "_" +  triggerObject + "_" + "convolutionCurves/histograms.root"
   #options.extraOptions.append("sample=" + yamlConf["sampleClosureTest1"])
   options.components = split(componentClosureTest1)
@@ -882,7 +882,7 @@ def runClosureTest2(yamlConf):
 
   parser = create_parser()
   (options,args) = parser.parse_args()
-  folderAndScriptName = [saveFolder, "genObjectToL1TObjectConvolutionCurves/plotTransverseMomentumDistributionForClosureTest_cfg.py"]
+  folderAndScriptName = [saveFolder, "heppy/genObjectToL1TObjectConvolutionCurves/plotTransverseMomentumDistributionForClosureTest_cfg.py"]
   convolutionFileName = saveFolder + "/" + genObject + "_" +  triggerObject + "_" + "convolutionCurves/histograms.root"
   #options.extraOptions.append("sample=" + sampleClosureTest2)
   options.components = split(componentClosureTest2)
@@ -949,7 +949,7 @@ def runRateClosureTest(yamlConf):
   
   parser = create_parser()
   (options,args) = parser.parse_args()
-  folderAndScriptName = [saveFolder, "genObjectToL1TObjectConvolutionCurves/computeTriggerRatesFromCMS_cfg.py"]
+  folderAndScriptName = [saveFolder, "heppy/genObjectToL1TObjectConvolutionCurves/computeTriggerRatesFromCMS_cfg.py"]
   #options.extraOptions.append("sample=" + sampleClosureTest3)
   options.components = split(componentRateClosureTest)
   for component in options.components:
