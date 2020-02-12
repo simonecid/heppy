@@ -1,0 +1,57 @@
+saveFolder: "_updatedJetStudies_1/"
+
+binning: "[3, 4, 5, 7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 80, 90, 100, 110, 125, 150, 175, 200, 250, 300, 400, 500]"
+qualityThreshold: 0
+barrelEta: 1.44 # 0-1.44 barrel
+endcapEta: 3 #1.44 - 3 endcap
+detectorEta: 5.05 # 3 - 1.44 forward
+magneticField: 3.8 # Tesla
+deltaR2Matching: 0.09 #dR = 0.3
+minimumPtToReachBarrel: 50 # Some cut
+minimumPtToReachEndcap: 50 # disabling endcap with high pt threshold
+minimumPtToReachForward: 50 # killing forward
+genObject: "genJet"
+triggerObject: "l1tJet"
+
+moduleNameConvolutionCurves: "heppy.samples.mySamples"
+componentNameConvolutionCurves: "cmsMatching_QCD_15_3000_PU200_CrossMatch_genJet_l1tJet"
+
+efficiencySourceFolder: "/hdfs/user/sb17498/CMS_Phase_2/jetMETStudies/ComputePhase1AndAK4L1TJetsFromPfCandidates_10_0_4_MTD/ComputeCalibratedPhase1AndAK4L1TJetsFromPfCandidates_10_0_4_MTD_7x7Jets/"
+efficiencyMatchTree: "MatchAK4GenJetWithPhase1L1TJetFromPfInputs/matchedCaloJetGenJetTree"
+efficiencyGenTree: "MatchAK4GenJetWithPhase1L1TJetFromPfInputs/genJetTree"
+numberOfEfficiencyFiles: -1
+
+moduleNameClosureTest1: "heppy.samples.mySamples"
+componentNameClosureTest1: "cmsMatching_QCD_15_3000_PU200_CrossMatch_genJet_l1tJet"
+moduleNameClosureTest2: "heppy.samples.mySamples"
+componentNameClosureTest2: "cmsMatching_QCD_15_3000_PU200_CrossMatch_genJet"
+moduleNameRateClosureTest: "heppy.samples.mySamples"
+componentNameRateClosureTest: "cmsMatching_SingleNeutrinoPU200_LeadingL1TJet"
+
+moduleNameRatePlots: "heppy.samples.sample_MinimumBias_NoTau_14TeV_GenParticles_CMSSWTune_WPropagation_111Mevents"
+componentNameRatePlots: "MinimumBias_14TeV_GenParticles_full_CMSSWTune_WPropagation_111MEvents"
+copyToLocal: True
+averagePileUp: 200
+bunchCrossingFrequency: !!float 31.6e6 # 2808 bunches
+genJetCollection: "nonPropagatedGenJets"
+momentumShift: 0
+
+steps: 
+- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+  function: computeConvolutionCurves
+- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+  function: obtainEfficiencies
+- module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+  function: computeNonNormalisedRatePlots
+# - module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+#   function: mergeNonNormalisedRatePlots
+# - module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+#   function: normaliseRatePlots
+# - module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+#   function: runClosureTest1
+# - module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+#   function: runClosureTest2
+# - module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+#   function: runRateClosureTest
+# - module: heppy.genObjectToL1TObjectConvolutionCurves.genJetToL1TObjectWorkflow
+#   function: buildRateComparisonPlot
