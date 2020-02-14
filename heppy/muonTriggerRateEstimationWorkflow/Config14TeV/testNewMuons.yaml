@@ -52,29 +52,29 @@ averagePileUp: 140
 bunchCrossingFrequency: !!float 31.6e6 # 2808 bunches
 
 steps: 
-  # - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-  #   function: computeConvolutionCurvesHighPtMuons
-  # - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-  #   function: computeConvolutionCurvesLowPtMuons
-  # - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-  #   function: computeConvolutionCurvesJetToMuon
-  # - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-  #   function: mergeConvolutionCurves
-  # - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-  #   function: obtainEfficiencies
-  # - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-  #   function: obtainEfficienciesJetToMuon
-  # - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-  #   function: computeNonNormalisedRatePlots
   - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-    function: mergeNonNormalisedRatePlots
+    function: computeConvolutionCurvesHighPtMuons
   - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-    function: normaliseMinimumBiasRate
+    function: computeConvolutionCurvesLowPtMuons
+  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
+    function: computeConvolutionCurvesJetToMuon
+  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
+    function: mergeConvolutionCurves
+  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
+    function: obtainEfficiencies
+  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
+    function: obtainEfficienciesJetToMuon
+  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
+    function: computeNonNormalisedRatePlots
+  # - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
+  #   function: mergeNonNormalisedRatePlots
+  # - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
+  #   function: normaliseMinimumBiasRate
   # - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
   #   function: runClosureTest1
   # - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
   #   function: runClosureTest2
-  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-    function: runCMSRateCalculation
-  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-    function: buildRateComparisonPlot
+  # - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
+  #   function: runCMSRateCalculation
+  # - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
+  #   function: buildRateComparisonPlot
