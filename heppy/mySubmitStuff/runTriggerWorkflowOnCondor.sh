@@ -62,6 +62,7 @@ fi
 # Zip file
 tar -czvf ${SAVE_DESTINATION}.tar.gz ${SAVE_DESTINATION}
 mv ${SAVE_DESTINATION}.tar.gz ${HOME_FOLDER}
+rm -r ${SAVE_DESTINATION}
 cd ${HOME_FOLDER}
 
 set +o xtrace
