@@ -5919,7 +5919,7 @@ cmsMatching_QCD_15_3000_PU200_CrossMatch_leadingGenJet_l1tJet = cfg.MCComponent(
   'cmsMatching_QCD_15_3000_PU200_CrossMatch_leadingGenJet_l1tJet',
   tree_name="MatchLeadingGenJetWithL1Jet/matchedLeadingGenJetL1TJetTree",
   files = [
-    "/scratch/sb17498/FCC/LeadingGenJetCaloJetTree/LeadingGenJetCaloJetTree.root",
+    "/hdfs/FCC-hh/HistogrammedJetsLeadingGenJetCaloJetTree/LeadingGenJetCaloJetTree.root",
   ],
   gen_object = "genJet",
   trigger_object = "l1tJet"
