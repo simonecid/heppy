@@ -489,6 +489,7 @@ def computeNonNormalisedRatePlots(yamlConf):
   options.extraOptions.append("convolutionFileName=" + convolutionFileName)
   options.extraOptions.append("convolutionFileNameJetToMuon=" + saveFolder + "/genJet_" + triggerObject + "_" + "convolutionCurves_JetToMuon/histograms.root")
   options.extraOptions.append("binning=" + yamlConf["binning"])
+  options.extraOptions.append("binningJet=" + yamlConf["binningJet"])
   options.extraOptions.append(
       "probabilityFile=" + "" + yamlConf["saveFolder"] + "/efficiencyFactors.root")
   options.extraOptions.append("probabilityHistogram=efficiencyHistogram")
