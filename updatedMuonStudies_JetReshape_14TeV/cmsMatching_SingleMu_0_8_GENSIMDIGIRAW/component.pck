@@ -1,0 +1,11 @@
+(dp0
+S'files'
+p1
+(lp2
+S'/hdfs/FCC-hh/MatchMuon_SingleMu_0_8_GENSIMDIGIRAW/MatchMuons.root'
+p3
+asS'name'
+p4
+S'cmsMatching_SingleMu_0_8_GENSIMDIGIRAW'
+p5
+s.

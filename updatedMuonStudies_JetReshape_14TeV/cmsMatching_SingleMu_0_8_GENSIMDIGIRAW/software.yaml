@@ -1,0 +1,13 @@
+software:
+  heppy: !!python/unicode '580083a2819ff2c3a049198e9dcfce4094e2f5fc'
+  heppy.analyzers: !!python/unicode '580083a2819ff2c3a049198e9dcfce4094e2f5fc'
+  heppy.analyzers.triggerrates: !!python/unicode '580083a2819ff2c3a049198e9dcfce4094e2f5fc'
+  heppy.framework: !!python/unicode '580083a2819ff2c3a049198e9dcfce4094e2f5fc'
+  heppy.framework.services: !!python/unicode '580083a2819ff2c3a049198e9dcfce4094e2f5fc'
+  heppy.papas: !!python/unicode '580083a2819ff2c3a049198e9dcfce4094e2f5fc'
+  heppy.papas.data: !!python/unicode '580083a2819ff2c3a049198e9dcfce4094e2f5fc'
+  heppy.particles: !!python/unicode '580083a2819ff2c3a049198e9dcfce4094e2f5fc'
+  heppy.particles.fcc: !!python/unicode '580083a2819ff2c3a049198e9dcfce4094e2f5fc'
+  heppy.samples: !!python/unicode '580083a2819ff2c3a049198e9dcfce4094e2f5fc'
+  heppy.statistics: !!python/unicode '580083a2819ff2c3a049198e9dcfce4094e2f5fc'
+  heppy.utils: !!python/unicode '580083a2819ff2c3a049198e9dcfce4094e2f5fc'

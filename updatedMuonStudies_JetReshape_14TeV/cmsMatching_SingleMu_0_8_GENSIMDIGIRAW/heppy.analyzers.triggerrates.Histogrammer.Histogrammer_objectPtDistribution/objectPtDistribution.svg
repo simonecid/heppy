@@ -1,0 +1,763 @@
+<?xml version="1.0" standalone="no"?>
+<svg width="567.429" height="544.6" viewBox="0 0 567.429 544.6" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+<title>
+_updatedMuonStudies_7/cmsMatching_SingleMu_0_8_GENSIMDIGIRAW/heppy.analyzers.triggerrates.Histogrammer.Histogrammer_objectPtDistribution/objectPtDistribution.svg
+</title>
+<desc>
+Creator: ROOT Version 6.18/04
+CreationDate: Tue Feb 11 14:40:04 2020</desc>
+<defs>
+</defs>
+<rect x="0.5" y="0" width="566.929" height="544.1" fill="white"/>
+<rect x="57.1929" y="54.41" width="453.543" height="435.28" fill="white"/>
+<rect x="57.1929" y="54.41" width="453.543" height="435.28" fill="none" stroke="black"/>
+<rect x="57.1929" y="54.41" width="453.543" height="435.28" fill="white"/>
+<rect x="57.1929" y="54.41" width="453.543" height="435.28" fill="none" stroke="black"/>
+<path d="M57.1929,489.69h 453.543" fill="none" stroke="black"/>
+<path d="M57.1929,54.41v 435.28" fill="none" stroke="black" stroke-dasharray=" 1, 2"/>
+<path d="M102.547,54.41v 435.28" fill="none" stroke="black" stroke-dasharray=" 1, 2"/>
+<path d="M147.902,54.41v 435.28" fill="none" stroke="black" stroke-dasharray=" 1, 2"/>
+<path d="M193.256,54.41v 435.28" fill="none" stroke="black" stroke-dasharray=" 1, 2"/>
+<path d="M238.61,54.41v 435.28" fill="none" stroke="black" stroke-dasharray=" 1, 2"/>
+<path d="M283.965,54.41v 435.28" fill="none" stroke="black" stroke-dasharray=" 1, 2"/>
+<path d="M329.319,54.41v 435.28" fill="none" stroke="black" stroke-dasharray=" 1, 2"/>
+<path d="M374.673,54.41v 435.28" fill="none" stroke="black" stroke-dasharray=" 1, 2"/>
+<path d="M420.028,54.41v 435.28" fill="none" stroke="black" stroke-dasharray=" 1, 2"/>
+<path d="M465.382,54.41v 435.28" fill="none" stroke="black" stroke-dasharray=" 1, 2"/>
+<path d="M510.736,54.41v 435.28" fill="none" stroke="black" stroke-dasharray=" 1, 2"/>
+<path d="M57.1929,489.69v -435.28" fill="none" stroke="black"/>
+<path d="M510.736,489.69h -453.543" fill="none" stroke="black" stroke-dasharray=" 1, 2"/>
+<path d="M510.736,419.019h -453.543" fill="none" stroke="black" stroke-dasharray=" 1, 2"/>
+<path d="M510.736,348.348h -453.543" fill="none" stroke="black" stroke-dasharray=" 1, 2"/>
+<path d="M510.736,277.678h -453.543" fill="none" stroke="black" stroke-dasharray=" 1, 2"/>
+<path d="M510.736,207.007h -453.543" fill="none" stroke="black" stroke-dasharray=" 1, 2"/>
+<path d="M510.736,136.336h -453.543" fill="none" stroke="black" stroke-dasharray=" 1, 2"/>
+<path d="M510.736,65.6656h -453.543" fill="none" stroke="black" stroke-dasharray=" 1, 2"/>
+<path d="M510.736,65.6656h -453.543" fill="none" stroke="black" stroke-dasharray=" 1, 2"/>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="56.7896" y="485.864" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="59.0573" y="483.348" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="61.325" y="465.779" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="63.5927" y="439.207" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="65.8605" y="302.169" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="68.1282" y="317.618" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="70.3959" y="243.393" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="72.6636" y="237.414" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="74.9313" y="153.612" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="77.199" y="139.118" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="79.4668" y="94.1077" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="81.7345" y="78.221" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="84.0022" y="111.938" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="86.2699" y="73.0408" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="88.5376" y="131.881" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="90.8053" y="177.506" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="93.0731" y="221.379" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="95.3408" y="294.593" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="97.6085" y="342.296" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="99.8762" y="299.653" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="102.144" y="400.225" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="104.412" y="401.751" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="106.679" y="428.196" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="108.947" y="418.345" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="111.215" y="449.596" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="113.483" y="458.783" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="115.75" y="464.125" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="118.018" y="459.284" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="120.286" y="474.111" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="122.553" y="475.348" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="124.821" y="477.178" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="127.089" y="476.641" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="129.357" y="478.238" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="131.624" y="480.853" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="133.892" y="479.786" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="136.16" y="479.404" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="138.427" y="482.641" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="140.695" y="482.351" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="142.963" y="483.27" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="145.231" y="481.517" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="147.498" y="484.083" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="149.766" y="484.302" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="152.034" y="483.835" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="154.301" y="484.323" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="156.569" y="483.715" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="158.837" y="484.542" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="161.105" y="484.903" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="163.372" y="484.592" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="165.64" y="484.083" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="167.908" y="483.383" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="170.175" y="485.32" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="172.443" y="485.15" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="174.711" y="484.733" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="176.979" y="485.115" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="179.246" y="485.263" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="181.514" y="485.065" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="183.782" y="484.952" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="186.049" y="485.044" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="188.317" y="485.164" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="190.585" y="484.047" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="192.853" y="485.32" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="195.12" y="485.32" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="197.388" y="485.341" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="199.656" y="485.546" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="201.923" y="485.623" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="204.191" y="485.687" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="206.459" y="485.694" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="208.727" y="485.666" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="210.994" y="485.404" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="213.262" y="484.754" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="215.53" y="485.546" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="217.797" y="485.51" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="220.065" y="485.744" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="222.333" y="485.659" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="224.601" y="485.638" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="226.868" y="485.588" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="229.136" y="485.722" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="231.404" y="485.715" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="233.671" y="485.616" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="235.939" y="485.482" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="238.207" y="485.68" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="240.475" y="485.729" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="242.742" y="485.659" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="245.01" y="485.411" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="247.278" y="485.779" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="249.546" y="485.8" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="251.813" y="485.843" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="254.081" y="485.744" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="256.349" y="485.772" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="258.616" y="485.426" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="260.884" y="485.786" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="263.152" y="485.814" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="265.42" y="485.807" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="267.687" y="485.701" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="269.955" y="485.588" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="272.223" y="485.779" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="274.49" y="485.722" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="276.758" y="485.758" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="279.026" y="485.758" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="281.294" y="485.609" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="283.561" y="485.8" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="285.829" y="485.807" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="288.097" y="485.828" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="290.364" y="485.807" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="292.632" y="485.835" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="294.9" y="485.793" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="297.168" y="485.751" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="299.435" y="485.793" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="301.703" y="485.821" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="303.971" y="485.828" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="306.238" y="485.772" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="308.506" y="485.779" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="310.774" y="485.722" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="313.042" y="485.857" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="315.309" y="485.864" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="317.577" y="485.814" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="319.845" y="485.857" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="322.112" y="485.857" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="324.38" y="485.85" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="326.648" y="485.722" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="328.916" y="485.85" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="331.183" y="485.772" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="333.451" y="485.758" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="335.719" y="485.821" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="337.986" y="485.821" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="340.254" y="485.807" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="342.522" y="485.835" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="344.79" y="485.864" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="347.057" y="485.772" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="349.325" y="485.821" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="351.593" y="485.835" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="353.86" y="485.708" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="356.128" y="485.835" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="358.396" y="485.821" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="360.664" y="485.772" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="362.931" y="485.821" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="365.199" y="485.85" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="367.467" y="485.871" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="369.734" y="485.857" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="372.002" y="485.588" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="374.27" y="485.751" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="376.538" y="485.843" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="378.805" y="485.835" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="381.073" y="485.737" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="383.341" y="485.871" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="385.608" y="485.821" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="387.876" y="485.828" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="390.144" y="485.814" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="392.412" y="485.857" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="394.679" y="485.828" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="396.947" y="485.871" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="399.215" y="485.843" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="401.483" y="485.772" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="403.75" y="485.8" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="406.018" y="485.878" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="408.286" y="485.828" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="410.553" y="485.857" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="412.821" y="485.864" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="415.089" y="485.864" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="417.357" y="485.574" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="419.624" y="485.878" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="421.892" y="485.85" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="424.16" y="485.814" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="426.427" y="485.828" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="428.695" y="485.878" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="430.963" y="485.835" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="433.231" y="485.878" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="435.498" y="485.857" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="437.766" y="485.871" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="440.034" y="485.864" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="442.301" y="485.857" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="444.569" y="485.857" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="446.837" y="485.708" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="449.105" y="485.857" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="451.372" y="485.878" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="455.908" y="485.843" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="458.175" y="485.843" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="460.443" y="485.835" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="462.711" y="485.503" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="464.979" y="485.871" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="469.514" y="485.864" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="471.782" y="485.871" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="476.317" y="485.843" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="478.585" y="485.878" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="480.853" y="485.878" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="483.12" y="485.871" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="485.388" y="485.871" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="487.656" y="485.857" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="489.923" y="485.864" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="492.191" y="485.843" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="494.459" y="485.878" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="496.727" y="485.871" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="498.994" y="485.878" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="501.262" y="485.857" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="503.53" y="485.871" width="7.60979" height="7.60979"/>
+</g>
+<g stroke="#0000ff" stroke-width="1" fill="#0000ff">
+<rect x="505.797" y="485.871" width="7.60979" height="7.60979"/>
+</g>
+<rect x="442.705" y="35.3665" width="113.386" height="87.056" fill="white"/>
+<path d="M442.705,122.422h 113.386" fill="none" stroke="black"/>
+<path d="M556.091,122.422v -87.056" fill="none" stroke="black"/>
+<path d="M556.091,35.3665h -113.386" fill="none" stroke="black"/>
+<path d="M442.705,35.3665v 87.056" fill="none" stroke="black"/>
+<text xml:space="preserve" x="445.673" y="49.4636" fill="black" font-size="12.2312" font-family="Helvetica">objectPtDistribution</text>
+<path d="M442.705,57.1305h 113.386" fill="none" stroke="black"/>
+<text xml:space="preserve" x="447.575" y="72.293" fill="black" font-size="12.2312" font-family="Helvetica">Entries </text>
+<text xml:space="preserve" x="505.6" y="72.293" fill="black" font-size="12.2312" font-family="Helvetica"> 729833</text>
+<text xml:space="preserve" x="447.575" y="94.1711" fill="black" font-size="12.2312" font-family="Helvetica">Mean  </text>
+<text xml:space="preserve" x="512.258" y="94.1711" fill="black" font-size="12.2312" font-family="Helvetica">  7.036</text>
+<text xml:space="preserve" x="447.575" y="116.049" fill="black" font-size="12.2312" font-family="Helvetica">Std Dev   </text>
+<text xml:space="preserve" x="512.258" y="116.049" fill="black" font-size="12.2312" font-family="Helvetica">  4.022</text>
+<path d="M57.1929,489.69h 453.543" fill="none" stroke="black"/>
+<path d="M57.1929,476.631v 13.0584" fill="none" stroke="black"/>
+<path d="M66.2638,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M75.3346,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M84.4055,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M93.4764,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M102.547,476.631v 13.0584" fill="none" stroke="black"/>
+<path d="M111.618,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M120.689,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M129.76,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M138.831,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M147.902,476.631v 13.0584" fill="none" stroke="black"/>
+<path d="M156.972,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M166.043,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M175.114,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M184.185,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M193.256,476.631v 13.0584" fill="none" stroke="black"/>
+<path d="M202.327,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M211.398,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M220.469,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M229.539,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M238.61,476.631v 13.0584" fill="none" stroke="black"/>
+<path d="M247.681,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M256.752,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M265.823,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M274.894,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M283.965,476.631v 13.0584" fill="none" stroke="black"/>
+<path d="M293.035,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M302.106,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M311.177,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M320.248,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M329.319,476.631v 13.0584" fill="none" stroke="black"/>
+<path d="M338.39,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M347.461,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M356.531,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M365.602,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M374.673,476.631v 13.0584" fill="none" stroke="black"/>
+<path d="M383.744,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M392.815,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M401.886,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M410.957,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M420.028,476.631v 13.0584" fill="none" stroke="black"/>
+<path d="M429.098,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M438.169,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M447.24,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M456.311,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M465.382,476.631v 13.0584" fill="none" stroke="black"/>
+<path d="M474.453,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M483.524,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M492.594,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M501.665,483.161v 6.5292" fill="none" stroke="black"/>
+<path d="M510.736,476.631v 13.0584" fill="none" stroke="black"/>
+<text xml:space="preserve" x="51.8661" y="507.002" fill="black" font-size="17.9711" font-family="Helvetica">0</text>
+<text xml:space="preserve" x="91.8174" y="507.002" fill="black" font-size="17.9711" font-family="Helvetica">10</text>
+<text xml:space="preserve" x="136.525" y="507.002" fill="black" font-size="17.9711" font-family="Helvetica">20</text>
+<text xml:space="preserve" x="182.184" y="507.002" fill="black" font-size="17.9711" font-family="Helvetica">30</text>
+<text xml:space="preserve" x="227.842" y="507.002" fill="black" font-size="17.9711" font-family="Helvetica">40</text>
+<text xml:space="preserve" x="273.501" y="507.002" fill="black" font-size="17.9711" font-family="Helvetica">50</text>
+<text xml:space="preserve" x="318.209" y="507.002" fill="black" font-size="17.9711" font-family="Helvetica">60</text>
+<text xml:space="preserve" x="363.867" y="507.002" fill="black" font-size="17.9711" font-family="Helvetica">70</text>
+<text xml:space="preserve" x="409.526" y="507.002" fill="black" font-size="17.9711" font-family="Helvetica">80</text>
+<text xml:space="preserve" x="454.234" y="507.002" fill="black" font-size="17.9711" font-family="Helvetica">90</text>
+<text xml:space="preserve" x="495.136" y="507.002" fill="black" font-size="17.9711" font-family="Helvetica">100</text>
+<text xml:space="preserve" x="458.99" y="522.222" fill="black" font-size="12.1474" font-family="Helvetica">L1T Muon</text>
+<text xml:space="preserve" x="458.99" y="539.344" fill="black" font-size="12.1474" font-family="Helvetica">t</text>
+<text xml:space="preserve" x="448.526" y="528.88" fill="black" font-size="17.9711" font-family="Helvetica">p</text>
+<path d="M57.1929,489.69v -435.28" fill="none" stroke="black"/>
+<path d="M70.7992,489.69h -13.6063" fill="none" stroke="black"/>
+<path d="M63.9961,475.556h -6.80315" fill="none" stroke="black"/>
+<path d="M63.9961,461.422h -6.80315" fill="none" stroke="black"/>
+<path d="M63.9961,447.287h -6.80315" fill="none" stroke="black"/>
+<path d="M63.9961,433.153h -6.80315" fill="none" stroke="black"/>
+<path d="M70.7992,419.019h -13.6063" fill="none" stroke="black"/>
+<path d="M63.9961,404.885h -6.80315" fill="none" stroke="black"/>
+<path d="M63.9961,390.751h -6.80315" fill="none" stroke="black"/>
+<path d="M63.9961,376.617h -6.80315" fill="none" stroke="black"/>
+<path d="M63.9961,362.483h -6.80315" fill="none" stroke="black"/>
+<path d="M70.7992,348.348h -13.6063" fill="none" stroke="black"/>
+<path d="M63.9961,334.214h -6.80315" fill="none" stroke="black"/>
+<path d="M63.9961,320.08h -6.80315" fill="none" stroke="black"/>
+<path d="M63.9961,305.946h -6.80315" fill="none" stroke="black"/>
+<path d="M63.9961,291.812h -6.80315" fill="none" stroke="black"/>
+<path d="M70.7992,277.678h -13.6063" fill="none" stroke="black"/>
+<path d="M63.9961,263.544h -6.80315" fill="none" stroke="black"/>
+<path d="M63.9961,249.409h -6.80315" fill="none" stroke="black"/>
+<path d="M63.9961,235.275h -6.80315" fill="none" stroke="black"/>
+<path d="M63.9961,221.141h -6.80315" fill="none" stroke="black"/>
+<path d="M70.7992,207.007h -13.6063" fill="none" stroke="black"/>
+<path d="M63.9961,192.873h -6.80315" fill="none" stroke="black"/>
+<path d="M63.9961,178.739h -6.80315" fill="none" stroke="black"/>
+<path d="M63.9961,164.605h -6.80315" fill="none" stroke="black"/>
+<path d="M63.9961,150.47h -6.80315" fill="none" stroke="black"/>
+<path d="M70.7992,136.336h -13.6063" fill="none" stroke="black"/>
+<path d="M63.9961,122.202h -6.80315" fill="none" stroke="black"/>
+<path d="M63.9961,108.068h -6.80315" fill="none" stroke="black"/>
+<path d="M63.9961,93.9339h -6.80315" fill="none" stroke="black"/>
+<path d="M63.9961,79.7997h -6.80315" fill="none" stroke="black"/>
+<path d="M70.7992,65.6656h -13.6063" fill="none" stroke="black"/>
+<path d="M70.7992,65.6656h -13.6063" fill="none" stroke="black"/>
+<text xml:space="preserve" x="44.2563" y="495.587" fill="black" font-size="17.9711" font-family="Helvetica">0</text>
+<text xml:space="preserve" x="4.30489" y="425.197" fill="black" font-size="17.9711" font-family="Helvetica">10000</text>
+<text xml:space="preserve" x="4.30489" y="354.806" fill="black" font-size="17.9711" font-family="Helvetica">20000</text>
+<text xml:space="preserve" x="4.30489" y="283.465" fill="black" font-size="17.9711" font-family="Helvetica">30000</text>
+<text xml:space="preserve" x="4.30489" y="213.074" fill="black" font-size="17.9711" font-family="Helvetica">40000</text>
+<text xml:space="preserve" x="4.30489" y="142.684" fill="black" font-size="17.9711" font-family="Helvetica">50000</text>
+<text xml:space="preserve" x="4.30489" y="72.293" fill="black" font-size="17.9711" font-family="Helvetica">60000</text>
+<g transform="rotate(-90,25.2318,132.22)">
+<text xml:space="preserve" x="25.2318" y="132.22" fill="black" font-size="17.9711" font-family="Helvetica">## events</text>
+</g>
+<rect x="442.705" y="35.3665" width="113.386" height="87.056" fill="white"/>
+<path d="M442.705,122.422h 113.386" fill="none" stroke="black"/>
+<path d="M556.091,122.422v -87.056" fill="none" stroke="black"/>
+<path d="M556.091,35.3665h -113.386" fill="none" stroke="black"/>
+<path d="M442.705,35.3665v 87.056" fill="none" stroke="black"/>
+<text xml:space="preserve" x="445.673" y="49.4636" fill="black" font-size="12.2312" font-family="Helvetica">objectPtDistribution</text>
+<path d="M442.705,57.1305h 113.386" fill="none" stroke="black"/>
+<text xml:space="preserve" x="447.575" y="72.293" fill="black" font-size="12.2312" font-family="Helvetica">Entries </text>
+<text xml:space="preserve" x="505.6" y="72.293" fill="black" font-size="12.2312" font-family="Helvetica"> 729833</text>
+<text xml:space="preserve" x="447.575" y="94.1711" fill="black" font-size="12.2312" font-family="Helvetica">Mean  </text>
+<text xml:space="preserve" x="512.258" y="94.1711" fill="black" font-size="12.2312" font-family="Helvetica">  7.036</text>
+<text xml:space="preserve" x="447.575" y="116.049" fill="black" font-size="12.2312" font-family="Helvetica">Std Dev   </text>
+<text xml:space="preserve" x="512.258" y="116.049" fill="black" font-size="12.2312" font-family="Helvetica">  4.022</text>
+<text xml:space="preserve" x="262.086" y="32.3416" fill="black" font-size="29.3877" font-family="Helvetica"> distribution</text>
+<text xml:space="preserve" x="172.671" y="20.9269" fill="black" font-size="19.7584" font-family="Helvetica">L1T Muon</text>
+<text xml:space="preserve" x="172.671" y="47.5612" fill="black" font-size="19.7584" font-family="Helvetica">t</text>
+<text xml:space="preserve" x="156.501" y="32.3416" fill="black" font-size="29.3877" font-family="Helvetica">p</text></svg>
