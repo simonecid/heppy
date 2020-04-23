@@ -1,7 +1,7 @@
 Universe = vanilla
 job = muonTriggerRate_14TeV_UpdatedMuons_111MEvents
 cmd = heppy/mySubmitStuff/runTriggerWorkflowOnCondor.sh
-args= -j $(job) -c $(cluster) -p $(process) -i heppy/muonTriggerRateEstimationWorkflow/Config14TeV/testNewMuons.yaml
+args= -j $(job) -c $(cluster) -p $(process) -i heppy/muonTriggerRateEstimationWorkflow/Config14TeV/UpdatedMuonStudy/MuonTriggerRate_14TeV_111MEvents.yaml
 # Better not to put logs in the same folder, as they are plenty
 output = /storage/sb17498/logs/heppy/$(job)_$(cluster).$(process).out
 error = /storage/sb17498/logs/heppy/$(job)_$(cluster).$(process).err
@@ -15,4 +15,4 @@ request_cpus = 1
 request_memory = 2000
 request_disk = 900000
 
-queue 20
+queue 185

@@ -15,4 +15,4 @@ request_cpus = 1
 request_memory = 2000
 request_disk = 900000
 
-queue 20
+queue 185
