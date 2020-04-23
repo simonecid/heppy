@@ -76,10 +76,12 @@ class Transformer  (Analyzer):
       
       rndNumber = self.rng.uniform(0, 1)
 
+      efficiencyBinIndex = self.probabilityHistogram.FindBin(jetPt)
+
       if self.probabilityHistogram is None:
         isMisidentified = True
       else:  
-        isMisidentified = rndNumber < self.probabilityHistogram.GetBinContent(factorIndex + 1)
+        isMisidentified = rndNumber < self.probabilityHistogram.GetBinContent(efficiencyBinIndex)
 
       if not isMisidentified:
         jet.match = None
