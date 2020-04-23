@@ -5915,6 +5915,25 @@ cmsMatching_QCD_15_3000_PU200_CrossMatch_genJet_l1tJet = cfg.MCComponent(
   trigger_object = "caloJet"
 )
 
+cmsMatching_QCD_15_3000_PU200_CrossMatch_leadingGenJet_l1tJet = cfg.MCComponent(
+  'cmsMatching_QCD_15_3000_PU200_CrossMatch_leadingGenJet_l1tJet',
+  tree_name="MatchLeadingGenJetWithL1Jet/matchedLeadingGenJetL1TJetTree",
+  files = [
+    "/scratch/sb17498/FCC/LeadingGenJetCaloJetTree/LeadingGenJetCaloJetTree.root",
+  ],
+  gen_object = "genJet",
+  trigger_object = "l1tJet"
+)
+
+cmsMatching_QCD_15_3000_PU200_CrossMatch_leadingGenJet = cfg.MCComponent(
+  'cmsMatching_QCD_15_3000_PU200_CrossMatch_leadingGenJet',
+  tree_name="MatchLeadingGenJetWithL1Jet/leadingGenJet",
+  files = [
+    "/scratch/sb17498/FCC/LeadingGenJetCaloJetTree/LeadingGenJetCaloJetTree.root",
+  ],
+  gen_object = "genJet"
+)
+
 cmsMatching_QCD_15_3000_PU200_CrossMatch_genJet = cfg.MCComponent(
   'cmsMatching_QCD_15_3000_PU200_CrossMatch_genJet',
   tree_name="MatchAK4GenJetWithPhase1L1TJetFromPfInputs/genJetTree",
