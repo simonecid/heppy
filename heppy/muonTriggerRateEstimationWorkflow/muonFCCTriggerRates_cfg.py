@@ -41,6 +41,8 @@ muon_ptBins = [0, 1.5, 3, 5, 8, 11, 15, 20, 30, 40, 50, 70, 100, 140, 200]
 if "binning" in _heppyGlobalOptions:
   import ast
   muon_ptBins = ast.literal_eval(_heppyGlobalOptions["binning"])
+  jet_ptBins = ast.literal_eval(_heppyGlobalOptions["binningJet"])
+
 
 #if specified in sample, a specific set will be used, otherwise the full set will be employed
 if "sample" in _heppyGlobalOptions:
@@ -310,7 +312,7 @@ smearJetToTriggerObject = cfg.Analyzer(
   output_collection = 'leading_fake_muon',
   convolution_file = convolutionFileNameJetToMuon,
   convolution_histogram_prefix = "objectPtDistributionBinnedInMatchedObject",
-  bins = muon_ptBins,
+  bins = jet_ptBins,
   object_x_range = (-300, 300),
   probability_file = jetToMuonProbabilityFile,
   probability_histogram = jetToMuonProbabilityHistogram
