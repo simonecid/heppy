@@ -361,7 +361,10 @@ def obtainEfficienciesJetToMuon(yamlConf):
   genObject = "genJet"
   triggerObject = "l1tMuon"
 
-  if "binningJet" in yamlConf:
+  if "binningJetEfficiency" in yamlConf:
+    binningArray = array("f", ast.literal_eval(yamlConf["binningJetEfficiency"]))
+    binningStr = yamlConf["binningJetEfficiency"]
+  elif "binningJet":
     binningArray = array("f", ast.literal_eval(yamlConf["binningJet"]))
     binningStr = yamlConf["binningJet"]
   else:
