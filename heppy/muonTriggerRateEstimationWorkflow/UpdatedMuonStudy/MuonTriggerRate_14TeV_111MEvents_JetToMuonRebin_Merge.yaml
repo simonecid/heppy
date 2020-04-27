@@ -53,7 +53,7 @@ copyToLocal: True
 averagePileUp: 140
 bunchCrossingFrequency: !!float 31.6e6 # 2808 bunches
 
-numberOfDelphesEvents: 103200000
+numberOfDelphesEvents: 93600000
 
 steps: 
   # - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
