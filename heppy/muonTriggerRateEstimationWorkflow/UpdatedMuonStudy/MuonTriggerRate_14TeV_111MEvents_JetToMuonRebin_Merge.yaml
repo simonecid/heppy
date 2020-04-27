@@ -2,11 +2,11 @@
 # [1] https://indico.cern.ch/event/556692/contributions/2465161/attachments/1468604/2271471/FCC_hh_muons_system_berlin_2017_riegler.pdf
 
 
-saveFolder: "updatedMuonStudies_JetReshape_14TeV/"
+saveFolder: "muonTriggerRate_14TeV_UpdatedMuons_JetRebin_111MEvents/good/"
 
 binning: "[0, 0.5, 0.7, 0.9, 1.1, 1.3, 1.6, 2, 2.5, 3, 3.5, 4, 5, 5.5, 6, 7, 8, 11, 15, 20, 30, 40, 50, 70, 100, 140, 200]"
-binningJet: "[0.8, 100, 140, 200, 250, 300, 350, 400]"
-binningJetEfficiency: "[0.8, 1.1, 1.4, 1.7, 2.5, 3, 3.5, 3.9, 5, 5.5, 6, 7, 8, 11, 15, 20, 30, 40, 50, 70, 100, 140, 200, 250, 300, 350, 400]"
+binningJet: "[0.8, 1.1, 1.4, 1.7, 2.5, 3, 3.5, 3.9, 5, 5.5, 6, 7, 8, 11, 15, 20, 30, 40, 50, 70, 100, 140, 200, 250, 300, 350, 400]"
+binningJetEfficiency: "[0.8, 100, 140, 200, 250, 300, 350, 400]"
 qualityThreshold: 8
 barrelEta: 1.1 
 detectorEta: 2.44
@@ -53,30 +53,32 @@ copyToLocal: True
 averagePileUp: 140
 bunchCrossingFrequency: !!float 31.6e6 # 2808 bunches
 
+numberOfDelphesEvents: 103200000
+
 steps: 
-  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-    function: computeConvolutionCurvesHighPtMuons
-  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-    function: computeConvolutionCurvesLowPtMuons
-  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-    function: computeConvolutionCurvesJetToMuon
-  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-    function: mergeConvolutionCurves
-  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-    function: obtainEfficiencies
-  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-    function: obtainEfficienciesJetToMuon
-  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-    function: computeNonNormalisedRatePlots
   # - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-  #   function: mergeNonNormalisedRatePlots
+  #   function: computeConvolutionCurvesHighPtMuons
   # - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-  #   function: normaliseMinimumBiasRate
+  #   function: computeConvolutionCurvesLowPtMuons
+  # - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
+  #   function: computeConvolutionCurvesJetToMuon
+  # - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
+  #   function: mergeConvolutionCurves
+  # - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
+  #   function: obtainEfficiencies
+  # - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
+  #   function: obtainEfficienciesJetToMuon
+  # - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
+  #   function: computeNonNormalisedRatePlots
+  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
+    function: mergeNonNormalisedRatePlots
+  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
+    function: normaliseMinimumBiasRate
   # - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
   #   function: runClosureTest1
   # - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
   #   function: runClosureTest2
   # - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
   #   function: runCMSRateCalculation
-  # - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
-  #   function: buildRateComparisonPlot
+  - module: heppy.muonTriggerRateEstimationWorkflow.runMuonTriggerWorkflow
+    function: buildRateComparisonPlot
