@@ -20,17 +20,17 @@ genObject: "genJet"
 triggerObject: "l1tJet"
 
 moduleNameConvolutionCurves: "heppy.samples.mySamples"
-componentNameConvolutionCurves: "cmsMatching_QCD_15_3000_PU200_CrossMatch_genJet_l1tJet"
+componentNameConvolutionCurves: "cmsMatching_QCD_15_3000_PU200_CrossMatch_leadingGenJet_l1tJet"
 
-efficiencySourceFolder: "/hdfs/user/sb17498/CMS_Phase_2/jetMETStudies/ComputePhase1AndAK4L1TJetsFromPfCandidates_10_0_4_MTD/ComputeCalibratedPhase1AndAK4L1TJetsFromPfCandidates_10_0_4_MTD_7x7Jets/"
-efficiencyMatchTree: "MatchAK4GenJetWithPhase1L1TJetFromPfInputs/matchedCaloJetGenJetTree"
-efficiencyGenTree: "MatchAK4GenJetWithPhase1L1TJetFromPfInputs/genJetTree"
+efficiencySourceFolder: "/hdfs/FCC-hh/HistogrammedJetsLeadingGenJetCaloJetTree"
+efficiencyMatchTree: "MatchLeadingGenJetWithL1Jet/matchedLeadingGenJetL1TJetTree"
+efficiencyGenTree: "MatchLeadingGenJetWithL1Jet/leadingGenJetTree"
 numberOfEfficiencyFiles: -1
 
 moduleNameClosureTest1: "heppy.samples.mySamples"
-componentNameClosureTest1: "cmsMatching_QCD_15_3000_PU200_CrossMatch_genJet_l1tJet"
+componentNameClosureTest1: "cmsMatching_QCD_15_3000_PU200_CrossMatch_leadingGenJet_l1tJet"
 moduleNameClosureTest2: "heppy.samples.mySamples"
-componentNameClosureTest2: "cmsMatching_QCD_15_3000_PU200_CrossMatch_genJet"
+componentNameClosureTest2: "cmsMatching_QCD_15_3000_PU200_CrossMatch_leadingGenJet"
 moduleNameRateClosureTest: "heppy.samples.mySamples"
 componentNameRateClosureTest: "cmsMatching_SingleNeutrinoPU200_LeadingL1TJet"
 
